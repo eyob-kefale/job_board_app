@@ -1,81 +1,4 @@
 
-// import React from 'react';
-// import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
-// import { Block, Text, theme } from 'galio-framework';
-
-
-// import materialTheme from '../constants/Theme';
-
-// const LogIn = ({navigation}) => {
-//   // You can add your login logic here
-
-//   return (
-//     <View style={styles.container}>
-//       <Block flex space="between" style={styles.padded}>
-//         <Block flex space="evenly" style={{ zIndex: 2 }}>
-//           <Block>
-//             <Block>
-//               <Text color="black" size={30}>
-//                 Log In
-//               </Text>
-//             </Block>
-//             <Block>
-//               <TextInput style={styles.input} placeholder="Username" />
-//               <TextInput
-//                 style={styles.input}
-//                 placeholder="Password"
-//                 secureTextEntry
-//               />
-//             </Block>
-//           </Block>
-//           <Block center>
-//             <TouchableOpacity
-//               style={styles.button}
-//               onPress={() => navigation.navigate("Register")}>
-//               <Text color="white" size={16}>
-//                 LOGIN
-//               </Text>
-//             </TouchableOpacity>
-//           </Block>
-//         </Block>
-//       </Block>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: theme.COLORS.WHITE,
-//   },
-//   padded: {
-//     paddingHorizontal: theme.SIZES.BASE * 4,
-//     position: 'relative',
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 5,
-//     height: 40,
-//     paddingLeft: 10,
-//     marginBottom: 10,
-//   },
-//   button: {
-//     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
-//     width: '100%',
-//     padding: 15,
-//     borderRadius: 5,
-//     alignItems: 'center',
-//   },
-// });
-
-// export default LogIn;
-
-
-
-
-
-
 import { Block ,Text} from 'galio-framework';
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
@@ -151,7 +74,7 @@ const handleLogIn=()=>{
   const handleRegistration = () => {
     // Add your registration logic here
     console.log('Registration submitted:', { userName,password });
-    navigation.navigate("Register");
+    navigation.navigate("SideBar");
     // You can send the data to a server for further processing
   };
 
