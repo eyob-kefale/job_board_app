@@ -1,4 +1,3 @@
-
 import { Block ,Text} from 'galio-framework';
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
@@ -9,7 +8,7 @@ const LogIn = ({navigation}) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   
-  
+  // jobdetails
   const jobDetails = [
     {
     title: 'Software Developer',
@@ -63,9 +62,21 @@ const LogIn = ({navigation}) => {
 ];
 
 
+// userProfile
+
+const user = {
+  name: 'Eyob Kefale',
+  email: 'jobkefale@gmail.com',
+  profileImage: require("../assets/job2.jpg"),
+  skills: ['React Native', 'JavaScript', 'UI/UX Design'],
+  education: 'Bachelor of Computer Science, Example University',
+  profession: 'Software Engineer',
+  aboutMe: 'Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.',
+};
+
 
 const handleLogIn=()=>{
-  navigation.navigate("JobListing",{jobDetails});
+  navigation.navigate("UserProfile",{user});
 }
 
 
@@ -74,7 +85,7 @@ const handleLogIn=()=>{
   const handleRegistration = () => {
     // Add your registration logic here
     console.log('Registration submitted:', { userName,password });
-    navigation.navigate("SideBar");
+    navigation.navigate("Register");
     // You can send the data to a server for further processing
   };
 

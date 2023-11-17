@@ -11,7 +11,7 @@ import LogIn from './screen/LogIn';
 import HomeScreen from './screen/HomeScreen'
 import Register from './screen/Register';
 import JobListing from './screen/JobListing';
-import SideBar from './common/SideBar';
+import UserProfile from './screen/UserProfile';
 
 // const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator();
@@ -40,11 +40,11 @@ const App = () => {
           name="JobListing"
           component={JobListing}
         />
-         <Stack.Screen
-          name="SideBar"
-          component={SideBar}
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
         />
-      </Stack.Navigator>
+   </Stack.Navigator>
     </NavigationContainer>
   );
 };
