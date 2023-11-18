@@ -2,8 +2,8 @@ import React from 'react';
 import {  StyleSheet, Dimensions } from 'react-native';
 import {theme } from 'galio-framework';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import materialTheme from './constants/Theme';
 import Images from './constants/Images';
@@ -12,40 +12,37 @@ import HomeScreen from './screen/HomeScreen'
 import Register from './screen/Register';
 import JobListing from './screen/JobListing';
 import UserProfile from './screen/UserProfile';
+import NavBar from './common/NavBar';
 
-// const Stack = createStackNavigator();
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
+
+
+// const MainTabs = () => (
+//   <Tab.Navigator>
+//     <Tab.Screen name="Job Listing" component={JobListing} initialParams={{jobDetails}} />
+//     <Tab.Screen name="My Profile" component={UserProfile} initialParams={{user}} />
+//   </Tab.Navigator>
+// );
 const { height, width } = Dimensions.get('screen');
 
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-        />
-        <Stack.Screen
-          name="LogIn"
-          component={LogIn}
-        />
-         <Stack.Screen
-          name="Register"
-          component={Register}
-        />
-
-        <Stack.Screen
-          name="JobListing"
-          component={JobListing}
-        />
-        <Stack.Screen
-          name="UserProfile"
-          component={UserProfile}
-        />
-   </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="LogIn" component={LogIn} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen
+        name="NavBar"
+        component={NavBar}
+        options={{ tabBarVisible: false }}
+      />
+    </Stack.Navigator>
+    {/* <Stack.Screen name="NavBar" component={NavBar} /> */}
+  </NavigationContainer>
   );
 };
 
@@ -67,4 +64,6 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+
 

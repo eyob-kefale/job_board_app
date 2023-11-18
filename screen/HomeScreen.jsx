@@ -41,7 +41,7 @@ const HomeScreen = ({navigation}) => {
                   shadowless
                   style={styles.button}
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                  onPress={() => navigation.navigate('LogIn')}>
+                  onPress={() => navigation.navigate('NavBar')}>
                   GET STARTED
                 </Button>
               </Block>
