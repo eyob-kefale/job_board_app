@@ -81,11 +81,14 @@ aboutMe: 'Passionate about creating delightful user experiences with a focus on 
 
 const NavBar=()=> {
   return (
-    <Tab.Navigator>
-    <Tab.Screen name="    Job Listing" component={JobListing} initialParams={{jobDetails}} />
-    <Tab.Screen name="    My Profile" component={UserProfile} initialParams={{user}} />
-  </Tab.Navigator>
+    <Tab.Navigator
+      
+    >
+      <Tab.Screen name="Job Listing" component={JobListing} initialParams={{ jobDetails }} />
+      <Tab.Screen name="My Profile" component={UserProfile} initialParams={{ user }} />
+    </Tab.Navigator>
   );
+  
 }
 
 export default NavBar;
