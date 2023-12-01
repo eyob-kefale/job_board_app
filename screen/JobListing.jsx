@@ -1,9 +1,8 @@
 // ... (other imports)
-
-import { Block } from 'galio-framework';
 import React, { useState } from 'react';
-import { Dimensions, Image } from 'react-native';
+import { Dimensions, Image, TextInput } from 'react-native';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Input } from 'react-native-elements';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -24,8 +23,16 @@ const JobListing = ({ route }) => {
     // You can add your navigation logic or any other actions here
   };
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchTerm(text);
+  };
+
+  const filteredInfo = jobDetails.filter(info => info.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
   const renderJobItem = ({ item, index }) => (
-    <Block key={index} style={styles.jobItem}>
+    <View key={index} style={styles.jobItem}>
       <Image source={item.imgUrl} style={styles.image} resizeMode="cover" />
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>
@@ -39,25 +46,35 @@ const JobListing = ({ route }) => {
       <TouchableOpacity onPress={() => onApplyPress(item.title)} style={styles.applyButton}>
         <Text style={styles.applyButtonText}>Apply</Text>
       </TouchableOpacity>
-    </Block>
+    </View>
   );
 
   return (
-    <FlatList
-      data={jobDetails}
-      renderItem={renderJobItem}
-      keyExtractor={(item, index) => index.toString()}
-      numColumns={1} // Set the number of columns to 1
-      contentContainerStyle={styles.card}
-    />
+    <View style={styles.card}>
+      <TextInput
+        style={styles.input}
+        placeholder="Search office requirement here"
+        placeholderTextColor="#000" // Set the text color for placeholder
+        value={searchTerm}
+        onChangeText={handleSearch}
+      />
+      <FlatList
+        data={filteredInfo}
+        renderItem={renderJobItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={1}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     padding: 16,
+    marginBottom:70
   },
+
   jobItem: {
     flex: 1,
     backgroundColor: '#fff',
@@ -102,6 +119,20 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 8,
     marginBottom: 8,
+  },
+
+  input: {
+    marginTop: 24,
+    padding: 24,
+    marginBottom: 16,
+    marginHorizontal: 12,
+    width: '65%',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    color: '#000', // Set the text color
   },
 });
 
