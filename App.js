@@ -138,6 +138,14 @@ const App = () => {
             console.log('User signed out');
           }}
         />
+      
+
+        
+        {/* <Stack.Screen
+            name="NavBar"
+            component={NavBar}
+            options={{ tabBarVisible: true }}
+          /> */}
         <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="LogIn" component={LogIn} />
@@ -164,6 +172,7 @@ const App = () => {
           }}
         /> */}
         </Stack.Navigator>
+        
       </SafeAreaView>
     </NavigationContainer>
   );
