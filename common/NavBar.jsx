@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native';
 import JobListing from '../screen/JobListing';
 import UserProfile from '../screen/UserProfile';
 import Notification from '../screen/Notification/Notification';
+import Setting from '../screen/Setting';
 
 const Tab = createBottomTabNavigator();
 
@@ -107,6 +108,18 @@ const NavBar=()=> {
               tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
             }}
           />
+  <Tab.Screen
+            name="Setting"
+            component={Setting}
+           
+            
+            options={{
+              headerShown: false,
+              tabBarLabel: 'My Profile',
+              tabBarIcon: ({ color }) => <Icon name="settings" color={color} size={24} />,
+            }}
+          />
+          
           <Tab.Screen
             name="Notification"
             component={Notification}
@@ -114,7 +127,7 @@ const NavBar=()=> {
             options={{
               headerShown: false,
               tabBarLabel: 'My Profile',
-              tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
+              tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
             }}
           />
         </Tab.Navigator>

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Dimensions, Image, TextInput } from 'react-native';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Input } from 'react-native-elements';
+import Search from '../common/Search';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -51,12 +52,10 @@ const JobListing = ({ route }) => {
 
   return (
     <View style={styles.card}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search office requirement here"
-        placeholderTextColor="#000" // Set the text color for placeholder
-        value={searchTerm}
-        onChangeText={handleSearch}
+      <Search
+        searchTerm={searchTerm}
+        placeholder="Search Notification here"
+        handleSearch={handleSearch}
       />
       <FlatList
         data={filteredInfo}
@@ -70,9 +69,9 @@ const JobListing = ({ route }) => {
 
 const styles = StyleSheet.create({
   card: {
-    // backgroundColor: '#fff',
+    // backgroundColor:"#6DB9EF",
     padding: 16,
-    marginBottom:70
+    marginBottom: 70
   },
 
   jobItem: {
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 8,
-    textAlign:"justify"
+    textAlign: "justify"
   },
   showMoreButton: {
     alignSelf: 'flex-end',
@@ -123,12 +122,12 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    marginTop: 24,
+    marginTop: 4,
     padding: 24,
     marginBottom: 16,
-    marginHorizontal: 12,
+    // marginHorizontal: 12,
     width: '65%',
-    padding: 12,
+    padding: 7,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ccc',

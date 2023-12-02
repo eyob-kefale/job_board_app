@@ -111,6 +111,7 @@ import Setting from './screen/Setting';
 import Notification from './screen/Notification/Notification';
 import SingleNotification from './screen/Notification/SingleNotification';
 import EditProfile from './screen/MyProfile/EditProfile';
+import Search from './common/Search';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -146,6 +147,7 @@ const App = () => {
           <Stack.Screen name="Setting" component={Setting} />
           <Stack.Screen name="JobListing" component={JobListing} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="Search" component={Search} />
           <Stack.Screen
             name="NavBar"
             component={NavBar}

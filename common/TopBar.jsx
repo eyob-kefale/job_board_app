@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const TopBar = ({ title, notificationCount, userImage, onSignOut }) => {
+const TopBar = ({ title, notificationCount, userImage, onSignOut,navigation }) => {
   const [showSignOutButton, setShowSignOutButton] = useState(false);
   const userImageURI = require('uri')(userImage);
+
+  const Notification=()=>{
+    navigation.navigate("Notification");
+  }
 
   return (
     <SafeAreaView style={styles.outerSafeAreaView}>
@@ -15,10 +20,17 @@ const TopBar = ({ title, notificationCount, userImage, onSignOut }) => {
 
       {notificationCount > 0 && (
         <SafeAreaView style={styles.notificationIconContainer}>
+          <TouchableOpacity
+          style={styles.notificationIconContainer}
+          onPress={Notification}
+          >
           <AntDesign name="notification" size={24} color="white" />
+          {/* <Icon   name="user" color={"#fff"} size={24}/> */}
           <SafeAreaView style={styles.notificationCountBadge}>
             <Text style={styles.notificationCountText}>{notificationCount}</Text>
           </SafeAreaView>
+
+          </TouchableOpacity>
         </SafeAreaView>
       )}
 
@@ -31,7 +43,7 @@ const TopBar = ({ title, notificationCount, userImage, onSignOut }) => {
         <Text style={styles.signOutButtonText}>Sign Out</Text>
       </TouchableOpacity>
 
-      {showSignOutButton && (
+      {/* {showSignOutButton && (
         <TouchableOpacity
           style={styles.signOutConfirmationButton}
           onPress={() => {
@@ -40,7 +52,7 @@ const TopBar = ({ title, notificationCount, userImage, onSignOut }) => {
         >
           <Text style={styles.signOutConfirmationButtonText}>Confirm Sign Out</Text>
         </TouchableOpacity>
-      )}
+      )} */}
     </SafeAreaView>
     </SafeAreaView>
   );
@@ -100,6 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     borderRadius: 5,
     marginTop: 10,
+    
   },
   signOutConfirmationButtonText: {
     color: 'white',

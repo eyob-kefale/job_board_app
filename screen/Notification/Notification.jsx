@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Dimensions, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Search from '../../common/Search';
 
 const { width, height } = Dimensions.get('window');
 const avatarSizeRatio = 0.15; // You can adjust the fraction as needed
@@ -83,13 +84,13 @@ const Notification = () => {
 
   return (
     <View style={styles.container}>
-       <TextInput
-        style={styles.input}
-        placeholder="Search office requirement here"
-        placeholderTextColor="#000" // Set the text color for placeholder
-        value={searchTerm}
-        onChangeText={handleSearch}
-      />
+      
+   <Search 
+   searchTerm={searchTerm} 
+   placeholder="Search Notification here" 
+   handleSearch={handleSearch}
+   />
+
       <FlatList
         data={filteredInfo}
         keyExtractor={(item) => item.id}
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: dynamicStyles.notificationItemPadding,
-   
+  //  backgroundColor:"#6DB9EF"
   },
   notificationItem: {
     flexDirection: 'row',
@@ -132,19 +133,19 @@ const styles = StyleSheet.create({
   notificationDescription: {
     fontSize: dynamicStyles.descriptionFontSize,
   },
-  input: {
-    marginTop: 24,
-    padding: 24,
-    marginBottom: 16,
+  // input: {
+  //   marginTop: 4,
+  //   padding: 24,
+  //   marginBottom: 16,
   
-    width: '65%',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#fff',
-    color: '#000', // Set the text color
-  },
+  //   width: '65%',
+  //   padding: 7,
+  //   borderRadius: 8,
+  //   borderWidth: 1,
+  //   borderColor: '#ccc',
+  //   backgroundColor: '#fff',
+  //   color: '#000', // Set the text color
+  // },
 
 });
 
