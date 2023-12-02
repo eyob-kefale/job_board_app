@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView,Button,Image, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-import { ScrollView } from 'react-native';
-import Textarea from 'react-native-textarea/src/Textarea';
 
+import {  } from 'react-native';
+import Textarea from 'react-native-textarea/src/Textarea';
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 const EditProfile = ({ route, navigation }) => {
   const { user } = route.params;
-
+  const [image, setImage] = useState(null);
+  const [ExistingImage, setExistingImage] = useState(user);
   const [editedUser, setEditedUser] = useState(user);
   const [editedEmail, setEditedEmail] = useState(user);
   const [editedDept, setEditedDept] = useState(user);
@@ -23,10 +26,35 @@ const EditProfile = ({ route, navigation }) => {
     navigation.navigate('UserProfile', { user: editedUser });
   };
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setExistingImage(null);
+    }
+  }
+
   return (
     <ScrollView>
-
       <View style={styles.container}>
+      <View style={styles.imgCont}>
+      
+        {/* <TouchableOpacity style={styles.ImagePickerButton} title="Edit Image" onPress={pickImage} > */}
+
+        <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24}  />
+        {ExistingImage&&<Image source={user.profileImage} style={styles.image} />}
+         {/* </TouchableOpacity> */}
+       <View>
+        {image && <Image source={{ uri: image }} style={styles.image} />}
+
+       </View>
+      </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>
             Name:
@@ -91,7 +119,7 @@ const EditProfile = ({ route, navigation }) => {
           </Text>
           <Textarea
 
-containerStyle={styles.textareaAboutContainer} 
+            containerStyle={styles.textareaAboutContainer}
             style={styles.input}
             value={editedAboutMe.aboutMe}
             onChangeText={(text) => setEditedAboutMe({ ...editedAboutMe, aboutMe: text })}
@@ -101,6 +129,7 @@ containerStyle={styles.textareaAboutContainer}
             <Text style={styles.saveButtonText}>Save Changes</Text>
           </TouchableOpacity>
         </Block>
+        
       </View>
     </ScrollView>
   );
@@ -119,7 +148,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft:10
+    marginLeft: 10
     // marginBottom: 8,
     // marginTop: 13,
   },
@@ -135,7 +164,7 @@ const styles = StyleSheet.create({
     padding: 5,
     // marginBottom: 16,
   },
-  textareaAboutContainer:{
+  textareaAboutContainer: {
     height: 150,
     padding: 5,
   }
@@ -152,6 +181,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
+
+  ImagePickerButton: {
+  
+    marginLeft: "30%",
+    top:"80%",
+  },
+  image:{ 
+
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    resizeMode: "cover",
+  
+  },
+  imgCont:{
+     flex: 1,
+     alignItems: 'center', 
+    //  justifyContent: 'center' 
+  }
 });
+
 
 export default EditProfile;

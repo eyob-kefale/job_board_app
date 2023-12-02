@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
 import { SafeAreaView } from 'react-native';
 import JobListing from '../screen/JobListing';
-import UserProfile from '../screen/UserProfile';
+import UserProfile from '../screen/MyProfile/UserProfile';
 import Notification from '../screen/Notification/Notification';
 import Setting from '../screen/Setting';
 

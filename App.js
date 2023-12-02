@@ -104,7 +104,7 @@ import LogIn from './screen/LogIn';
 import HomeScreen from './screen/HomeScreen';
 import Register from './screen/Register';
 import JobListing from './screen/JobListing';
-import UserProfile from './screen/UserProfile';
+import UserProfile from './screen/MyProfile/UserProfile';
 import NavBar from './common/NavBar';
 import TopBar from './common/TopBar';
 import Setting from './screen/Setting';
@@ -112,6 +112,7 @@ import Notification from './screen/Notification/Notification';
 import SingleNotification from './screen/Notification/SingleNotification';
 import EditProfile from './screen/MyProfile/EditProfile';
 import Search from './common/Search';
+import ImagePickerComponent from './screen/ImagePickerComponent';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -155,7 +156,9 @@ const App = () => {
           <Stack.Screen name="Setting" component={Setting} />
           <Stack.Screen name="JobListing" component={JobListing} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
-        
+          <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen name="ImagePickerComponent" component={ImagePickerComponent} />
+          
           <Stack.Screen
             name="NavBar"
             component={NavBar}
