@@ -133,19 +133,7 @@ const styles = StyleSheet.create({
   notificationDescription: {
     fontSize: dynamicStyles.descriptionFontSize,
   },
-  // input: {
-  //   marginTop: 4,
-  //   padding: 24,
-  //   marginBottom: 16,
   
-  //   width: '65%',
-  //   padding: 7,
-  //   borderRadius: 8,
-  //   borderWidth: 1,
-  //   borderColor: '#ccc',
-  //   backgroundColor: '#fff',
-  //   color: '#000', // Set the text color
-  // },
 
 });
 

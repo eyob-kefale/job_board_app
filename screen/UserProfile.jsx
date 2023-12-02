@@ -20,16 +20,25 @@ const UserProfile = ({ route, navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Block style={styles.profileImageContainer}>
-        <Image source={user.profileImage} style={styles.profileImage} />
-      </Block>
+      <Block style={styles.imgcont}>
 
-      <Block style={styles.header}>
-        <Text p style={styles.title}>
-          {user.name}
-        </Text>
-        <Text style={styles.desc}>{user.email}</Text>
-      
+        <Block style={styles.profileImageContainer}>
+          <Image source={user.profileImage} style={styles.profileImage} />
+          <View style={styles.dptCont}>
+            <Text style={styles.dpt}>
+              {user.department}
+            </Text>
+
+          </View>
+        </Block>
+
+        <Block style={styles.header}>
+          <Text p style={styles.title}>
+            {user.name}
+          </Text>
+          <Text style={styles.email}>{user.email}</Text>
+
+        </Block>
       </Block>
 
       <ScrollView style={styles.detailsContainer}>
@@ -69,7 +78,7 @@ const UserProfile = ({ route, navigation }) => {
         />
       </Block>
 
-      
+
 
       {/* <TouchableOpacity style={styles.followButton}>
         <Text style={styles.followButtonText}>{user.isFollowing ? "Unfollow" : "Follow"}</Text>
@@ -79,7 +88,7 @@ const UserProfile = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  
+
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -102,26 +111,69 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
     padding: 16,
+
   },
   desc: {
     color: "#000",
     marginBottom: 20,
-    textAlign:"justify"
+    textAlign: "justify"
   },
   header: {
     marginBottom: 20,
   },
-  title: {
-    color: "#000",
-    marginBottom: 8,
+  imgcont: {
+    marginLeft: "5%",
   },
+
+
   rating: {
     color: theme.COLORS.WARNING,
     fontSize: 20,
     marginBottom: 8,
   },
-  profileImageContainer: {},
+  profileImageContainer: {
+
+    flexDirection: "row"
+  },
+  dptCont: {
+    flex: 1,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+  ,
+  dpt: {
+    width: '100%', // Set the width to 100%
+    fontSize: 18,
+    fontFamily: "serif",
+    fontStyle: "italic",
+    fontWeight: "bold",
+    textAlign: 'center',
+
+
+  }
+  ,
+  title: {
+    width: '100%', // Set the width to 100%
+    fontSize: 20,
+    fontFamily: "serif",
+    fontStyle: "italic",
+    fontWeight: "normal",
+
+
+    color: "#000",
+    marginBottom: 8,
+  },
+  email: {
+    fontSize: 20,
+    fontFamily: "serif",
+    fontStyle: "italic",
+    fontWeight: "normal",
+  }
+  ,
+
   profileImage: {
+
     width: 120,
     height: 120,
     borderRadius: 60,
@@ -134,7 +186,7 @@ const styles = StyleSheet.create({
   },
   sectionTitleContainer: {
     marginTop: 20,
-    marginBottom:30,
+    marginBottom: 30,
   },
   sectionTitle: {
     color: "#000",
@@ -147,7 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 16,
-    
+
   },
   socialLinkText: {
     marginLeft: 8,
@@ -157,7 +209,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
-    marginBottom:30,
+    marginBottom: 30,
     alignItems: 'center',
   },
   followButtonText: {

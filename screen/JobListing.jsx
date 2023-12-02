@@ -54,7 +54,7 @@ const JobListing = ({ route }) => {
     <View style={styles.card}>
       <Search
         searchTerm={searchTerm}
-        placeholder="Search Notification here"
+        placeholder="Search office requirement here"
         handleSearch={handleSearch}
       />
       <FlatList
@@ -121,19 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
-  input: {
-    marginTop: 4,
-    padding: 24,
-    marginBottom: 16,
-    // marginHorizontal: 12,
-    width: '65%',
-    padding: 7,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#fff',
-    color: '#000', // Set the text color
-  },
+  
 });
 
 export default JobListing;
