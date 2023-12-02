@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
+import { ScrollView } from 'react-native';
 
 const EditProfile = ({ route, navigation }) => {
   const { user } = route.params;
+
   const [editedUser, setEditedUser] = useState(user);
+  const [editedEmail, setEditedEmail] = useState(user);
+  const [editedDept, setEditedDept] = useState(user);
+  const [editedSkills, setEditedSkills] = useState(user);
+  const [editedEducationalDetail, setEditedEducationalDetail] = useState(user);
+  const [editedprofession, setEditedprofession] = useState(user);
+  const [editedAboutMe, setEditedAboutMe] = useState(user);
+
 
   const handleSaveChanges = () => {
     // Implement logic to save changes to the user profile
@@ -14,6 +23,8 @@ const EditProfile = ({ route, navigation }) => {
   };
 
   return (
+    <ScrollView>
+
     <View style={styles.container}>
       <Block style={styles.detailsContainer}>
         <Text h5 style={styles.sectionTitle}>
@@ -25,6 +36,51 @@ const EditProfile = ({ route, navigation }) => {
           onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
         />
 
+        <Text h5 style={styles.sectionTitle}>
+          Email:
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={editedEmail.email}
+          onChangeText={(text) => setEditedEmail({ ...editedEmail, email: text })}
+        />
+
+        <Text h5 style={styles.sectionTitle}>
+          Department:
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={editedDept.department}
+          onChangeText={(text) => setEditedDept({ ...editedDept, department: text })}
+        />
+
+        <Text h5 style={styles.sectionTitle}>
+          Educational Details:
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={editedEducationalDetail.education}
+          onChangeText={(text) => setEditedEducationalDetail({ ...editedEducationalDetail, EducationalDetail: text })}
+        />
+
+        <Text h5 style={styles.sectionTitle}>
+          Skills:
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={editedSkills.skills.join(", ")}
+          onChangeText={(text) => setEditedSkills({ ...editedSkills, skills: text })}
+        />
+
+        <Text h5 style={styles.sectionTitle}>
+          About Me:
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={editedAboutMe.aboutMe}
+          onChangeText={(text) => setEditedAboutMe({ ...editedAboutMe, aboutMe: text })}
+        />
+
         {/* Add other input fields for editing user details */}
         {/* For example: email, skills, education, profession, aboutMe, etc. */}
 
@@ -33,6 +89,7 @@ const EditProfile = ({ route, navigation }) => {
         </TouchableOpacity>
       </Block>
     </View>
+    </ScrollView>
   );
 };
 
@@ -60,10 +117,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   saveButton: {
-    backgroundColor: theme.COLORS.SUCCESS,
+    backgroundColor: '#3498db',
     padding: 12,
     borderRadius: 8,
-    marginTop: 16,
+    marginTop: "10%",
+    marginBottom:"7%",
     alignItems: 'center',
   },
   saveButtonText: {

@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { Ionicons } from '@expo/vector-icons';
+import { CommonActions } from "@react-navigation/native";
 
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
@@ -15,7 +16,20 @@ const UserProfile = ({ route, navigation }) => {
 
   const handleEditProfile = () => {
     // Navigate to the EditProfile screen
-    navigation.navigate('EditProfile', { user });
+    CommonActions.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'NavBar',
+          state: {
+            routes: [
+              { name: 'NavBar' }, // Replace with your actual tab names
+              { name: 'EditProfile', params: { user } },
+            ],
+          },
+        },
+      ],
+    })
   };
 
   return (

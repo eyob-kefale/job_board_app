@@ -147,7 +147,7 @@ const App = () => {
           <Stack.Screen name="Setting" component={Setting} />
           <Stack.Screen name="JobListing" component={JobListing} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
-          {/* <Stack.Screen name="Search" component={Search} /> */}
+        
           <Stack.Screen
             name="NavBar"
             component={NavBar}
