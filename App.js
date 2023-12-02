@@ -144,6 +144,7 @@ const App = () => {
           <Stack.Screen name="Notification" component={Notification}  />
           <Stack.Screen name="SingleNotification" component={SingleNotification}  />
           <Stack.Screen name="Setting" component={Setting} />
+          <Stack.Screen name="JobListing" component={JobListing} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen
             name="NavBar"

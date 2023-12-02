@@ -1,14 +1,14 @@
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-
+import Icon from 'react-native-vector-icons/Feather';
+import { SafeAreaView } from 'react-native';
 import JobListing from '../screen/JobListing';
 import UserProfile from '../screen/UserProfile';
+import Notification from '../screen/Notification/Notification';
 
 const Tab = createBottomTabNavigator();
 
 
-
-// 
 const jobDetails = [
   {
   title: 'Software Developer',
@@ -47,7 +47,7 @@ const jobDetails = [
 },
 {
   title: 'Software Developer',
-  imgUrl:require("../assets/job1.jpg"),
+    imgUrl:require("../assets/job1.jpg"),
   description: 'Tech Co',
   experienceRequired: '3 years',
   // Add more details as needed
@@ -81,13 +81,48 @@ aboutMe: 'Passionate about creating delightful user experiences with a focus on 
 
 const NavBar=()=> {
   return (
-    <Tab.Navigator
-      
-    >
-      <Tab.Screen name="Job Listing" component={JobListing} initialParams={{ jobDetails }} />
-      <Tab.Screen name="My Profile" component={UserProfile} initialParams={{ user }} />
-    </Tab.Navigator>
-  );
+
+    <SafeAreaView style={{flex:3,height:"20%"}}>
+        <Tab.Navigator>
+    
+    
+          <Tab.Screen
+            name="Job Listing"
+            component={JobListing}
+            initialParams={{ jobDetails}}
+            options={{
+              headerShown: false,
+              tabBarLabel: 'Job Listing',
+              tabBarIcon: ({ color }) => <Icon name="list" color={color} size={24} />,
+            }}
+          />
+          <Tab.Screen
+            name="My Profile"
+            component={UserProfile}
+            initialParams={{ user }}
+            
+            options={{
+              headerShown: false,
+              tabBarLabel: 'My Profile',
+              tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
+            }}
+          />
+          <Tab.Screen
+            name="Notification"
+            component={Notification}
+          
+            options={{
+              headerShown: false,
+              tabBarLabel: 'My Profile',
+              tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
+            }}
+          />
+        </Tab.Navigator>
+    </SafeAreaView>
+    
+    
+    
+      )
   
 }
 

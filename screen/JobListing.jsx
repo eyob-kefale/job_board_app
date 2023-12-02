@@ -7,7 +7,7 @@ import { Input } from 'react-native-elements';
 const { height, width } = Dimensions.get('screen');
 
 const JobListing = ({ route }) => {
-  const { jobDetails } = route.params;
+  const { jobDetails } = route.params; // Access jobDetails from route.params
   const [showMoreMap, setShowMoreMap] = useState({});
 
   const toggleShowMore = (index) => {
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 8,
+    textAlign:"justify"
   },
   showMoreButton: {
     alignSelf: 'flex-end',
