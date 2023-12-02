@@ -56,7 +56,7 @@ const UserProfile = ({ route, navigation }) => {
         <Text h5 style={styles.sectionTitle}>
           Profession:
         </Text>
-        <Text style={styles.desc}>{user.profession}</Text>
+        <Text style={styles.desc}>{user.c}</Text>
 
         <Text h5 style={styles.sectionTitle}>
           About Me:

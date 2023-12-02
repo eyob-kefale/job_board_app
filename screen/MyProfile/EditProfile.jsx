@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { ScrollView } from 'react-native';
+import Textarea from 'react-native-textarea/src/Textarea';
 
 const EditProfile = ({ route, navigation }) => {
   const { user } = route.params;
@@ -25,70 +26,82 @@ const EditProfile = ({ route, navigation }) => {
   return (
     <ScrollView>
 
-    <View style={styles.container}>
-      <Block style={styles.detailsContainer}>
-        <Text h5 style={styles.sectionTitle}>
-          Name:
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={editedUser.name}
-          onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
-        />
+      <View style={styles.container}>
+        <Block style={styles.detailsContainer}>
+          <Text h5 style={styles.sectionTitle}>
+            Name:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedUser.name}
+            onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
+          />
 
-        <Text h5 style={styles.sectionTitle}>
-          Email:
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={editedEmail.email}
-          onChangeText={(text) => setEditedEmail({ ...editedEmail, email: text })}
-        />
+          <Text h5 style={styles.sectionTitle}>
+            Email:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedEmail.email}
+            onChangeText={(text) => setEditedEmail({ ...editedEmail, email: text })}
+          />
 
-        <Text h5 style={styles.sectionTitle}>
-          Department:
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={editedDept.department}
-          onChangeText={(text) => setEditedDept({ ...editedDept, department: text })}
-        />
+          <Text h5 style={styles.sectionTitle}>
+            Department:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedDept.department}
+            onChangeText={(text) => setEditedDept({ ...editedDept, department: text })}
+          />
 
-        <Text h5 style={styles.sectionTitle}>
-          Educational Details:
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={editedEducationalDetail.education}
-          onChangeText={(text) => setEditedEducationalDetail({ ...editedEducationalDetail, EducationalDetail: text })}
-        />
+          <Text h5 style={styles.sectionTitle}>
+            Educational Details:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedEducationalDetail.education}
+            onChangeText={(text) => setEditedEducationalDetail({ ...editedEducationalDetail, education: text })}
+          />
 
-        <Text h5 style={styles.sectionTitle}>
-          Skills:
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={editedSkills.skills.join(", ")}
-          onChangeText={(text) => setEditedSkills({ ...editedSkills, skills: text })}
-        />
+          <Text h5 style={styles.sectionTitle}>
+            Skills:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedSkills.skills.join(", ")}
+            onChangeText={(text) => setEditedSkills({ ...editedSkills, skills: text })}
+          />
+          <Text h5 style={styles.sectionTitle}>
+            Profession:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedprofession.profession}
+            onChangeText={(text) => setEditedprofession({ ...editedprofession, skills: text })}
+          />
+          <Text h5 style={styles.sectionTitle}>
+            About Me:
+          </Text>
+          <Textarea
 
-        <Text h5 style={styles.sectionTitle}>
-          About Me:
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={editedAboutMe.aboutMe}
-          onChangeText={(text) => setEditedAboutMe({ ...editedAboutMe, aboutMe: text })}
-        />
+containerStyle={styles.textareaAboutContainer} 
+            style={styles.input}
+            value={editedAboutMe.aboutMe}
+            onChangeText={(text) => setEditedAboutMe({ ...editedAboutMe, aboutMe: text })}
+          />
 
-        {/* Add other input fields for editing user details */}
-        {/* For example: email, skills, education, profession, aboutMe, etc. */}
-
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-          <Text style={styles.saveButtonText}>Save Changes</Text>
-        </TouchableOpacity>
-      </Block>
-    </View>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+            <Text style={styles.saveButtonText}>Save Changes</Text>
+          </TouchableOpacity>
+        </Block>
+      </View>
     </ScrollView>
   );
 };
@@ -100,28 +113,39 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   detailsContainer: {
-    marginTop: 20,
+    // marginTop: 20,
   },
   sectionTitle: {
     color: '#000',
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
-    marginTop: 13,
+    marginLeft:10
+    // marginBottom: 8,
+    // marginTop: 13,
   },
   input: {
     borderWidth: 1,
     borderColor: theme.COLORS.INFO,
     borderRadius: 8,
     padding: 8,
-    marginBottom: 16,
+    // marginBottom: 16,
   },
+  textareaContainer: {
+    height: 70,
+    padding: 5,
+    // marginBottom: 16,
+  },
+  textareaAboutContainer:{
+    height: 150,
+    padding: 5,
+  }
+  ,
   saveButton: {
     backgroundColor: '#3498db',
     padding: 12,
     borderRadius: 8,
     marginTop: "10%",
-    marginBottom:"7%",
+    marginBottom: "7%",
     alignItems: 'center',
   },
   saveButtonText: {
