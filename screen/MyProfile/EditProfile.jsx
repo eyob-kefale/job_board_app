@@ -8,8 +8,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 const EditProfile = ({ route, navigation }) => {
   const { user } = route.params;
+  // const [image, setImage] = useState(null);
+  // const [ExistingImage, setExistingImage] = useState(user);
+
   const [image, setImage] = useState(null);
-  const [ExistingImage, setExistingImage] = useState(user);
   const [editedUser, setEditedUser] = useState(user);
   const [editedEmail, setEditedEmail] = useState(user);
   const [editedDept, setEditedDept] = useState(user);
@@ -23,8 +25,9 @@ const EditProfile = ({ route, navigation }) => {
     // Implement logic to save changes to the user profile
     // For simplicity, this example updates the user state directly.
     // In a real app, you might want to make an API call or use state management.
-    navigation.navigate('UserProfile', { user: editedUser });
+    navigation.navigate('UserProfile', { user: { ...editedUser, profileImage: image } });
   };
+  
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -36,7 +39,6 @@ const EditProfile = ({ route, navigation }) => {
     });
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      setExistingImage(null);
     }
   }
 
@@ -44,17 +46,10 @@ const EditProfile = ({ route, navigation }) => {
     <ScrollView>
       <View style={styles.container}>
       <View style={styles.imgCont}>
-      
-        {/* <TouchableOpacity style={styles.ImagePickerButton} title="Edit Image" onPress={pickImage} > */}
-
-        <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24}  />
-        {ExistingImage&&<Image source={user.profileImage} style={styles.image} />}
-         {/* </TouchableOpacity> */}
-       <View>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-
-       </View>
-      </View>
+          <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
+          {image && <Image source={{ uri: image }} style={styles.image} />}
+          {!image && user.profileImage && <Image source={user.profileImage} style={styles.image} />}
+        </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>
             Name:

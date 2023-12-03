@@ -1,33 +1,50 @@
-import React from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import React from 'react';
+import { View, TextInput } from 'react-native';
+import { Icon } from 'react-native-elements';
+// Import the icon library you are using
 
-const Search = ({searchTerm,placeholder,handleSearch}) => {
-    
+const Search = ({ searchTerm, placeholder, handleSearch }) => {
+
+
   return (
-    <TextInput
-    style={styles.input}
-    placeholder={placeholder}
-    placeholderTextColor="#000" // Set the text color for placeholder
-    value={searchTerm}
-    onChangeText={handleSearch}
-  />
-  )
-}
+    <View style={styles.inputContainer}>
+      <Icon name="search" size={20} style={styles.icon} />
+      <TextInput
+        underLineColorAndroid="transparent"
+        placeholderTextColor="grey"
+        style={styles.input}
+        placeholder={placeholder}
 
-const styles=StyleSheet.create({
-    input: {
-        marginTop: 4,
-        padding: 24,
-        marginBottom: 16,
-      
-        width: '65%',
-        padding: 7,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        backgroundColor: '#fff',
-        color: '#000', // Set the text color
-      },
-})
+        value={searchTerm}
+        onChangeText={handleSearch}
+      />
+    </View>
+  );
+};
 
-export default Search
+const styles = {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    paddingHorizontal: 10,
+    marginTop: 4,
+    marginBottom: 8
+  },
+  icon: {
+    marginRight: 8,
+  },
+  input: {
+
+    flex: 1,
+    fontWeight: '700',
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+
+  },
+};
+
+export default Search;

@@ -113,6 +113,8 @@ import SingleNotification from './screen/Notification/SingleNotification';
 import EditProfile from './screen/MyProfile/EditProfile';
 import Search from './common/Search';
 import ImagePickerComponent from './screen/ImagePickerComponent';
+import MyApplication from './screen/MyApplication';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -130,7 +132,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <SafeAreaView style={{ flex: 1 }}>
-        <TopBar
+        {/* <TopBar
           
           title="Job Board"
           notificationCount={5}
@@ -138,7 +140,7 @@ const App = () => {
           onSignOut={() => {
             console.log('User signed out');
           }}
-        />
+        /> */}
       
 
         
@@ -157,7 +159,9 @@ const App = () => {
           <Stack.Screen name="JobListing" component={JobListing} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen name="MyApplication" component={MyApplication} />
           <Stack.Screen name="ImagePickerComponent" component={ImagePickerComponent} />
+        
           
           <Stack.Screen
             name="NavBar"

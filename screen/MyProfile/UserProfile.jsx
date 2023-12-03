@@ -25,6 +25,7 @@ const UserProfile = ({ route, navigation }) => {
 
         <Block style={styles.profileImageContainer}>
           <Image source={user.profileImage} style={styles.profileImage} />
+      
           <View style={styles.dptCont}>
             <Text style={styles.dpt}>
               {user.department}

@@ -1,14 +1,75 @@
 // ... (other imports)
 import React, { useState } from 'react';
 import { Dimensions, Image, TextInput } from 'react-native';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text,ScrollView, StyleSheet, TouchableOpacity, FlatList,SafeAreaView } from 'react-native';
 import { Input } from 'react-native-elements';
 import Search from '../common/Search';
+
 
 const { height, width } = Dimensions.get('screen');
 
 const JobListing = ({ route }) => {
-  const { jobDetails } = route.params; // Access jobDetails from route.params
+  const { jobDetails } = route.params; 
+  const SECTIONS = [
+    {
+      title: 'Made for you',
+      horizontal: true,
+      data:[
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Tech Co',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Tech Co',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Tech Co',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Tech Co',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Tech Co',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+        {
+          title: 'Software Developer',
+          imgUrl: require("../assets/job1.jpg"),
+          description: 'Tech Co',
+          experienceRequired: '3 years',
+          // Add more details as needed
+        },
+      ]
+      
+    },
+    // ...
+  ]; 
+ 
   const [showMoreMap, setShowMoreMap] = useState({});
 
   const toggleShowMore = (index) => {
@@ -47,8 +108,10 @@ const JobListing = ({ route }) => {
       <TouchableOpacity onPress={() => onApplyPress(item.title)} style={styles.applyButton}>
         <Text style={styles.applyButtonText}>Apply</Text>
       </TouchableOpacity>
+
     </View>
   );
+
 
   return (
     <View style={styles.card}>
@@ -57,6 +120,11 @@ const JobListing = ({ route }) => {
         placeholder="Search office requirement here"
         handleSearch={handleSearch}
       />
+    
+
+
+    
+
       <FlatList
         data={filteredInfo}
         renderItem={renderJobItem}
@@ -67,13 +135,18 @@ const JobListing = ({ route }) => {
   );
 };
 
+
+
+
+
 const styles = StyleSheet.create({
   card: {
-    // backgroundColor:"#6DB9EF",
+    // backgroundColor:"#BB9CC0",
     padding: 16,
     marginBottom: 70
   },
 
+ 
   jobItem: {
     flex: 1,
     backgroundColor: '#fff',
@@ -86,16 +159,27 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+ 
+
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
   },
+
+  horizontalTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 6,
+  },
+
   description: {
     fontSize: 16,
     marginBottom: 8,
     textAlign: "justify"
   },
+  
+
   showMoreButton: {
     alignSelf: 'flex-end',
     padding: 8,
@@ -120,8 +204,64 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
-
   
+
+
+
+
+  horizontalJobItem: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 10,
+    marginTop:50,
+    marginBottom: 150,
+    marginRight: 10, // Add spacing between horizontal items
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  horizontalTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#333', // Change text color
+  },
+
+  horizontalDescription: {
+    fontSize: 14,
+    marginBottom: 6,
+    textAlign: 'justify',
+    color: '#555', // Change text color
+  },
+
+  horizontalApplyButton: {
+    backgroundColor: '#3498db', // Change button color
+    padding: 10,
+    borderRadius: 4,
+    marginTop: 8,
+    alignItems: 'center',
+  },
+
+  horizontalApplyButtonText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+
+  horizontalImage: {
+    width: '100%',
+    height: 100, // Adjust image height
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+
+
+
+
+
 });
 
 export default JobListing;

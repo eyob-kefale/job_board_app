@@ -67,6 +67,7 @@ const LogIn = ({navigation}) => {
 const user = {
   name: 'Eyob Kefale',
   email: 'jobkefale@gmail.com',
+  department: 'Software Engineer',
   profileImage: require("../assets/job2.jpg"),
   skills: ['React Native', 'JavaScript', 'UI/UX Design'],
   education: 'Bachelor of Computer Science, Example University',

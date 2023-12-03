@@ -6,6 +6,7 @@ import JobListing from '../screen/JobListing';
 import UserProfile from '../screen/MyProfile/UserProfile';
 import Notification from '../screen/Notification/Notification';
 import Setting from '../screen/Setting';
+import MyApplication from '../screen/MyApplication';
 
 const Tab = createBottomTabNavigator();
 
@@ -84,11 +85,12 @@ const user = {
 const NavBar = () => {
   return (
 
-    <SafeAreaView style={{ flex: 3, height: "20%" }}>
-      <Tab.Navigator>
+    <SafeAreaView style={{ flex: 3, height: "20%"}}>
+      <Tab.Navigator >
 
 
         <Tab.Screen
+        
           name="Job Listing"
           component={JobListing}
           initialParams={{ jobDetails }}
@@ -110,13 +112,13 @@ const NavBar = () => {
           }}
         />
         <Tab.Screen
-          name="Setting"
-          component={Setting}
+          name="MyApplication"
+          component={MyApplication}
 
 
           options={{
             headerShown: false,
-            tabBarLabel: 'Setting',
+            tabBarLabel: 'MyApplication',
             tabBarIcon: ({ color }) => <Icon name="settings" color={color} size={24} />,
           }}
         />
