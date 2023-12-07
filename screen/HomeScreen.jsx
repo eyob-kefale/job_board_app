@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ImageBackground, StatusBar, StyleSheet } from 'react-native';
+import { Dimensions, ImageBackground, StatusBar, StyleSheet ,SafeAreaView} from 'react-native';
 import { Block, Button, Text,  } from 'galio-framework';
 import materialTheme from '../constants/Theme';
 import {theme } from 'galio-framework';
@@ -11,6 +11,8 @@ const HomeScreen = ({navigation}) => {
     // Use useNavigation hook to get the navigation prop
     
       return (
+        <SafeAreaView>
+
         <Block flex style={styles.container}>
           <StatusBar barStyle="light-content" />
           <Block flex center>
@@ -41,13 +43,14 @@ const HomeScreen = ({navigation}) => {
                   shadowless
                   style={styles.button}
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                  onPress={() => navigation.navigate('NavBar')}>
+                  onPress={() => navigation.navigate('LogIn')}>
                   GET STARTED
                 </Button>
               </Block>
             </Block>
           </Block>
         </Block>
+        </SafeAreaView>
       );
     };
 

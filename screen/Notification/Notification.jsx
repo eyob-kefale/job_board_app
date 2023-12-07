@@ -102,6 +102,7 @@ const Notification = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop:"5%",
     flex: 1,
     padding: dynamicStyles.notificationItemPadding,
   //  backgroundColor:"#6DB9EF"

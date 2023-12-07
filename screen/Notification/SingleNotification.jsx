@@ -4,22 +4,22 @@ import { Dimensions, Image, View, Text, StyleSheet, ScrollView, TouchableOpacity
 
 const { width, height } = Dimensions.get('window');
 
-const SingleNotification = ({ route }) => {
-  const { item } = route.params;
+const SingleNotification = ({ title,description,avatar }) => {
+  // const { item } = route.params;
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.card}>
         <View style={styles.jobItem}>
           <Image
-            source={{ uri: item.avatar }}
+            source={{ uri: avatar }}
             style={styles.image}
             resizeMode="cover"
           />
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
           <TouchableOpacity
-            onPress={() => onApplyPress(item.title)}
+            onPress={() => onApplyPress(title)}
             style={styles.applyButton}
           >
             <Text style={styles.applyButtonText}>Apply</Text>
@@ -33,6 +33,7 @@ const SingleNotification = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:"5%",
     backgroundColor: '#fff',
   },
   card: {
