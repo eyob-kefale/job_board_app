@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {View} from "react-native"
+import { View } from "react-native"
 import Icon from 'react-native-vector-icons/Feather';
-import {StatusBar} from "expo-status-bar"
+import { StatusBar } from "expo-status-bar"
 import JobListing from './screen/JobListing';
 import UserProfile from './screen/MyProfile/UserProfile';
 import MyApplication from './screen/MyApplication';
@@ -12,6 +12,8 @@ import NavBar from './common/NavBar'
 import SingleNotification from './screen/Notification/SingleNotification';
 import EditProfile from './screen/MyProfile/EditProfile';
 import { createStackNavigator } from '@react-navigation/stack';
+import EmployeerProfile from './screen/employeerProfile';
+import Register from './screen/Register';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -83,25 +85,27 @@ const user = {
 };
 
 const MainTabNavigator = () => (
- <NavBar/>
+  <NavBar />
 );
 
 
 const App = () => {
   return (
-   
-       
+
+
     <NavigationContainer>
-      <StatusBar style="auto"/>
-    <Stack.Navigator initialRouteName="MainTabs" screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="NavBar" component={MainTabNavigator} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="SingleNotification" component={SingleNotification} />
-     
-      {/* Add more stack screens if needed */}
-    </Stack.Navigator>
-  </NavigationContainer>
-   
+      <StatusBar style="auto" />
+      <Stack.Navigator initialRouteName="MainTabs" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="NavBar" component={MainTabNavigator} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="SingleNotification" component={SingleNotification} />
+        <Stack.Screen name="EmployeerProfile" component={EmployeerProfile} />
+       
+        {/* Add more stack screens if needed */}
+      </Stack.Navigator>
+    </NavigationContainer>
+
   );
 };
 

@@ -8,7 +8,8 @@ import Register from '../screen/Register';
 import MyApplication from '../screen/MyApplication';
 import Icon from 'react-native-vector-icons/Feather';
 import { NavigationContainer, } from '@react-navigation/native';
-import EmployeerProfile from '../screen/employeerProfile';
+// import EmployeerProfile from '../screen/employeerProfile';
+import LogIn from '../screen/LogIn';
 const Tab = createBottomTabNavigator();
 
 
@@ -117,7 +118,7 @@ const NavBar = () => {
                 />
                 <Tab.Screen
                     name="MyApplication"
-                    component={EmployeerProfile}
+                    component={MyApplication}
 
 
                     options={{

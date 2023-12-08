@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageBackground } from 'react-native';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 const MyApplication = () => {
   // Example data for job applications
   const jobApplications = [
@@ -35,7 +35,10 @@ const MyApplication = () => {
     },
     // Add more job applications as needed
   ];
-
+  const navigation = useNavigation();
+  // const handleMyApplocation=()=>{
+  //   navigation.navigate("employeerProfile");
+  // }
   const handleSeeMore = (jobId) => {
     // Handle navigation to see more details about the job (you can implement this based on your navigation structure)
     // For example, you can use React Navigation to navigate to a detailed job view.
@@ -48,7 +51,7 @@ const MyApplication = () => {
         <Image source={item.jobImage} style={styles.jobImage} />
         <View style={styles.jobDetails}>
           <Text style={styles.jobTitle}>{item.jobTitle}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleMyApplocation}>
           <Text style={styles.jobOwner}>Company: {item.jobOwner}</Text>
 
           </TouchableOpacity>
