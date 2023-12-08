@@ -3,8 +3,18 @@ import { View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity } from 
 import { Block, Text, theme } from "galio-framework";
 import { Ionicons } from '@expo/vector-icons';
 
-const UserProfile = ({ route, navigation }) => {
-  const { user } = route.params;
+const user = {
+    name: 'Eyob Kefale',
+    email: 'jobkefale@gmail.com',
+    department: 'Software Engineer',
+    profileImage: require("../assets/job2.jpg"),
+    skills: ['React Native', 'JavaScript', 'UI/UX Design'],
+    education: 'Bachelor of Computer Science, Example University',
+    profession: 'Software Engineer',
+    aboutMe: 'Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.',
+  };
+const UserProfile = ({navigation }) => {
+//   const { user } = route.params;
 
   const renderItem = ({ item }) => (
     <View style={styles.socialLink}>
@@ -22,7 +32,7 @@ const UserProfile = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subCont}>
-<Image style={styles.bgImage} source={require("../../assets/job1.jpg")}></Image>
+<Image style={styles.bgImage} source={require("../assets/job1.jpg")}></Image>
     
       <Block style={styles.imgcont}>
         <Block style={styles.profileImageContainer}>
@@ -66,10 +76,7 @@ const UserProfile = ({ route, navigation }) => {
         </Text>
         <Text style={styles.desc}>{user.aboutMe}</Text>
      
-      <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-        <Ionicons name="ios-create" size={24} color={ "#001B79"} />
-        <Text style={styles.editButtonText}>Edit Profile</Text>
-      </TouchableOpacity>
+     
       <Block style={styles.sectionTitleContainer}>
         <Text h5 style={styles.sectionTitle}>
           Social Links:

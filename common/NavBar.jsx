@@ -8,6 +8,7 @@ import Register from '../screen/Register';
 import MyApplication from '../screen/MyApplication';
 import Icon from 'react-native-vector-icons/Feather';
 import { NavigationContainer, } from '@react-navigation/native';
+import EmployeerProfile from '../screen/employeerProfile';
 const Tab = createBottomTabNavigator();
 
 
@@ -95,7 +96,7 @@ const NavBar = () => {
                 <Tab.Screen
 
                     name="Job Listing"
-                    component={Register}
+                    component={JobListing}
                     // initialParams={{ jobDetails }}
                     options={{
                         headerShown: false,
@@ -116,7 +117,7 @@ const NavBar = () => {
                 />
                 <Tab.Screen
                     name="MyApplication"
-                    component={MyApplication}
+                    component={EmployeerProfile}
 
 
                     options={{
