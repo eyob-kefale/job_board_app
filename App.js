@@ -14,6 +14,7 @@ import EditProfile from './screen/MyProfile/EditProfile';
 import { createStackNavigator } from '@react-navigation/stack';
 import EmployeerProfile from './screen/employeerProfile';
 import Register from './screen/Register';
+import ApplyPage from './screen/ApplyPage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -99,8 +100,10 @@ const App = () => {
         <Stack.Screen name="NavBar" component={MainTabNavigator} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="SingleNotification" component={SingleNotification} />
         <Stack.Screen name="EmployeerProfile" component={EmployeerProfile} />
+        <Stack.Screen name="ApplyPage" component={ApplyPage} />
        
         {/* Add more stack screens if needed */}
       </Stack.Navigator>

@@ -36,13 +36,13 @@ const MyApplication = () => {
     // Add more job applications as needed
   ];
   const navigation = useNavigation();
-  // const handleMyApplocation=()=>{
-  //   navigation.navigate("employeerProfile");
-  // }
+  const handleMyApplocation=()=>{
+    navigation.navigate("EmployeerProfile");
+  }
   const handleSeeMore = (jobId) => {
     // Handle navigation to see more details about the job (you can implement this based on your navigation structure)
     // For example, you can use React Navigation to navigate to a detailed job view.
-    console.log(`See more for job ${jobId}`);
+    // console.log(`See more for job ${jobId}`);
   };
   const renderApplicationItem = ({ item, index }) => (
     <View key={index} style={styles.container}>

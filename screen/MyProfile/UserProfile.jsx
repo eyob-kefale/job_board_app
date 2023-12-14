@@ -18,11 +18,11 @@ const UserProfile = ({ route, navigation }) => {
     navigation.navigate('EditProfile', { user });
 
   };
-  const myApplications = () => {
-    // Navigate to the EditProfile screen
-    navigation.navigate('MyApplication', { user });
+  // const myApplications = () => {
+  //   // Navigate to the EditProfile screen
+  //   navigation.navigate('MyApplication', { user });
 
-  };
+  // };
   
   return (
     <ScrollView style={styles.container}>
@@ -119,10 +119,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.COLORS.WHITE,
+    borderColor: "#001B79",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#001B79",
     marginTop: 16,
     // marginLeft: "5%",
   },
@@ -131,18 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 8,
   },
-  MyApplicationButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.COLORS.WHITE,
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#001B79",
-    marginTop: 16,
-    // marginLeft: "5%",
-  },
+  
 
   container: {
     // backgroundColor: "#EBE3D5",

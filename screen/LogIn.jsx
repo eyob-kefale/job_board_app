@@ -85,7 +85,7 @@ const handleLogIn=()=>{
 
   const handleRegistration = () => {
     // Add your registration logic here
-    console.log('Registration submitted:', { userName,password });
+    // console.log('Registration submitted:', { userName,password });
     navigation.navigate("Register");
     // You can send the data to a server for further processing
   };

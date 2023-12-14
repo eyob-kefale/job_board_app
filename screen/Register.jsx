@@ -12,7 +12,7 @@ const Register = ({navigation}) => {
 
   const handleRegistration = () => {
     // Add your registration logic here
-    console.log('Registration submitted:', { firstName, lastName, email, password });
+    // console.log('Registration submitted:', { firstName, lastName, email, password });
     navigation.navigate("LogIn");
     // You can send the data to a server for further processing
   };

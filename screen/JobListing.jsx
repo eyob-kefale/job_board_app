@@ -13,7 +13,10 @@ import {
   Dimensions,
 } from "react-native";
 import Search from "../common/Search";
+import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('window');
+
+
 
 const dynamicStyles = {
   // avatarSize: width * avatarSizeRatio,
@@ -54,10 +57,13 @@ export default () => {
       [index]: !prevShowMoreMap[index],
     }));
   };
-
-  const onApplyPress = (title) => {
+  const navigation = useNavigation();
+  const onApplyPress = () => {
     // Implement logic for handling the "Apply" button press
-    console.log("Apply button pressed for job:", title);
+    
+      navigation.navigate("ApplyPage");
+    
+    
     // You can add your navigation logic or any other actions here
   };
 
@@ -88,7 +94,7 @@ export default () => {
         </TouchableOpacity>
       )}
       <TouchableOpacity
-        onPress={() => onApplyPress(item.title)}
+        onPress={onApplyPress}
         style={styles.applyButton}
       >
         <Text style={styles.applyButtonText}>Apply</Text>
@@ -279,7 +285,8 @@ const styles = StyleSheet.create({
     // fontStyle: "italic",
     fontWeight: "bold",
     textAlign: 'left',
-    color:"#3498db"
+    // color:"#3498db"
+    color: '#0766AD',
   }
   ,
   container: {
@@ -367,7 +374,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   applyButton: {
-    backgroundColor: "#3498db",
+    // backgroundColor: "#3498db",
+    backgroundColor: '#0766AD',
     padding: 12,
     borderRadius: 4,
     marginTop: 8,

@@ -5,6 +5,7 @@ import UserProfile from '../screen/MyProfile/UserProfile';
 import Notification from '../screen/Notification/Notification';
 import Setting from '../screen/Setting';
 import Register from '../screen/Register';
+import CreateJobListing from '../screen/Employer/CreateJobListing'
 import MyApplication from '../screen/MyApplication';
 import Icon from 'react-native-vector-icons/Feather';
 import { NavigationContainer, } from '@react-navigation/native';
@@ -88,8 +89,8 @@ const NavBar = () => {
          
             <Tab.Navigator 
             tabBarOptions={{
-              labelStyle:{paddingBottom:10,fontSize:10},
-              style:{position:'absolute',bottom:25,height:90,backgroundColor:'#000'}
+              labelStyle: { paddingBottom: 10, fontSize: 10 },
+              style: { position: 'absolute', bottom: 25, height: 90, backgroundColor: '#AF2655' },
             }}
             >
 
@@ -130,7 +131,7 @@ const NavBar = () => {
 
                 <Tab.Screen
                     name="Notification"
-                    component={Notification}
+                    component={CreateJobListing}
 
                     options={{
                         headerShown: false,

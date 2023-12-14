@@ -1,48 +1,70 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView,Button,Image, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
+import defaultImagee from '../../assets/job1.jpg';
 import {  } from 'react-native';
 import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import NavBar from '../../common/NavBar';
-const EditProfile = ({ route, navigation }) => {
-  const { user } = route.params;
+const CreateJobListing = ({ route, navigation }) => {
+  // const { user } = route.params;
   // const [image, setImage] = useState(null);
   // const [ExistingImage, setExistingImage] = useState(user);
-
-  const [image, setImage] = useState(null);
-  const [editedUser, setEditedUser] = useState(user);
-  const [editedEmail, setEditedEmail] = useState(user);
-  const [editedDept, setEditedDept] = useState(user);
-  const [editedSkills, setEditedSkills] = useState(user);
-  const [editedEducationalDetail, setEditedEducationalDetail] = useState(user);
-  const [editedprofession, setEditedprofession] = useState(user);
-  const [editedAboutMe, setEditedAboutMe] = useState(user);
-
+  // imgUrl:require("../assets/job1.jpg")
+   const [image, setImage] = useState("");
+   const [defaultImage, setDefaultImage] = useState(defaultImagee);
+  // const [editedUser, setEditedUser] = useState(user);
+  // const [editedEmail, setEditedEmail] = useState(user);
+  // const [editedDept, setEditedDept] = useState(user);
+  // const [editedSkills, setEditedSkills] = useState(user);
+  // const [editedEducationalDetail, setEditedEducationalDetail] = useState(user);
+  // const [editedprofession, setEditedprofession] = useState(user);
+  // const [editedAboutMe, setEditedAboutMe] = useState(user);
+  const [jobDetails, setJobDetails] = useState({
+    title: '',
+    description: '',
+    requirements: '',
+    skills: '',
+    professions: '',
+    education: '',
+    image: '',
+  });
 
   const handleSaveChanges = () => {
     // Implement logic to save changes to the user profile
     // For simplicity, this example updates the user state directly.
     // In a real app, you might want to make an API call or use state management.
-    navigation.navigate('UserProfile', { user: { ...editedUser, profileImage: image } });
-    //navigation.goBack(); // Navigate back to the job list screen after creating the job
+     console.log('Job created:', jobDetails);
+    navigation.goBack(); // Navigate back to the job list screen after creating the job
   };
   
-
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
+
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const selectedImage = result.assets[0].uri;
+      setImage(selectedImage);
+      setJobDetails({ ...jobDetails, image: selectedImage });
     }
-  }
+  };
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+  //   if (!result.canceled) {
+  //     setImage(result.assets[0].uri);
+  //   }
+  // }
 
   return (
   
@@ -51,49 +73,42 @@ const EditProfile = ({ route, navigation }) => {
       <View style={styles.container}>
       <View style={styles.imgCont}>
           <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
+          {/* {image && <Image source={image} style={styles.image} />} */}
+          {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
+        
+          {!image && <Image source={defaultImage} style={styles.image}/>}
           {image && <Image source={{ uri: image }} style={styles.image} />}
-          {!image && user.profileImage && <Image source={user.profileImage} style={styles.image} />}
         </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>
-            Name:
+            Title:
           </Text>
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedUser.name}
-            onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
+            onChangeText={text => setJobDetails({ ...jobDetails, title: text })}
           />
 
           <Text h5 style={styles.sectionTitle}>
-            Email:
+           Description:
           </Text>
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedEmail.email}
-            onChangeText={(text) => setEditedEmail({ ...editedEmail, email: text })}
+            
+            onChangeText={(text) => setJobDetails({ ...jobDetails, department: text })}
           />
 
           <Text h5 style={styles.sectionTitle}>
-            Department:
+            Requirements:
           </Text>
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedDept.department}
-            onChangeText={(text) => setEditedDept({ ...editedDept, department: text })}
+            onChangeText={(text) => setJobDetails({ ...jobDetails, requirements: text })}
           />
 
-          <Text h5 style={styles.sectionTitle}>
-            Educational Details:
-          </Text>
-          <Textarea
-            containerStyle={styles.textareaContainer}
-            style={styles.input}
-            value={editedEducationalDetail.education}
-            onChangeText={(text) => setEditedEducationalDetail({ ...editedEducationalDetail, education: text })}
-          />
+         
 
           <Text h5 style={styles.sectionTitle}>
             Skills:
@@ -101,8 +116,8 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedSkills.skills.join(", ")}
-            onChangeText={(text) => setEditedSkills({ ...editedSkills, skills: text })}
+            
+            onChangeText={(text) => setJobDetails({ ...jobDetails, skills: text })}
           />
           <Text h5 style={styles.sectionTitle}>
             Profession:
@@ -110,18 +125,18 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedprofession.profession}
-            onChangeText={(text) => setEditedprofession({ ...editedprofession, skills: text })}
+           
+            onChangeText={(text) => setJobDetails({ ...jobDetails, professions: text })}
           />
           <Text h5 style={styles.sectionTitle}>
-            About Me:
+            Educaton:
           </Text>
           <Textarea
 
             containerStyle={styles.textareaAboutContainer}
             style={styles.input}
-            value={editedAboutMe.aboutMe}
-            onChangeText={(text) => setEditedAboutMe({ ...editedAboutMe, aboutMe: text })}
+          
+            onChangeText={(text) => setJobDetails({ ...jobDetails, education: text })}
           />
 
           <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
@@ -139,10 +154,11 @@ const EditProfile = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:"5%",
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     flex: 1,
     padding: 16,
+    marginTop: "5%",
+   
   },
   detailsContainer: {
     // marginTop: 20,
@@ -187,23 +203,25 @@ const styles = StyleSheet.create({
 
   ImagePickerButton: {
   
-    marginLeft: "30%",
-    top:"80%",
+    marginLeft: "90%",
+    top:"90%",
+    
   },
   image:{ 
-
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    marginBottom:"10%",
+    width: "100%",
+    height: 250,
+    // borderRadius: 60,
     resizeMode: "cover",
-  
   },
   imgCont:{
      flex: 1,
-     alignItems: 'center', 
+     alignItems: 'center',
+  
+
     //  justifyContent: 'center' 
   }
 });
 
 
-export default EditProfile;
+export default CreateJobListing;
