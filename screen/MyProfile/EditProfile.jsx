@@ -6,7 +6,9 @@ import {  } from 'react-native';
 import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import materialTheme from '../../constants/Theme'
 import NavBar from '../../common/NavBar';
+
 const EditProfile = ({ route, navigation }) => {
   const { user } = route.params;
   // const [image, setImage] = useState(null);
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
   }
   ,
   saveButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     padding: 12,
     borderRadius: 8,
     marginTop: "10%",

@@ -4,12 +4,12 @@ import { Block, Button, Text,  } from 'galio-framework';
 import materialTheme from '../constants/Theme';
 import {theme } from 'galio-framework';
 import Images from '../constants/Images';
-
+import { useNavigation } from '@react-navigation/native';
 const { height, width } = Dimensions.get('screen');
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = () => {
     // Use useNavigation hook to get the navigation prop
-    
+    const navigation = useNavigation();
       return (
         <SafeAreaView>
 

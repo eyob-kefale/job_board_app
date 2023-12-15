@@ -6,7 +6,7 @@ import {  } from 'react-native';
 import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import NavBar from '../../common/NavBar';
+
 const CreateJobListing = ({ route, navigation }) => {
   // const { user } = route.params;
   // const [image, setImage] = useState(null);

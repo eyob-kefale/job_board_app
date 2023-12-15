@@ -3,11 +3,14 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import Images from '../constants/Images';
 import materialTheme from '../constants/Theme';
+import { FIREBASE_AUTH } from '../FireBaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LogIn = ({navigation}) => {
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [loading,setLoading]=useState(false);
+  const auth=FIREBASE_AUTH;
   // jobdetails
   const jobDetails = [
     {
@@ -76,16 +79,29 @@ const user = {
 };
 
 
-const handleLogIn=()=>{
-  navigation.navigate("UserProfile",{user});
-}
+// const handleLogIn=()=>{
+//   navigation.navigate("UserProfile",{user});
+// }
 
+const handleLogIn=async()=>{
+  setLoading(true);
+  try{
+    const response = await signInWithEmailAndPassword(auth,email,password);
+    navigation.navigate("NavBar");
+
+  }catch(error){
+    alert("Sign in failed: "+error.message);
+
+  }finally{
+    setLoading(false);
+  }
+}
 
 
 
   const handleRegistration = () => {
     // Add your registration logic here
-    // console.log('Registration submitted:', { userName,password });
+    // console.log('Registration submitted:', { Email,password });
     navigation.navigate("Register");
     // You can send the data to a server for further processing
   };
@@ -100,8 +116,8 @@ const handleLogIn=()=>{
       <TextInput
         style={styles.input}
         placeholder="User Name"
-        value={userName}
-        onChangeText={text => setUserName(text)}
+        value={email}
+        onChangeText={text => setEmail(text)}
       />
      
       <TextInput
@@ -128,7 +144,7 @@ const handleLogIn=()=>{
             <TouchableOpacity
              
               onPress={handleRegistration }>
-             <Text color="blue" size={11}>
+             <Text style={styles.signUp} >
                 sign up
               </Text>
             </TouchableOpacity>
@@ -140,7 +156,10 @@ const handleLogIn=()=>{
 };
 
 const styles = StyleSheet.create({
-
+signUp:{
+  color: materialTheme.COLORS.BUTTON_COLOR,
+  size:15
+},
  btn: {
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     width: '100%',

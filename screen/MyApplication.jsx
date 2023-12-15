@@ -2,6 +2,7 @@ import React from 'react';
 import { ImageBackground } from 'react-native';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import materialTheme from '../constants/Theme'
 const MyApplication = () => {
   // Example data for job applications
   const jobApplications = [
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   seeMoreButton: {
-    backgroundColor: '#3498db',
+    backgroundColor:  materialTheme.COLORS.BUTTON_COLOR,
     padding: 8,
     borderRadius: 8,
     alignSelf: 'flex-start',
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontWeight: "bold",
     textAlign: 'center',
-    color: "#3498db",
+    color: materialTheme.COLORS.BUTTON_COLOR,
     //  flex:1,
     //  justifyContent:"center",
     // alignItems:"center"

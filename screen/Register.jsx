@@ -4,18 +4,47 @@ import { View, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-nat
 
 import materialTheme from '../constants/Theme';
 
+import { doc, setDoc } from "firebase/firestore"; 
+import { FIREBASE_DB } from '../FireBaseConfig';
+import { collection, addDoc } from "firebase/firestore"; 
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+
+
+// Add a new document in collection "cities"
+
+
 const Register = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegistration = () => {
-    // Add your registration logic here
-    // console.log('Registration submitted:', { firstName, lastName, email, password });
-    navigation.navigate("LogIn");
-    // You can send the data to a server for further processing
+  const handleRegistration = async () => {
+    const auth = getAuth();
+    try {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = response.user?.uid; // Access the uid from the user property
+      const data = {
+        id: uid,
+        firstName,
+        lastName,
+        email,
+      };
+  
+      try {
+        const docRef = await addDoc(collection(FIREBASE_DB, "user"), data);
+        console.log("Document written with ID: ", docRef.id);
+        navigation.navigate("LogIn");
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    } catch (error) {
+      console.error("Error creating user: ", error);
+    }
   };
+  
+  
+
 
   return (
     <View style={styles.container}>

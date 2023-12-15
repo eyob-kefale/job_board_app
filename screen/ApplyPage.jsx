@@ -2,7 +2,7 @@ import { theme } from 'galio-framework';
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TextInput, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import materialTheme from '../constants/Theme';
 const ApplyPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     margin:"5%"
   },
   header: {
-    backgroundColor: '#340100',
+    backgroundColor: '#0766AD',
     paddingVertical: 20,
     alignItems: 'center',
   },
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: theme.COLORS.WHITE,
-    backgroundColor: '#340100',
-    borderColor: "#001B79",
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
+    borderColor: "#0766AD",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,

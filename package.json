@@ -39,6 +39,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-textarea": "^1.0.4",
     "react-native-web": "~0.19.6",
+    "react-navigation": "^5.0.0",
     "uri": "^0.1.0"
   },
   "devDependencies": {

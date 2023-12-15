@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { Ionicons } from '@expo/vector-icons';
-
+import materialTheme from '../../constants/Theme';
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
 
@@ -72,7 +72,7 @@ const UserProfile = ({ route, navigation }) => {
         <Text style={styles.desc}>{user.aboutMe}</Text>
 
         <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-          <Ionicons name="ios-create" size={24} color={"#001B79"} />
+          <Ionicons name="ios-create" size={24} color={"#fff"} />
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
           {/* <TouchableOpacity style={styles.MyApplicationButton} onPress={myApplications}>
@@ -118,7 +118,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.COLORS.WHITE,
+    // backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
+  
     borderColor: "#001B79",
     padding: 12,
     borderRadius: 8,
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
     // marginLeft: "5%",
   },
   editButtonText: {
-    color: "#001B79",
+    color: "#fff",
     fontSize: 16,
     marginLeft: 8,
   },
@@ -177,6 +179,7 @@ const styles = StyleSheet.create({
   dptCont: {
     flex: 1,
     padding: 16,
+    paddingVertical:50
     // alignItems: 'center',
     // justifyContent: 'center',
   }
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontWeight: "bold",
     textAlign: 'center',
-    color: "#3498db",
+    color: materialTheme.COLORS.BUTTON_COLOR
 
 
   }

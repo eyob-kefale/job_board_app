@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import Search from "../common/Search";
 import { useNavigation } from '@react-navigation/native';
+import materialTheme from '../constants/Theme';
 const { width, height } = Dimensions.get('window');
 
 
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: 'left',
     // color:"#3498db"
-    color: '#0766AD',
+    color: materialTheme.COLORS.BUTTON_COLOR,
   }
   ,
   container: {
@@ -375,7 +376,8 @@ const styles = StyleSheet.create({
   },
   applyButton: {
     // backgroundColor: "#3498db",
-    backgroundColor: '#0766AD',
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
+    
     padding: 12,
     borderRadius: 4,
     marginTop: 8,

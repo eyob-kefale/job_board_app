@@ -15,6 +15,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EmployeerProfile from './screen/employeerProfile';
 import Register from './screen/Register';
 import ApplyPage from './screen/ApplyPage';
+import HomeScreen from './screen/HomeScreen';
+import LogIn from './screen/LogIn';
+import { useState } from 'react';
+import User from 'firebase/auth'
+
+import { collection, getDocs } from "firebase/firestore"; 
+
+// const querySnapshot = await getDocs(collection(db, "user"));
+// querySnapshot.forEach((doc) => {
+//   console.log(`${doc.id} => ${doc.data()}`);
+// });
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -85,25 +97,28 @@ const user = {
   aboutMe: 'Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.',
 };
 
-const MainTabNavigator = () => (
-  <NavBar />
-);
+// const MainTabNavigator = () => (
+//   <HomeScreen />
+// );
 
 
 const App = () => {
+  // const [user,setUser]=useState<User|null>(null);
   return (
 
 
     <NavigationContainer>
       <StatusBar style="auto" />
-      <Stack.Navigator initialRouteName="MainTabs" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="NavBar" component={MainTabNavigator} />
+      <Stack.Navigator  screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="SingleNotification" component={SingleNotification} />
         <Stack.Screen name="EmployeerProfile" component={EmployeerProfile} />
         <Stack.Screen name="ApplyPage" component={ApplyPage} />
+        <Stack.Screen name="NavBar" component={NavBar} />
+        <Stack.Screen name="LogIn" component={LogIn} />
        
         {/* Add more stack screens if needed */}
       </Stack.Navigator>
