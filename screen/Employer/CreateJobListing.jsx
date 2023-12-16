@@ -6,21 +6,17 @@ import {  } from 'react-native';
 import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import { collection, doc, setDoc } from 'firebase/firestore';
+
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from '../../FireBaseConfig';
+
 
 const CreateJobListing = ({ route, navigation }) => {
-  // const { user } = route.params;
-  // const [image, setImage] = useState(null);
-  // const [ExistingImage, setExistingImage] = useState(user);
-  // imgUrl:require("../assets/job1.jpg")
+
    const [image, setImage] = useState("");
    const [defaultImage, setDefaultImage] = useState(defaultImagee);
-  // const [editedUser, setEditedUser] = useState(user);
-  // const [editedEmail, setEditedEmail] = useState(user);
-  // const [editedDept, setEditedDept] = useState(user);
-  // const [editedSkills, setEditedSkills] = useState(user);
-  // const [editedEducationalDetail, setEditedEducationalDetail] = useState(user);
-  // const [editedprofession, setEditedprofession] = useState(user);
-  // const [editedAboutMe, setEditedAboutMe] = useState(user);
+   const [file, setFile] = useState('');
   const [jobDetails, setJobDetails] = useState({
     title: '',
     description: '',
@@ -31,13 +27,6 @@ const CreateJobListing = ({ route, navigation }) => {
     image: '',
   });
 
-  const handleSaveChanges = () => {
-    // Implement logic to save changes to the user profile
-    // For simplicity, this example updates the user state directly.
-    // In a real app, you might want to make an API call or use state management.
-     console.log('Job created:', jobDetails);
-    navigation.goBack(); // Navigate back to the job list screen after creating the job
-  };
   
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -46,25 +35,77 @@ const CreateJobListing = ({ route, navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
+  
     if (!result.canceled) {
-      const selectedImage = result.assets[0].uri;
-      setImage(selectedImage);
-      setJobDetails({ ...jobDetails, image: selectedImage });
+      const uri = result.assets[0].uri;
+      const response = await fetch(uri);
+      const blob = await response.blob();
+  
+      setFile(blob);
+      setImage(uri);
+      setJobDetails({ ...jobDetails, image: uri });
+  
+      console.log("Image URI:", uri,"aaaaaaaa");
+      console.log("File Blob:", blob);
     }
   };
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-  //   if (!result.canceled) {
-  //     setImage(result.assets[0].uri);
-  //   }
-  // }
+  
+  // insert in to jobLists begin
+  const handleSaveChanges = async (event) => {
+    event.preventDefault();
+
+    if (!image) {
+        console.log("No file selected");
+        return;
+    }
+
+    try {
+
+
+
+      const parts = image.split('/');
+
+      // Get the last part of the array, which contains the filename
+      const filename = parts[parts.length - 1];
+        const storageRef = storage;
+        const filePath = 'jobLists/' +filename;
+
+        // // Upload the file to Firebase Storage
+        const fileRef = ref(storageRef, filePath);
+        const snapshot = await uploadBytes(fileRef, file, { contentType: 'image/jpeg' });
+        console.log('Uploaded an image to Firebase Storage!');
+
+        // Get the download URL of the uploaded file
+        const url = await getDownloadURL(fileRef);
+        console.log('Got the download URL:', url);
+
+        // Store the download URL and category name in Firestore
+        const categoriesRef = collection(db, 'jobLists');
+
+        const newJobLists = {
+            title:jobDetails.title,
+            description:jobDetails.description,
+            requirements:jobDetails.requirements,
+            skills:jobDetails.skills,
+            professions:jobDetails.professions,
+           
+            img: url,
+            education:jobDetails.education,
+           
+           
+        };
+
+
+        await setDoc(doc(categoriesRef), newJobLists);
+        console.log('Jobs added successfully!');
+        navigation.goBack();
+    } catch (error) {
+        console.error('Error adding Jobs: ', error);
+    }
+};
+
+
+  //insert into jobLists end
 
   return (
   
@@ -73,8 +114,7 @@ const CreateJobListing = ({ route, navigation }) => {
       <View style={styles.container}>
       <View style={styles.imgCont}>
           <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
-          {/* {image && <Image source={image} style={styles.image} />} */}
-          {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
+       
         
           {!image && <Image source={defaultImage} style={styles.image}/>}
           {image && <Image source={{ uri: image }} style={styles.image} />}
@@ -96,7 +136,7 @@ const CreateJobListing = ({ route, navigation }) => {
             containerStyle={styles.textareaContainer}
             style={styles.input}
             
-            onChangeText={(text) => setJobDetails({ ...jobDetails, department: text })}
+            onChangeText={(text) => setJobDetails({ ...jobDetails, description: text })}
           />
 
           <Text h5 style={styles.sectionTitle}>

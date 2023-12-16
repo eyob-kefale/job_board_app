@@ -4,6 +4,10 @@ import { Block, Text, theme } from "galio-framework";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import { Dimensions } from "react-native";
+
+import { collection, getDocs, limit, query } from 'firebase/firestore';
+import { db } from '../FireBaseConfig';
+import { useEffect } from 'react';
 const { width, height } = Dimensions.get('window');
 const dynamicStyles = {
   // avatarSize: width * avatarSizeRatio,
@@ -26,59 +30,81 @@ const user = {
 const jobDetails = [
   {
     title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
+    imgUrl: "https://firebasestorage.googleapis.com/v0/b/job-board-3093a.appspot.com/o/jobLists%2F1702713977478.jpg?alt=media&token=a94b5594-e961-4e55-b128-7d5e141e7f16",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     experienceRequired: "3 years",
     // Add more details as needed
   },
-  {
-    title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
-    description: "Tech Co",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
-  {
-    title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
-    description: "Tech Co",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
-  {
-    title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
-    description: "Tech Co",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
-  {
-    title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
-    description: "Tech Co",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
-  {
-    title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
-    description: "Tech Co",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
-  {
-    title: "Software Developer",
-    imgUrl: require("../assets/job1.jpg"),
-    description: "Tech Co",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
+  // {
+  //   title: "Software Developer",
+  //   imgUrl: require("../assets/job1.jpg"),
+  //   description: "Tech Co",
+  //   experienceRequired: "3 years",
+  //   // Add more details as needed
+  // },
+  // {
+  //   title: "Software Developer",
+  //   imgUrl: require("../assets/job1.jpg"),
+  //   description: "Tech Co",
+  //   experienceRequired: "3 years",
+  //   // Add more details as needed
+  // },
+  // {
+  //   title: "Software Developer",
+  //   imgUrl: require("../assets/job1.jpg"),
+  //   description: "Tech Co",
+  //   experienceRequired: "3 years",
+  //   // Add more details as needed
+  // },
+  // {
+  //   title: "Software Developer",
+  //   imgUrl: require("../assets/job1.jpg"),
+  //   description: "Tech Co",
+  //   experienceRequired: "3 years",
+  //   // Add more details as needed
+  // },
+  // {
+  //   title: "Software Developer",
+  //   imgUrl: require("../assets/job1.jpg"),
+  //   description: "Tech Co",
+  //   experienceRequired: "3 years",
+  //   // Add more details as needed
+  // },
+  // {
+  //   title: "Software Developer",
+  //   imgUrl: require("../assets/job1.jpg"),
+  //   description: "Tech Co",
+  //   experienceRequired: "3 years",
+  //   // Add more details as needed
+  // },
 ];
 const EmployeerProfile = ({ navigation }) => {
   //   const { user } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
   const [showMoreMap, setShowMoreMap] = useState({});
+
+
+//fetch from jobLists
+const [posts, setPosts] = useState([]);
+
+const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
+
+
+useEffect(() => {
+    const getJoblists = async () => {
+        const data = await getDocs(jobListsCollectionRef);
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+    };
+    getJoblists();
+}, []);
+
+
+
+
+
+
 
   const toggleShowMore = (index) => {
     setShowMoreMap((prevShowMoreMap) => ({
@@ -98,17 +124,19 @@ const EmployeerProfile = ({ navigation }) => {
     setSearchTerm(text);
   };
 
-  const filteredInfo = jobDetails.filter((info) =>
+  const filteredInfo = posts.filter((info) =>
     info.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+ 
   const renderJobItem = ({ item, index }) => (
     <View key={index} style={styles.jobItem}>
-      <Image source={item.imgUrl} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: item.img}} style={styles.image} resizeMode="cover" />
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>
         {showMoreMap[index]
           ? item.description
-          : `${item.description.substring(0, 100)}...`}
+          : `${item.description.substring(0, 100)}...`} 
+          {/* {item.description} */}
       </Text>
       {item.description.length > 100 && (
         <TouchableOpacity
@@ -144,7 +172,7 @@ const EmployeerProfile = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.subCont}>
         <Image style={styles.bgImage} source={require("../assets/job1.jpg")}></Image>
-
+        
         <Block style={styles.imgcont}>
           <Block style={styles.profileImageContainer}>
             <Image source={user.profileImage} style={styles.profileImage} />
