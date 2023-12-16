@@ -11,7 +11,7 @@ const HomeScreen = () => {
     // Use useNavigation hook to get the navigation prop
     const navigation = useNavigation();
       return (
-        <SafeAreaView>
+    
 
         <Block flex style={styles.container}>
           <StatusBar barStyle="light-content" />
@@ -50,13 +50,14 @@ const HomeScreen = () => {
             </Block>
           </Block>
         </Block>
-        </SafeAreaView>
+      
       );
     };
 
     const styles = StyleSheet.create({
         container: {
           backgroundColor: "black",
+         
         },
         padded: {
           paddingHorizontal: theme.SIZES.BASE * 2,

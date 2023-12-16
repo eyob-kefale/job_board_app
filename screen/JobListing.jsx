@@ -15,6 +15,10 @@ import {
 import Search from "../common/Search";
 import { useNavigation } from '@react-navigation/native';
 import materialTheme from '../constants/Theme';
+import { collection, getDocs, limit, query } from 'firebase/firestore';
+import { db } from '../FireBaseConfig';
+import { useEffect } from 'react';
+
 const { width, height } = Dimensions.get('window');
 
 
@@ -68,18 +72,38 @@ export default () => {
     // You can add your navigation logic or any other actions here
   };
 
+//start fetching from jobLists
+const [posts, setPosts] = useState([]);
+
+const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
+
+
+useEffect(() => {
+    const getJoblists = async () => {
+        const data = await getDocs(jobListsCollectionRef);
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+    };
+    getJoblists();
+}, []);
+
+//end fetching from jobLists
+
+
+
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (text) => {
     setSearchTerm(text);
   };
 
-  const filteredInfo = jobDetails.filter((info) =>
+  const filteredInfo = posts.filter((info) =>
     info.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const renderJobItem = ({ item, index }) => (
     <View key={index} style={styles.jobItem}>
-      <Image source={item.imgUrl} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: item.img}} style={styles.image} resizeMode="cover" />
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>
         {showMoreMap[index]

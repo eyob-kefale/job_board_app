@@ -159,7 +159,7 @@ const handleLogIn=async()=>{
 const styles = StyleSheet.create({
 signUp:{
   color: materialTheme.COLORS.BUTTON_COLOR,
-  size:15
+  fontSize:15
 },
  btn: {
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,

@@ -27,58 +27,7 @@ const user = {
   profession: 'Software Engineer',
   aboutMe: 'Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.',
 };
-const jobDetails = [
-  {
-    title: "Software Developer",
-    imgUrl: "https://firebasestorage.googleapis.com/v0/b/job-board-3093a.appspot.com/o/jobLists%2F1702713977478.jpg?alt=media&token=a94b5594-e961-4e55-b128-7d5e141e7f16",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    experienceRequired: "3 years",
-    // Add more details as needed
-  },
-  // {
-  //   title: "Software Developer",
-  //   imgUrl: require("../assets/job1.jpg"),
-  //   description: "Tech Co",
-  //   experienceRequired: "3 years",
-  //   // Add more details as needed
-  // },
-  // {
-  //   title: "Software Developer",
-  //   imgUrl: require("../assets/job1.jpg"),
-  //   description: "Tech Co",
-  //   experienceRequired: "3 years",
-  //   // Add more details as needed
-  // },
-  // {
-  //   title: "Software Developer",
-  //   imgUrl: require("../assets/job1.jpg"),
-  //   description: "Tech Co",
-  //   experienceRequired: "3 years",
-  //   // Add more details as needed
-  // },
-  // {
-  //   title: "Software Developer",
-  //   imgUrl: require("../assets/job1.jpg"),
-  //   description: "Tech Co",
-  //   experienceRequired: "3 years",
-  //   // Add more details as needed
-  // },
-  // {
-  //   title: "Software Developer",
-  //   imgUrl: require("../assets/job1.jpg"),
-  //   description: "Tech Co",
-  //   experienceRequired: "3 years",
-  //   // Add more details as needed
-  // },
-  // {
-  //   title: "Software Developer",
-  //   imgUrl: require("../assets/job1.jpg"),
-  //   description: "Tech Co",
-  //   experienceRequired: "3 years",
-  //   // Add more details as needed
-  // },
-];
+
 const EmployeerProfile = ({ navigation }) => {
   //   const { user } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
