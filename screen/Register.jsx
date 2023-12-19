@@ -43,11 +43,16 @@ const Register = ({ navigation }) => {
         firstName,
         lastName,
         email,
-        password
+        password,
+        
       };
 
       try {
-        const docRef = await addDoc(collection(db, "user"), data);
+        const docRef = doc(db, "user", email);
+
+        // Set the document data
+        await setDoc(docRef, data);
+        // const docRef = await addDoc(collection(db, "user",email), data);
         console.log("Document written with ID: ", docRef.id);
         navigation.navigate("LogIn");
       } catch (e) {

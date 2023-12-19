@@ -19,6 +19,7 @@ import HomeScreen from './screen/HomeScreen';
 import LogIn from './screen/LogIn';
 import { useState } from 'react';
 import User from 'firebase/auth'
+import { UserProvider } from './common/context/UserContext'
 
 import { collection, getDocs } from "firebase/firestore"; 
 
@@ -108,6 +109,7 @@ const App = () => {
 
 
     <NavigationContainer>
+      <UserProvider>
       {/* <StatusBar style="auto" /> */}
       <Stack.Navigator  screenOptions={{ headerShown: false }}>
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -122,6 +124,7 @@ const App = () => {
        
         {/* Add more stack screens if needed */}
       </Stack.Navigator>
+      </UserProvider>
     </NavigationContainer>
 
   );

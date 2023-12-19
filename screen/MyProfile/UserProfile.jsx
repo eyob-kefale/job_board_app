@@ -1,10 +1,45 @@
 import React from "react";
-import { View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { Block, Text, theme } from "galio-framework";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons,MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
+
 import materialTheme from '../../constants/Theme';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { db } from '../../FireBaseConfig';
+import { useEffect } from 'react';
+import { useState } from "react";
+import { useUser } from "../../common/context/UserContext";
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
+  const { userEmail } = useUser();
+console.log(user);
+
+
+// console.log("emailllllll "+userEmail+" emailllll");
+//  usertid=user[0].id;
+  //start fetching from jobLists
+  const [userProfile, setUser] = useState([]);
+
+  const userCollectionRef = query(collection(db, 'user'), where("email", "==",userEmail), limit(10));
+
+
+  useEffect(() => {
+    const getUserprofile = async () => {
+      try {
+        const querySnapshot = await getDocs(userCollectionRef);
+        const userData = querySnapshot.docs.map((doc) => ({ ...doc.data(), user: doc.user }));
+        setUser(userData);
+        console.log(userData);
+      } catch (error) {
+        console.error('Error fetching user profile: ', error);
+      }
+    };
+  
+    getUserprofile();
+  }, []);
+  
+
+  //end fetching from jobLists
 
   const renderItem = ({ item }) => (
     <View style={styles.socialLink}>
@@ -15,7 +50,7 @@ const UserProfile = ({ route, navigation }) => {
 
   const handleEditProfile = () => {
     // Navigate to the EditProfile screen
-    navigation.navigate('EditProfile', { user });
+    navigation.navigate('EditProfile', { userProfile });
 
   };
   // const myApplications = () => {
@@ -23,76 +58,112 @@ const UserProfile = ({ route, navigation }) => {
   //   navigation.navigate('MyApplication', { user });
 
   // };
-  
+
+  const screenWidth = Dimensions.get('window').width;
+  const dynamicMarginLeft = screenWidth * 0.1;
+
   return (
+
     <ScrollView style={styles.container}>
-      <View style={styles.subCont}>
-        <Image style={styles.bgImage} source={require("../../assets/job1.jpg")}></Image>
+      {userProfile.map((userP) => (
+        <>
+        
+          <View style={styles.subCont}>
+            <Image style={styles.bgImage} source={require("../../assets/job1.jpg")}></Image>
 
-        <Block style={styles.imgcont}>
-          <Block style={styles.profileImageContainer}>
-            <Image source={user.profileImage} style={styles.profileImage} />
+            <Block style={styles.imgcont}>
+              <Block style={styles.profileImageContainer}>
+                {!userP.profileImage && <Image source={user.profileImage} style={styles.profileImage} />}
+                {userP.profileImage && <Image source={{ uri: userP.profileImage }} style={styles.profileImage} />}
+                <View style={styles.dptCont}>
+                  <Text style={styles.dpt}>
+                    {userP.department}
 
-            <View style={styles.dptCont}>
-              <Text style={styles.dpt}>
-                {user.department}
-              </Text>
+                  </Text>
 
-            </View>
-          </Block>
+                </View>
+              </Block>
+              <Block style={styles.editCont}>
 
-          <Block style={styles.header}>
-            <Text p style={styles.title}>
-              {user.name}
-            </Text>
-            <Text style={styles.email}>{user.email}</Text>
+                <Block style={styles.header}>
+                  <Text style={styles.emailCont}>
+                  <Entypo style={styles.nameIcon} name="man"></Entypo>
+                  <Text p style={styles.title}>
+                    {userP.firstName} {userP.lastName}
+                  </Text>
 
-          </Block>
-        </Block>
-      </View>
-      <ScrollView style={styles.detailsContainer}>
-        <Text h5 style={styles.sectionTitle}>
-          Skills:
-        </Text>
-        <Text style={styles.desc}>{user.skills.join(", ")}</Text>
+                  </Text>
+                  <Block style={styles.emailCont}>
+                  <MaterialCommunityIcons style={styles.emailIcon} name="email"></MaterialCommunityIcons>
+                  <Text style={styles.email}>{userP.email}</Text>
+                  </Block>
 
-        <Text h5 style={styles.sectionTitle}>
-          Educational Details:
-        </Text>
-        <Text style={styles.desc}>{user.education}</Text>
+                </Block>
+                <TouchableOpacity onPress={handleEditProfile}>
+                  <Ionicons name="ios-create" style={styles.editbtn} size={30} color={"#000"} />
+               
+                </TouchableOpacity>
+              </Block>
+            </Block>
+          </View>
 
-        <Text h5 style={styles.sectionTitle}>
-          Profession:
-        </Text>
-        <Text style={styles.desc}>{user.c}</Text>
+          <ScrollView style={styles.detailsContainer}>
+            {userP.skills && (
+              <>
+                <Text h5 style={styles.sectionTitle}>
+                  Skills:
+                </Text>
+                <Text style={styles.desc}>{user.skills}</Text>
 
-        <Text h5 style={styles.sectionTitle}>
-          About Me:
-        </Text>
-        <Text style={styles.desc}>{user.aboutMe}</Text>
-
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-          <Ionicons name="ios-create" size={24} color={"#fff"} />
-          <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.MyApplicationButton} onPress={myApplications}>
+              </>
+            )}
+            {userP.education && (
+              <>
+                <Text h5 style={styles.sectionTitle}>
+                  Educational Details:
+                </Text>
+                <Text style={styles.desc}>{userP.education}</Text>
+              </>
+            )}
+            {userP.profession && (
+              <>
+                <Text h5 style={styles.sectionTitle}>
+                  Profession:
+                </Text>
+                <Text style={styles.desc}>{userP.profession}</Text>
+              </>
+            )}
+            {userP.aboutMe && (
+              <>
+                <Text h5 style={styles.sectionTitle}>
+                  About Me:
+                </Text>
+                <Text style={styles.desc}>{userP.aboutMe}</Text>
+              </>
+            )}
+            {/* <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+              <Ionicons name="ios-create" size={24} color={"#fff"} />
+              <Text style={styles.editButtonText}>Edit Profile</Text>
+            </TouchableOpacity> */}
+            {/* <TouchableOpacity style={styles.MyApplicationButton} onPress={myApplications}>
           <Ionicons name="list" size={24} color={"#001B79"} />
           <Text style={styles.editButtonText}>My Applications</Text>
         </TouchableOpacity> */}
-        <Block style={styles.sectionTitleContainer}>
-          <Text h5 style={styles.sectionTitle}>
-            Social Links:
-          </Text>
-          <FlatList
-            data={user.socialLinks}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-          />
-        </Block>
+            <Block style={styles.sectionTitleContainer}>
+              {/* <Text h5 style={styles.sectionTitle}>
+                Social Links:
+              </Text> */}
+              <FlatList
+                data={user.socialLinks}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id.toString()}
+                horizontal
+              />
+            </Block>
 
-      </ScrollView>
-
+          </ScrollView>
+        </>
+))}
       {/* <TouchableOpacity style={styles.followButton}>
         <Text style={styles.followButtonText}>{user.isFollowing ? "Unfollow" : "Follow"}</Text>
       </TouchableOpacity> */}
@@ -114,18 +185,28 @@ const styles = StyleSheet.create({
     marginBottom: "40%"
     //  backgroundColor:"#543"
   },
+  editbtn: {
+   marginRight:'10%',
+   marginBottom:'37%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+   
+    color: materialTheme.COLORS.BUTTON_COLOR,
+   
+  },
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: theme.COLORS.WHITE,
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
-  
+
     borderColor: "#001B79",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    marginTop: 16,
+    marginTop: "60%",
     // marginLeft: "5%",
   },
   editButtonText: {
@@ -133,7 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 8,
   },
-  
+
 
   container: {
     // backgroundColor: "#EBE3D5",
@@ -143,6 +224,14 @@ const styles = StyleSheet.create({
     marginTop: "5%",
 
   },
+
+  editCont: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Align items to the left and right edges
+    alignItems: 'center', // Center items vertically
+  },
+
   desc: {
     color: "#000",
     marginBottom: 20,
@@ -179,7 +268,7 @@ const styles = StyleSheet.create({
   dptCont: {
     flex: 1,
     padding: 16,
-    paddingVertical:50
+    paddingVertical: 50
     // alignItems: 'center',
     // justifyContent: 'center',
   }
@@ -198,7 +287,7 @@ const styles = StyleSheet.create({
   ,
   title: {
     width: '100%', // Set the width to 100%
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: "serif",
     fontStyle: "italic",
     fontWeight: "normal",
@@ -206,20 +295,39 @@ const styles = StyleSheet.create({
 
     color: "#000",
     marginBottom: 8,
+    marginLeft:8
   },
   email: {
-    fontSize: 20,
+    fontSize: 15,
+    
     fontFamily: "serif",
     fontStyle: "italic",
     fontWeight: "normal",
+    marginTop:8
+  },
+  emailCont:{
+    flexDirection:"row",
+
+  }
+  ,
+  emailIcon:{
+    marginTop:"5%",
+    color:materialTheme.COLORS.BUTTON_COLOR,
+    // marginRight:"5%"
+  }
+  ,
+  nameIcon:{
+    marginTop:"5%",
+    paddingRight:"15%",
+    color:materialTheme.COLORS.BUTTON_COLOR,
   }
   ,
 
   profileImage: {
 
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     resizeMode: "cover",
   },
   detailsContainer: {

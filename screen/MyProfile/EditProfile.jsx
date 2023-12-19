@@ -1,70 +1,183 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView,Button,Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Button, Image, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
-import {  } from 'react-native';
+import { } from 'react-native';
 import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import materialTheme from '../../constants/Theme'
-import NavBar from '../../common/NavBar';
+
+import { db } from '../../FireBaseConfig';
+
+import { doc, getDoc, collection, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { serverTimestamp } from 'firebase/firestore';
 
 const EditProfile = ({ route, navigation }) => {
-  const { user } = route.params;
+  const { userProfile } = route.params;
+  const modifyId = userProfile[0].email;
+
   // const [image, setImage] = useState(null);
   // const [ExistingImage, setExistingImage] = useState(user);
 
   const [image, setImage] = useState(null);
-  const [editedUser, setEditedUser] = useState(user);
-  const [editedEmail, setEditedEmail] = useState(user);
-  const [editedDept, setEditedDept] = useState(user);
-  const [editedSkills, setEditedSkills] = useState(user);
-  const [editedEducationalDetail, setEditedEducationalDetail] = useState(user);
-  const [editedprofession, setEditedprofession] = useState(user);
-  const [editedAboutMe, setEditedAboutMe] = useState(user);
+  const [file, setFile] = useState('');
+  const [editedUser, setEditedUser] = useState(userProfile);
+
+  const [a, setA] = useState(false);
+  // const [editedEmail, setEditedEmail] = useState(userProfile);
+  // const [editedDept, setEditedDept] = useState(userProfile);
+  // const [editedSkills, setEditedSkills] = useState(userProfile);
+  // const [editedEducationalDetail, setEditedEducationalDetail] = useState(userProfile);
+  // const [editedprofession, setEditedprofession] = useState(userProfile);
+  // const [editedAboutMe, setEditedAboutMe] = useState(userProfile);
 
 
-  const handleSaveChanges = () => {
-    // Implement logic to save changes to the user profile
-    // For simplicity, this example updates the user state directly.
-    // In a real app, you might want to make an API call or use state management.
-    navigation.navigate('UserProfile', { user: { ...editedUser, profileImage: image } });
-    //navigation.goBack(); // Navigate back to the job list screen after creating the job
-  };
-  
+  // const handleSaveChanges = () => {
+  //   // Implement logic to save changes to the user profile
+  //   // For simplicity, this example updates the user state directly.
+  //   // In a real app, you might want to make an API call or use state management.
+  //   navigation.navigate('UserProfile', { userProfile: { ...editedUser, profileImage: image } });
+  //   //navigation.goBack(); // Navigate back to the job list screen after creating the job
+  // };
 
+
+  // picking image from file
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
+
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const uri = result.assets[0].uri;
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      setFile(blob);
+      setImage(uri);
+      setEditedUser({ ...editedUser, image: uri });
+
+      console.log("Image URI:", uri, "aaaaaaaa");
+      console.log("File Blob:", blob);
     }
-  }
+  };
+
+
+
+  //start updating user profile
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+
+    try {
+
+      const parts = image.split('/');
+
+      // Get the last part of the array, which contains the filename
+      const filename = parts[parts.length - 1];
+
+
+
+      const storageRef = getStorage();
+      const filePath = 'user/' + filename;
+
+      // Upload the file to Firebase Storage
+      const fileRef = ref(storageRef, filePath);
+      const snapshot = await uploadBytes(fileRef, file, { contentType: 'image/jpeg' });
+      console.log('Uploaded a file to Firebase Storage!');
+
+      // Get the download URL of the uploaded file
+      const url = await getDownloadURL(fileRef);
+      let urlImage = file;
+      if (a) {
+        urlImage = url;
+      }
+      console.log('Got the download URL:', url);
+
+    
+      // Update the document with the new data and file URL
+      const categoriesRef = collection(db, 'user');
+      const docRef = doc(categoriesRef, modifyId); // replace 'document-id' with the ID of the document you want to update
+      // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
+
+      // Ensure all fields are defined
+      const userData = {
+        firstName: editedUser[0]?.firstName || '',
+        lastName: editedUser[0]?.lastName || '',
+        email: editedUser[0]?.email || '',
+        department: editedUser[0]?.department || '', // Make sure this field is handled properly
+        education: editedUser[0]?.education || '',
+        skills: editedUser[0]?.skills || '',
+        profession: editedUser[0]?.profession || '',
+        aboutMe: editedUser[0]?.aboutMe || '',
+        profileImage: url,
+      };
+
+      await updateDoc(docRef, userData);
+      // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
+
+      console.log('Category updated successfully!');
+      navigation.navigate('UserProfile', { userProfile: { ...editedUser } });
+      // window.location.reload();
+      // navigation.goBack();
+      console.log('Document ID:', modifyId);
+    } catch (error) {
+  console.log('nnDocument ID:', modifyId);
+      console.error('Error updating category: ', error);
+    }
+  };
+
+
+  // end updating user profile
+
 
   return (
-  
+
     <ScrollView>
-    
+
       <View style={styles.container}>
-      <View style={styles.imgCont}>
-          <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
+        <View style={styles.imgCont}>
+          <TouchableOpacity onPress={pickImage}>
+
+            <Ionicons style={styles.ImagePickerButton} name="image-sharp" size={24} />
+          </TouchableOpacity>
           {image && <Image source={{ uri: image }} style={styles.image} />}
-          {!image && user.profileImage && <Image source={user.profileImage} style={styles.image} />}
+          {/* {!image && user.profileImage && <Image source={user.profileImage} style={styles.image} />} */}
         </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>
-            Name:
+            First Name:
           </Text>
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedUser.name}
-            onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
+            value={editedUser[0].firstName}
+            // onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], firstName: text },
+              }));
+            }}
+          />
+
+          <Text h5 style={styles.sectionTitle}>
+            Last Name:
+          </Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.input}
+            value={editedUser[0].lastName}
+            // onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], lastName: text },
+              }));
+            }}
           />
 
           <Text h5 style={styles.sectionTitle}>
@@ -73,8 +186,14 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedEmail.email}
-            onChangeText={(text) => setEditedEmail({ ...editedEmail, email: text })}
+            editable={false}
+            value={editedUser[0].email}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], email: text },
+              }));
+            }}
           />
 
           <Text h5 style={styles.sectionTitle}>
@@ -83,8 +202,13 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedDept.department}
-            onChangeText={(text) => setEditedDept({ ...editedDept, department: text })}
+            value={editedUser[0].department}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], department: text },
+              }));
+            }}
           />
 
           <Text h5 style={styles.sectionTitle}>
@@ -93,8 +217,13 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedEducationalDetail.education}
-            onChangeText={(text) => setEditedEducationalDetail({ ...editedEducationalDetail, education: text })}
+            value={editedUser[0].education}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], education: text },
+              }));
+            }}
           />
 
           <Text h5 style={styles.sectionTitle}>
@@ -103,8 +232,14 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedSkills.skills.join(", ")}
-            onChangeText={(text) => setEditedSkills({ ...editedSkills, skills: text })}
+
+            value={editedUser[0].skills && editedUser.skills}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], skills: text },
+              }));
+            }}
           />
           <Text h5 style={styles.sectionTitle}>
             Profession:
@@ -112,8 +247,13 @@ const EditProfile = ({ route, navigation }) => {
           <Textarea
             containerStyle={styles.textareaContainer}
             style={styles.input}
-            value={editedprofession.profession}
-            onChangeText={(text) => setEditedprofession({ ...editedprofession, skills: text })}
+            value={editedUser[0].profession}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], profession: text },
+              }));
+            }}
           />
           <Text h5 style={styles.sectionTitle}>
             About Me:
@@ -122,26 +262,31 @@ const EditProfile = ({ route, navigation }) => {
 
             containerStyle={styles.textareaAboutContainer}
             style={styles.input}
-            value={editedAboutMe.aboutMe}
-            onChangeText={(text) => setEditedAboutMe({ ...editedAboutMe, aboutMe: text })}
+            value={editedUser[0].aboutMe}
+            onChangeText={(text) => {
+              setEditedUser((prevUser) => ({
+                ...prevUser,
+                [0]: { ...prevUser[0], aboutMe: text },
+              }));
+            }}
           />
 
-          <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
             <Text style={styles.saveButtonText}>Save Changes</Text>
           </TouchableOpacity>
         </Block>
-        
+
       </View>
-    
+
     </ScrollView>
-   
-    
+
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:"5%",
+    marginTop: "5%",
     backgroundColor: '#fff',
     flex: 1,
     padding: 16,
@@ -188,21 +333,21 @@ const styles = StyleSheet.create({
   },
 
   ImagePickerButton: {
-  
+
     marginLeft: "30%",
-    top:"80%",
+    top: "80%",
   },
-  image:{ 
+  image: {
 
     width: 120,
     height: 120,
     borderRadius: 60,
     resizeMode: "cover",
-  
+
   },
-  imgCont:{
-     flex: 1,
-     alignItems: 'center', 
+  imgCont: {
+    flex: 1,
+    alignItems: 'center',
     //  justifyContent: 'center' 
   }
 });

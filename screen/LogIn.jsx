@@ -5,11 +5,13 @@ import Images from '../constants/Images';
 import materialTheme from '../constants/Theme';
 import { FIREBASE_AUTH } from '../FireBaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useUser } from '../common/context/UserContext';
 
 const LogIn = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading,setLoading]=useState(false);
+  const {updateUser}=useUser();
   const auth=FIREBASE_AUTH;
   // jobdetails
   const jobDetails = [
@@ -88,6 +90,8 @@ const handleLogIn=async()=>{
   setLoading(true);
   try{
     const response = await signInWithEmailAndPassword(auth,email,password);
+    
+    updateUser(email);
     navigation.navigate("NavBar");
 
   }catch(error){
