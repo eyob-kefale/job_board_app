@@ -17,7 +17,8 @@ import { serverTimestamp } from 'firebase/firestore';
 const EditJobs = ({ route, navigation }) => {
   const { posts } = route.params;
   const modifyId = posts[0].title;
-console.log(posts);
+  const {jobId}=route.params;
+  console.log("id",jobId);
   // const [image, setImage] = useState(null);
   // const [ExistingImage, setExistingImage] = useState(user);
 
@@ -95,7 +96,7 @@ console.log(posts);
     
       // Update the document with the new data and file URL
       const categoriesRef = collection(db, 'jobLists');
-      const docRef = doc(categoriesRef, modifyId); // replace 'document-id' with the ID of the document you want to update
+      const docRef = doc(categoriesRef, jobId[0]); // replace 'document-id' with the ID of the document you want to update
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
 
       // Ensure all fields are defined

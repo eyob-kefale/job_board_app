@@ -16,8 +16,9 @@ import { serverTimestamp } from 'firebase/firestore';
 
 const EditProfile = ({ route, navigation }) => {
   const { userProfile } = route.params;
-  const modifyId = userProfile[0].email;
-
+   const modifyId = userProfile[0].email;
+  const { userIds } = route.params;
+  console.log("edddd",userIds[0]);
   // const [image, setImage] = useState(null);
   // const [ExistingImage, setExistingImage] = useState(user);
 
@@ -85,7 +86,7 @@ const EditProfile = ({ route, navigation }) => {
     
       // Update the document with the new data and file URL
       const categoriesRef = collection(db, 'user');
-      const docRef = doc(categoriesRef, modifyId); // replace 'document-id' with the ID of the document you want to update
+      const docRef = doc(categoriesRef, userIds[0]); // replace 'document-id' with the ID of the document you want to update
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
 
       // Ensure all fields are defined

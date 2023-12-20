@@ -44,16 +44,17 @@ const Register = ({ navigation }) => {
         lastName,
         email,
         password,
-        
+
       };
 
       try {
-        const docRef = doc(db, "user", email);
 
-        // Set the document data
-        await setDoc(docRef, data);
-        // const docRef = await addDoc(collection(db, "user",email), data);
-        console.log("Document written with ID: ", docRef.id);
+        const collectionRef = collection(db, 'user');
+        const docRef = await addDoc(collectionRef, data);
+
+        // The following line will now correctly log the ID of the newly added document
+        // console.log("Document written with ID: ", docRef.id);
+
         navigation.navigate("LogIn");
       } catch (e) {
         console.error("Error adding document: ", e);

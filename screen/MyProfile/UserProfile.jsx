@@ -13,7 +13,7 @@ const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
   const { userEmail } = useUser();
 console.log(user);
-
+const [id, setId] = useState([]);
 
 // console.log("emailllllll "+userEmail+" emailllll");
 //  usertid=user[0].id;
@@ -25,14 +25,31 @@ console.log(user);
 
   useEffect(() => {
     const getUserprofile = async () => {
+      // try {
+      //   const querySnapshot = await getDocs(userCollectionRef);
+      //   const userData = querySnapshot.docs.map((doc) => ({ ...doc.data(), user: doc.user,  id: doc.id, }));
+      //   setUser(userData);
+      //   console.log("idddddddd "+id);
+      // } catch (error) {
+      //   console.error('Error fetching user profile: ', error);
+      // }
       try {
         const querySnapshot = await getDocs(userCollectionRef);
-        const userData = querySnapshot.docs.map((doc) => ({ ...doc.data(), user: doc.user }));
+        const userData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          user: doc.user,
+          id: doc.id, // Access the document ID directly here
+        }));
         setUser(userData);
-        console.log(userData);
+        //  console.log("idddddddd ", userData.map(user => user.id));
+        setId(prevId => [...prevId, ...userData.map(user => user.id)]);
+    //      id = userData.map(user => user.id);
+    // console.log("idddddddd ", id);
+
       } catch (error) {
         console.error('Error fetching user profile: ', error);
       }
+      
     };
   
     getUserprofile();
@@ -49,8 +66,9 @@ console.log(user);
   );
 
   const handleEditProfile = () => {
+    // console.log("idddddddd ", id);
     // Navigate to the EditProfile screen
-    navigation.navigate('EditProfile', { userProfile });
+    navigation.navigate('EditProfile', { userProfile,userIds: id  });
 
   };
   // const myApplications = () => {

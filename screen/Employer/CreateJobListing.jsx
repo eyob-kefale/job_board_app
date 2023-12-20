@@ -98,7 +98,7 @@ const CreateJobListing = ({ route, navigation }) => {
         };
 
 
-        await setDoc(doc(categoriesRef,jobDetails.title), newJobLists);
+        await setDoc(doc(categoriesRef), newJobLists);
         console.log('Jobs added successfully!');
         navigation.goBack();
     } catch (error) {

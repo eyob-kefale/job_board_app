@@ -41,22 +41,28 @@ const EmployeerProfile = ({ navigation }) => {
 const [posts, setPosts] = useState([]);
 
 const jobListsCollectionRef = query(collection(db, 'jobLists'),where('employer','==',userEmail), limit(10));
-
+const [jobId, setJobId] = useState([]);
 
 useEffect(() => {
-    const getJoblists = async () => {
-        const data = await getDocs(jobListsCollectionRef);
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  const getJoblists = async () => {
+    const data = await getDocs(jobListsCollectionRef);
+    // Extract job IDs from data and update state
+    const jobIds = data.docs.map((doc) => doc.id);
+    setJobId((prevId) => [...prevId, ...jobIds]);
 
-    };
-    getJoblists();
+    // Set the posts state with the data and include IDs
+    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
+  getJoblists();
 }, []);
+
 
 
 const handleEditJobs = (posts) => {
   console.log("ffggfgfgg "+posts);
   // Navigate to the EditProfile screen with the item as a parameter
-  navigation.navigate('EditJobs', { posts });
+  navigation.navigate('EditJobs', { posts,jobId });
 
 };
 
