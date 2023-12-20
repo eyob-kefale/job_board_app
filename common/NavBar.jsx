@@ -90,7 +90,7 @@ const NavBar = () => {
             <Tab.Navigator 
             tabBarOptions={{
               labelStyle: { paddingBottom: 10, fontSize: 10 },
-              style: { position: 'absolute', bottom: 25, height: 90, backgroundColor: '#AF2655' },
+              style: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 90, backgroundColor: '#000' },
             }}
             >
 

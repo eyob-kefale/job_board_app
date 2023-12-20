@@ -26,22 +26,7 @@ const EditProfile = ({ route, navigation }) => {
   const [editedUser, setEditedUser] = useState(userProfile);
 
   const [a, setA] = useState(false);
-  // const [editedEmail, setEditedEmail] = useState(userProfile);
-  // const [editedDept, setEditedDept] = useState(userProfile);
-  // const [editedSkills, setEditedSkills] = useState(userProfile);
-  // const [editedEducationalDetail, setEditedEducationalDetail] = useState(userProfile);
-  // const [editedprofession, setEditedprofession] = useState(userProfile);
-  // const [editedAboutMe, setEditedAboutMe] = useState(userProfile);
-
-
-  // const handleSaveChanges = () => {
-  //   // Implement logic to save changes to the user profile
-  //   // For simplicity, this example updates the user state directly.
-  //   // In a real app, you might want to make an API call or use state management.
-  //   navigation.navigate('UserProfile', { userProfile: { ...editedUser, profileImage: image } });
-  //   //navigation.goBack(); // Navigate back to the job list screen after creating the job
-  // };
-
+  
 
   // picking image from file
   const pickImage = async () => {
@@ -114,6 +99,7 @@ const EditProfile = ({ route, navigation }) => {
         profession: editedUser[0]?.profession || '',
         aboutMe: editedUser[0]?.aboutMe || '',
         profileImage: url,
+        updatedDate: serverTimestamp(),
       };
 
       await updateDoc(docRef, userData);
@@ -123,9 +109,9 @@ const EditProfile = ({ route, navigation }) => {
       navigation.navigate('UserProfile', { userProfile: { ...editedUser } });
       // window.location.reload();
       // navigation.goBack();
-      console.log('Document ID:', modifyId);
+      
     } catch (error) {
-  console.log('nnDocument ID:', modifyId);
+  
       console.error('Error updating category: ', error);
     }
   };

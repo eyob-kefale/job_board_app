@@ -4,10 +4,11 @@ import { Block, Text, theme } from "galio-framework";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import { Dimensions } from "react-native";
-
-import { collection, getDocs, limit, query } from 'firebase/firestore';
+import materialTheme from '../constants/Theme';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
+import { useUser } from "../common/context/UserContext";
 const { width, height } = Dimensions.get('window');
 const dynamicStyles = {
   // avatarSize: width * avatarSizeRatio,
@@ -29,6 +30,8 @@ const user = {
 };
 
 const EmployeerProfile = ({ navigation }) => {
+  //fetch from context
+  const { userEmail } = useUser();
   //   const { user } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
   const [showMoreMap, setShowMoreMap] = useState({});
@@ -37,7 +40,7 @@ const EmployeerProfile = ({ navigation }) => {
 //fetch from jobLists
 const [posts, setPosts] = useState([]);
 
-const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
+const jobListsCollectionRef = query(collection(db, 'jobLists'),where('employer','==',userEmail), limit(10));
 
 
 useEffect(() => {
@@ -50,6 +53,12 @@ useEffect(() => {
 }, []);
 
 
+const handleEditJobs = (posts) => {
+  console.log("ffggfgfgg "+posts);
+  // Navigate to the EditProfile screen with the item as a parameter
+  navigation.navigate('EditJobs', { posts });
+
+};
 
 
 
@@ -96,10 +105,11 @@ useEffect(() => {
         </TouchableOpacity>
       )}
       <TouchableOpacity
-        onPress={() => onApplyPress(item.title)}
+        onPress={() => handleEditJobs(posts)}
+
         style={styles.applyButton}
       >
-        <Text style={styles.applyButtonText}>Apply</Text>
+        <Text style={styles.applyButtonText}>Edit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -238,7 +248,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontWeight: "bold",
     textAlign: 'center',
-    color: "#3498db",
+    color: materialTheme.COLORS.BUTTON_COLOR,
 
 
   }
@@ -326,7 +336,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   applyButton: {
-    backgroundColor: "#3498db",
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     padding: 12,
     borderRadius: 4,
     marginTop: 8,

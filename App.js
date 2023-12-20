@@ -22,6 +22,7 @@ import User from 'firebase/auth'
 import { UserProvider } from './common/context/UserContext'
 
 import { collection, getDocs } from "firebase/firestore"; 
+import EditJobs from './screen/Employer/EditJobs';
 
 // const querySnapshot = await getDocs(collection(db, "user"));
 // querySnapshot.forEach((doc) => {
@@ -118,6 +119,7 @@ const App = () => {
         <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="SingleNotification" component={SingleNotification} />
         <Stack.Screen name="EmployeerProfile" component={EmployeerProfile} />
+        <Stack.Screen name="EditJobs" component={EditJobs} />
         <Stack.Screen name="ApplyPage" component={ApplyPage} />
         <Stack.Screen name="NavBar" component={NavBar} />
         <Stack.Screen name="LogIn" component={LogIn} />

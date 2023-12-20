@@ -10,10 +10,12 @@ import { collection, doc, setDoc } from 'firebase/firestore';
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from '../../FireBaseConfig';
-
+import { useUser } from '../../common/context/UserContext';
+import { serverTimestamp } from 'firebase/firestore';
 
 const CreateJobListing = ({ route, navigation }) => {
-
+  const { userEmail } = useUser();
+  // console.log("create job   "+userEmail);
    const [image, setImage] = useState("");
    const [defaultImage, setDefaultImage] = useState(defaultImagee);
    const [file, setFile] = useState('');
@@ -91,12 +93,12 @@ const CreateJobListing = ({ route, navigation }) => {
            
             img: url,
             education:jobDetails.education,
-           
-           
+            employer:userEmail,
+            createdDate: serverTimestamp(), 
         };
 
 
-        await setDoc(doc(categoriesRef), newJobLists);
+        await setDoc(doc(categoriesRef,jobDetails.title), newJobLists);
         console.log('Jobs added successfully!');
         navigation.goBack();
     } catch (error) {
