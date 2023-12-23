@@ -69,6 +69,7 @@ const CreateJobListing = ({ route, navigation }) => {
 
       // Get the last part of the array, which contains the filename
       const filename = parts[parts.length - 1];
+      
         const storageRef = storage;
         const filePath = 'jobLists/' +filename;
 
@@ -83,8 +84,9 @@ const CreateJobListing = ({ route, navigation }) => {
 
         // Store the download URL and category name in Firestore
         const categoriesRef = collection(db, 'jobLists');
-
+        const docRef = doc(categoriesRef);
         const newJobLists = {
+            id: docRef.id,
             title:jobDetails.title,
             description:jobDetails.description,
             requirements:jobDetails.requirements,
@@ -94,11 +96,14 @@ const CreateJobListing = ({ route, navigation }) => {
             img: url,
             education:jobDetails.education,
             employer:userEmail,
+            
             createdDate: serverTimestamp(), 
         };
 
 
         await setDoc(doc(categoriesRef), newJobLists);
+
+        
         console.log('Jobs added successfully!');
         navigation.goBack();
     } catch (error) {

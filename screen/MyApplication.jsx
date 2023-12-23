@@ -3,7 +3,18 @@ import { ImageBackground } from 'react-native';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import materialTheme from '../constants/Theme'
+import { firebase } from 'firebase/app'; // Make sure to import 'firebase/app' to get the 'firebase' namespace
+
+import { FieldPath } from 'firebase/firestore';
+import { collection, getDocs, query, where, arrayContains, getDoc, doc } from 'firebase/firestore';
+import { db } from '../FireBaseConfig';
+import { useUser } from '../common/context/UserContext';
+import { useEffect } from 'react';
+import { useState } from 'react';
 const MyApplication = () => {
+  const { userEmail, userDocId } = useUser();
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  // const [jobs, setJobs] = useState();
   // Example data for job applications
   const jobApplications = [
     {
@@ -37,27 +48,90 @@ const MyApplication = () => {
     // Add more job applications as needed
   ];
   const navigation = useNavigation();
-  const handleMyApplocation=()=>{
-    navigation.navigate("EmployeerProfile");
+  const handleMyApplocation = (id) => {
+
+    navigation.navigate("EmployeerProfile",{id});
   }
   const handleSeeMore = (jobId) => {
     // Handle navigation to see more details about the job (you can implement this based on your navigation structure)
     // For example, you can use React Navigation to navigate to a detailed job view.
     // console.log(`See more for job ${jobId}`);
   };
+
+
+
+
+  // Function to fetch jobs based on user's applied job IDs
+  const fetchAppliedJobs = async (appliedJobIds) => {
+    try {
+
+      const jobListsCollectionRef = collection(db, 'jobLists');
+      const queryRef = query(jobListsCollectionRef, where('id', 'array-contains', appliedJobIds));
+      // console.log("jobs ")
+      // const querySnapshot = await getDocs(queryRef);
+
+
+      // // Extract and return the job data
+      // // const jobs = querySnapshot.cs.map((c) => ({ ...c.data(), id: doc.id }));
+      // setJobs(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      const jobs = [];
+      for (const appliedJobId of appliedJobIds) {
+        const docRef = doc(jobListsCollectionRef, appliedJobId);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists) {
+          jobs.push(docSnapshot.data());
+        }
+      }
+    
+      return jobs;
+    } catch (error) {
+      console.error('Error fetching applied jobs: ', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // console.log(userDocId)
+      // Assuming you have the user document with the 'apply' field containing job IDs
+      const userRef = doc(db, 'user', userDocId);
+
+      // Fetch the user document
+      const userDocSnapshot = await getDoc(userRef);
+      const userData = userDocSnapshot.data();
+      // console.log("userData ", userData.apply);
+      // Fetch jobs based on the 'apply' field in the user document
+      if(userData.apply){
+        const appliedJobsData = await fetchAppliedJobs(userData.apply);
+        // console.log("appliedJobsData ", appliedJobsData);
+        // Now, 'appliedJobsData' contains an array of jobs that the user has applied to
+        setAppliedJobs(appliedJobsData);
+
+      }
+
+    };
+
+    fetchData();
+  }, [userDocId]);
+  // Now, 'appliedJobs' contains an array of jobs that the user has applied to
+  // console.log('Applied Jobs:', appliedJobs);
+  // console.log(appliedJobs, "gghhhhhhhhhhhhhhhh");
+
+
   const renderApplicationItem = ({ item, index }) => (
+
     <View key={index} style={styles.container}>
 
       <View key={item.jobId} style={styles.jobContainer}>
-        <Image source={item.jobImage} style={styles.jobImage} />
+        <Image source={{uri:item.img}} style={styles.jobImage} />
         <View style={styles.jobDetails}>
-          <Text style={styles.jobTitle}>{item.jobTitle}</Text>
-          <TouchableOpacity onPress={handleMyApplocation}>
-          <Text style={styles.jobOwner}>Company: {item.jobOwner}</Text>
+          <Text style={styles.jobTitle}>{item.title}</Text>
+          <TouchableOpacity onPress={() => handleMyApplocation(item.id)}>
+            <Text style={styles.jobOwner}>Company: {item.employer}</Text>
 
           </TouchableOpacity>
           <Text numberOfLines={3} style={styles.jobDescription}>
-            {item.jobDescription}
+            {item.description}
           </Text>
           <TouchableOpacity
             style={styles.seeMoreButton}
@@ -82,12 +156,14 @@ const MyApplication = () => {
           </Text>
         </ImageBackground>
       </View>
-      <FlatList
-        data={jobApplications}
-        renderItem={renderApplicationItem}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={1}
-      />
+      {appliedJobs && (
+  <FlatList
+    data={appliedJobs}
+    renderItem={renderApplicationItem}
+    keyExtractor={(item, index) => index.toString()}
+    numColumns={1}
+  />
+)}
     </View>
 
   );
@@ -129,7 +205,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   seeMoreButton: {
-    backgroundColor:  materialTheme.COLORS.BUTTON_COLOR,
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     padding: 8,
     borderRadius: 8,
     alignSelf: 'flex-start',
@@ -139,12 +215,12 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    flex:1,
+    flex: 1,
     margin: "5%"
   },
 
   TitleCont: {
-     marginVertical: "5%",
+    marginVertical: "5%",
     // backgroundColor:"#fff",
 
     height: "25%",

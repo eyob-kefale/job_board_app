@@ -29,9 +29,10 @@ const user = {
   aboutMe: 'Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.Passionate about creating delightful user experiences with a focus on mobile app development.',
 };
 
-const EmployeerProfile = ({ navigation }) => {
+const EmployeerProfile = ({route, navigation }) => {
   //fetch from context
   const { userEmail } = useUser();
+  const {id}=route.params;
   //   const { user } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
   const [showMoreMap, setShowMoreMap] = useState({});
@@ -40,7 +41,7 @@ const EmployeerProfile = ({ navigation }) => {
 //fetch from jobLists
 const [posts, setPosts] = useState([]);
 
-const jobListsCollectionRef = query(collection(db, 'jobLists'),where('employer','==',userEmail), limit(10));
+const jobListsCollectionRef = query(collection(db, 'jobLists'),where('id','==',id), limit(10));
 const [jobId, setJobId] = useState([]);
 
 useEffect(() => {
@@ -49,9 +50,9 @@ useEffect(() => {
     // Extract job IDs from data and update state
     const jobIds = data.docs.map((doc) => doc.id);
     setJobId((prevId) => [...prevId, ...jobIds]);
-
     // Set the posts state with the data and include IDs
     setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    console.log("employer",posts)
   };
 
   getJoblists();
@@ -132,7 +133,7 @@ const handleEditJobs = (posts) => {
     navigation.navigate('EditProfile', { user });
 
   };
-
+console.log("posts",posts)
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subCont}>

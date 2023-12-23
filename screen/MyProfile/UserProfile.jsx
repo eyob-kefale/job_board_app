@@ -11,11 +11,12 @@ import { useState } from "react";
 import { useUser } from "../../common/context/UserContext";
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
-  const { userEmail } = useUser();
+  
+  const { userEmail,docId } = useUser();
 console.log(user);
 const [id, setId] = useState([]);
 
-// console.log("emailllllll "+userEmail+" emailllll");
+ console.log(userEmail,"plm ",docId," emailllll");
 //  usertid=user[0].id;
   //start fetching from jobLists
   const [userProfile, setUser] = useState([]);
@@ -131,7 +132,7 @@ const [id, setId] = useState([]);
                 <Text h5 style={styles.sectionTitle}>
                   Skills:
                 </Text>
-                <Text style={styles.desc}>{user.skills}</Text>
+                <Text style={styles.desc}>{userP.skills}</Text>
 
               </>
             )}
@@ -171,12 +172,12 @@ const [id, setId] = useState([]);
               {/* <Text h5 style={styles.sectionTitle}>
                 Social Links:
               </Text> */}
-              <FlatList
+              {/* <FlatList
                 data={user.socialLinks}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
-              />
+              /> */}
             </Block>
 
           </ScrollView>

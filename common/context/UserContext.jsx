@@ -5,13 +5,16 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState(null);
-
+  const [userDocId, setUserDocId] = useState(null);
   const updateUser = (email) => {
     setUserEmail(email);
   };
-//   console.log("emailllllll "+email+" emailllll");
+  const updateDocId=(id)=>{
+    setUserDocId(id[0]);
+  }
+    // console.log("emailllllll "+userEmail+" emailllll");
   return (
-    <UserContext.Provider value={{ userEmail, updateUser }}>
+    <UserContext.Provider value={{ userEmail, updateUser,userDocId,updateDocId }}>
       {children}
     </UserContext.Provider>
   );

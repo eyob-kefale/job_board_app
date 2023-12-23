@@ -121,6 +121,7 @@ const App = () => {
         <Stack.Screen name="EmployeerProfile" component={EmployeerProfile} />
         <Stack.Screen name="EditJobs" component={EditJobs} />
         <Stack.Screen name="ApplyPage" component={ApplyPage} />
+        <Stack.Screen name="JobListing" component={JobListing} />
         <Stack.Screen name="NavBar" component={NavBar} />
         <Stack.Screen name="LogIn" component={LogIn} />
        

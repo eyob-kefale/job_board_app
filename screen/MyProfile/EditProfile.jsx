@@ -16,7 +16,7 @@ import { serverTimestamp } from 'firebase/firestore';
 
 const EditProfile = ({ route, navigation }) => {
   const { userProfile } = route.params;
-   const modifyId = userProfile[0].email;
+  //  const modifyId = userProfile[0].email;
   const { userIds } = route.params;
   console.log("edddd",userIds[0]);
   // const [image, setImage] = useState(null);
@@ -220,7 +220,7 @@ const EditProfile = ({ route, navigation }) => {
             containerStyle={styles.textareaContainer}
             style={styles.input}
 
-            value={editedUser[0].skills && editedUser.skills}
+            value={editedUser[0].skills}
             onChangeText={(text) => {
               setEditedUser((prevUser) => ({
                 ...prevUser,

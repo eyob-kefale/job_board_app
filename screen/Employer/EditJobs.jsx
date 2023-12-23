@@ -78,7 +78,7 @@ const EditJobs = ({ route, navigation }) => {
 
 
       const storageRef = getStorage();
-      const filePath = 'user/' + filename;
+      const filePath = 'job/' + filename;
 
       // Upload the file to Firebase Storage
       const fileRef = ref(storageRef, filePath);
@@ -97,10 +97,11 @@ const EditJobs = ({ route, navigation }) => {
       // Update the document with the new data and file URL
       const categoriesRef = collection(db, 'jobLists');
       const docRef = doc(categoriesRef, jobId[0]); // replace 'document-id' with the ID of the document you want to update
-      // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
-
+      // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() }; 
+        console.log(jobId[0]);
       // Ensure all fields are defined
       const userData = {
+        title:editedUser[0]?.title||'',
         description: editedUser[0]?.description || '',
         education: editedUser[0]?.education || '',
         professions: editedUser[0]?.professions || '',
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
     }
     ,
     saveButton: {
-      backgroundColor: '#3498db',
+      backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
       padding: 12,
       borderRadius: 8,
       marginTop: "10%",

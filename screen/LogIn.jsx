@@ -6,12 +6,15 @@ import materialTheme from '../constants/Theme';
 import { FIREBASE_AUTH } from '../FireBaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useUser } from '../common/context/UserContext';
-
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { db } from '../FireBaseConfig';
+import { useEffect } from 'react';
 const LogIn = ({navigation}) => {
+  const [id,setId]=useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading,setLoading]=useState(false);
-  const {updateUser}=useUser();
+  const {updateUser,updateDocId}=useUser();
   const auth=FIREBASE_AUTH;
   // jobdetails
   const jobDetails = [
@@ -86,21 +89,54 @@ const user = {
 // }
 
 
-const handleLogIn=async()=>{
+
+const handleLogIn = async () => {
   setLoading(true);
-  try{
-    const response = await signInWithEmailAndPassword(auth,email,password);
-    
+  try {
+    const response = await signInWithEmailAndPassword(auth, email, password);
+
+    // Fetch user profile data
+    const querySnapshot = await getDocs(userCollectionRef);
+    const userData = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      user: doc.user,
+      id: doc.id,
+    }));
+
+    // Update user context and ID
     updateUser(email);
+    updateDocId(userData.map(user => user.id));
+
+    // Navigate to "NavBar"
     navigation.navigate("NavBar");
-
-  }catch(error){
-    alert("Sign in failed: "+error.message);
-
-  }finally{
+  } catch (error) {
+    alert("Sign in failed: " + error.message);
+  } finally {
     setLoading(false);
   }
-}
+};
+
+const [userProfile, setUser] = useState([]);
+const userCollectionRef = query(collection(db, 'user'), where("email", "==", email));
+
+useEffect(() => {
+  const getUserProfile = async () => {
+    try {
+      const querySnapshot = await getDocs(userCollectionRef);
+      const userData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        user: doc.user,
+        id: doc.id,
+      }));
+      setUser(userData);
+    } catch (error) {
+      console.error('Error fetching user profile: ', error);
+    }
+  };
+
+  getUserProfile();
+}, []);
+
 
 
 

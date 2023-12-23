@@ -3,16 +3,83 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TextInput, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import materialTheme from '../constants/Theme';
-const ApplyPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [resume, setResume] = useState('');
+import { useNavigation } from '@react-navigation/native';
+import { collection, doc, getDoc, setDoc,updateDoc } from 'firebase/firestore';
+import { db, storage } from '../FireBaseConfig';
+import { useUser } from '../common/context/UserContext';
+import { serverTimestamp } from 'firebase/firestore';
+const ApplyPage = ({route}) => {
+  const [firstName, setFirstName] = useState('');
+  const [LastName, setLastName] = useState('');
+  const [age, setAge] = useState('');
+  const [profession, setProfession] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
 
+  const [apply,setApply]=useState([]);
+  const { docId }=route.params;
+  const { userEmail,userDocId } = useUser(); 
+console.log(docId,"why");
+  const navigation = useNavigation();
+// console.log("ffff",userDocId);
   const handleSubmit = () => {
     // Implement logic to submit the application
-    console.log('Application submitted:', { name, email, resume, coverLetter });
+    //console.log('Application submitted:', { firstName,LastName, email, resume, coverLetter });
   };
+
+
+// insert in to jobLists begin
+const handleSaveChanges = async (event) => {
+  event.preventDefault();
+
+
+  try {
+
+      // Store the download URL and category name in Firestore
+      const categoriesRef = collection(db, 'application');
+
+      const newJobLists = {
+          firstName,
+          LastName,
+          age,
+          profession,
+          coverLetter,
+           email:userEmail,
+           jobId:docId,
+          createdDate: serverTimestamp(), 
+      };
+
+
+      await setDoc(doc(categoriesRef), newJobLists);
+      setApply(docId);
+// update the use collection by adding applied jobs
+  // Update the document with the new data and file URL
+   // Update the document with the new data and file URL
+   const userRef = collection(db, 'user');
+   const docRef = doc(userRef, userDocId); // replace 'document-id' with the ID of the document you want to update
+   // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
+  
+   const getdocRef = doc(userRef, userDocId);
+
+    // Fetch the current user data
+    const docSnapshot = await getDoc(getdocRef);
+    const userData = docSnapshot.data();
+  
+   const updatedApply = [...userData.apply, docId];
+   // Ensure all fields are defined
+   const updatedUserData = {
+    apply:updatedApply,
+     updatedDate: serverTimestamp(),
+   };
+
+   await updateDoc(docRef, updatedUserData);
+
+      console.log('applicant apply successfully!');
+      navigation.navigate("MyApplication");
+  } catch (error) {
+      console.error('Error adding Jobs: ', error);
+  }
+};
+
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -26,25 +93,31 @@ const ApplyPage = () => {
         <View style={styles.formContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Your Name"
-            value={name}
-            onChangeText={(text) => setName(text)}
+            placeholder="Your First Name"
+            value={firstName}
+            onChangeText={(text) => setFirstName(text)}
+          />
+           <TextInput
+            style={styles.input}
+            placeholder="Your Last Name"
+            value={LastName}
+            onChangeText={(text) => setLastName(text)}
           />
           <TextInput
             style={styles.input}
-            placeholder="Your Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
+            placeholder="Your Age"
+            value={age}
+            onChangeText={(text) => setAge(text)}
+          />
+             <TextInput
+            style={styles.input}
+            placeholder="Your Profession"
+            value={profession}
+            onChangeText={(text) => setProfession(text)}
           />
           <TextInput
             style={styles.input}
-            placeholder="Attach Resume"
-            value={resume}
-            onChangeText={(text) => setResume(text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Write a Cover Letter"
+            placeholder="Write some description about the job"
             multiline
             numberOfLines={4}
             value={coverLetter}
@@ -52,7 +125,7 @@ const ApplyPage = () => {
           />
 
           {/* Submit Button */}
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSaveChanges}>
             <Text style={styles.submitButtonText}>Submit Application</Text>
           </TouchableOpacity>
         </View>
@@ -67,7 +140,7 @@ const styles = StyleSheet.create({
     margin:"5%"
   },
   header: {
-    backgroundColor: '#0766AD',
+    backgroundColor: "#A2129A",
     paddingVertical: 20,
     alignItems: 'center',
   },

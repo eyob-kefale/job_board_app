@@ -63,10 +63,10 @@ export default () => {
     }));
   };
   const navigation = useNavigation();
-  const onApplyPress = () => {
+  const onApplyPress = (docId) => {
     // Implement logic for handling the "Apply" button press
     
-      navigation.navigate("ApplyPage");
+      navigation.navigate("ApplyPage", { docId });
     
     
     // You can add your navigation logic or any other actions here
@@ -74,18 +74,41 @@ export default () => {
 
 //start fetching from jobLists
 const [posts, setPosts] = useState([]);
-
+const [jobId, setJobId] = useState([]);
 const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
 
-
 useEffect(() => {
-    const getJoblists = async () => {
-        const data = await getDocs(jobListsCollectionRef);
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  const getJoblists = async () => {
+    try {
+      const data = await getDocs(jobListsCollectionRef);
 
-    };
-    getJoblists();
+      // Check if data.docs is defined before mapping over it
+      if (data.docs && data.docs.length > 0) {
+        const jobIds = data.docs.map((doc) => doc.id);
+        setJobId((prevId) => [...prevId, ...jobIds]);
+
+        // Set the posts state with the data and include IDs
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } else {
+        console.error('No documents found');
+      }
+    } catch (error) {
+      console.error('Error fetching job lists: ', error);
+    }
+  };
+
+  getJoblists();
 }, []);
+
+// useEffect(() => {
+//     const getJoblists = async () => {
+//         const data = await getDocs(jobListsCollectionRef);
+//         setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+//         const jobIds=data.docs.map((doc) => doc.id);
+//         setjobId((prevId) => [...prevId, ...jobIds]);
+//     };
+//     getJoblists();
+// }, []);
 
 //end fetching from jobLists
 
@@ -119,7 +142,7 @@ useEffect(() => {
         </TouchableOpacity>
       )}
       <TouchableOpacity
-        onPress={onApplyPress}
+       onPress={() => onApplyPress(item.id)}
         style={styles.applyButton}
       >
         <Text style={styles.applyButtonText}>Apply</Text>
