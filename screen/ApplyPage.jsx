@@ -31,54 +31,60 @@ console.log(docId,"why");
 const handleSaveChanges = async (event) => {
   event.preventDefault();
 
-
+  // Validate inputs
+  if (!firstName || !LastName || !age || !profession || !coverLetter) {
+    alert('All fields must be filled out');
+    // You can display an alert or handle the validation error in a way you prefer
+    return;
+  }
   try {
-
-      // Store the download URL and category name in Firestore
-      const categoriesRef = collection(db, 'application');
-
-      const newJobLists = {
-          firstName,
-          LastName,
-          age,
-          profession,
-          coverLetter,
-           email:userEmail,
-           jobId:docId,
-          createdDate: serverTimestamp(), 
-      };
-
-
-      await setDoc(doc(categoriesRef), newJobLists);
-      setApply(docId);
-// update the use collection by adding applied jobs
-  // Update the document with the new data and file URL
-   // Update the document with the new data and file URL
-   const userRef = collection(db, 'user');
-   const docRef = doc(userRef, userDocId); // replace 'document-id' with the ID of the document you want to update
-   // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
-  
-   const getdocRef = doc(userRef, userDocId);
-
     // Fetch the current user data
+    const userRef = collection(db, 'user');
+    const docRef = doc(userRef, userDocId);
+    const getdocRef = doc(userRef, userDocId);
     const docSnapshot = await getDoc(getdocRef);
     const userData = docSnapshot.data();
-  
-   const updatedApply = [...userData.apply, docId];
-   // Ensure all fields are defined
-   const updatedUserData = {
-    apply:updatedApply,
-     updatedDate: serverTimestamp(),
-   };
 
-   await updateDoc(docRef, updatedUserData);
+    // Check if the jobId is already in the userData.apply array
+    if (userData.apply && userData.apply.includes(docId)) {
+     alert(`User has already applied for the job with ID: ${docId}`);
+      // Handle case where the user has already applied
+      // You can display a message or prevent further actions
+    } else {
+      // Store the download URL and category name in Firestore
+      const categoriesRef = collection(db, 'application');
+      const newJobLists = {
+        firstName,
+        LastName,
+        age,
+        profession,
+        coverLetter,
+        email: userEmail,
+        jobId: docId,
+        createdDate: serverTimestamp(),
+      };
 
-      console.log('applicant apply successfully!');
+      // Create a document in the 'application' collection
+      await setDoc(doc(categoriesRef), newJobLists);
+
+      // Update the user collection by adding the applied job
+      const updatedApply = [...userData.apply, docId];
+      const updatedUserData = {
+        apply: updatedApply,
+        updatedDate: serverTimestamp(),
+      };
+
+      // Update the document in the 'user' collection
+      await updateDoc(docRef, updatedUserData);
+
+      console.log('Application submitted successfully!');
       navigation.navigate("MyApplication");
+    }
   } catch (error) {
-      console.error('Error adding Jobs: ', error);
+    console.error('Error submitting application: ', error);
   }
 };
+
 
 
   return (

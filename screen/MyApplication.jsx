@@ -49,8 +49,8 @@ const MyApplication = () => {
   ];
   const navigation = useNavigation();
   const handleMyApplocation = (id) => {
-
-    navigation.navigate("EmployeerProfile",{id});
+    navigation.navigate("SingleJob",{id});
+    // navigation.navigate("EmployeerProfile",{id});
   }
   const handleSeeMore = (jobId) => {
     // Handle navigation to see more details about the job (you can implement this based on your navigation structure)
@@ -66,7 +66,7 @@ const MyApplication = () => {
     try {
 
       const jobListsCollectionRef = collection(db, 'jobLists');
-      const queryRef = query(jobListsCollectionRef, where('id', 'array-contains', appliedJobIds));
+      const queryRef = query(jobListsCollectionRef, where('uid', 'array-contains', appliedJobIds));
       // console.log("jobs ")
       // const querySnapshot = await getDocs(queryRef);
 
@@ -111,7 +111,14 @@ const MyApplication = () => {
 
     };
 
-    fetchData();
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 1000);
+  
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+
+    
   }, [userDocId]);
   // Now, 'appliedJobs' contains an array of jobs that the user has applied to
   // console.log('Applied Jobs:', appliedJobs);
@@ -126,7 +133,7 @@ const MyApplication = () => {
         <Image source={{uri:item.img}} style={styles.jobImage} />
         <View style={styles.jobDetails}>
           <Text style={styles.jobTitle}>{item.title}</Text>
-          <TouchableOpacity onPress={() => handleMyApplocation(item.id)}>
+          <TouchableOpacity >
             <Text style={styles.jobOwner}>Company: {item.employer}</Text>
 
           </TouchableOpacity>
@@ -135,7 +142,7 @@ const MyApplication = () => {
           </Text>
           <TouchableOpacity
             style={styles.seeMoreButton}
-            onPress={() => handleSeeMore(item.jobId)}>
+            onPress={() => handleMyApplocation(item.jobId)}>
             <Text style={styles.seeMoreButtonText}>See More</Text>
           </TouchableOpacity>
         </View>

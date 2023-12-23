@@ -37,11 +37,15 @@ const EmployeerProfile = ({route, navigation }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showMoreMap, setShowMoreMap] = useState({});
 
-
+  const onShowMorePress = (id) => {
+    console.log("SingleJob ",id)
+      navigation.navigate("SingleJob",{id});
+    
+  };
 //fetch from jobLists
 const [posts, setPosts] = useState([]);
 
-const jobListsCollectionRef = query(collection(db, 'jobLists'),where('id','==',id), limit(10));
+const jobListsCollectionRef = query(collection(db, 'jobLists'),where('jobId','==',id));
 const [jobId, setJobId] = useState([]);
 
 useEffect(() => {
@@ -94,6 +98,8 @@ const handleEditJobs = (posts) => {
   );
  
   const renderJobItem = ({ item, index }) => (
+    <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
+
     <View key={index} style={styles.jobItem}>
       <Image source={{ uri: item.img}} style={styles.image} resizeMode="cover" />
       <Text style={styles.title}>{item.title}</Text>
@@ -119,6 +125,7 @@ const handleEditJobs = (posts) => {
         <Text style={styles.applyButtonText}>Edit</Text>
       </TouchableOpacity>
     </View>
+    </TouchableOpacity>
   );
 
   const renderItem = ({ item }) => (

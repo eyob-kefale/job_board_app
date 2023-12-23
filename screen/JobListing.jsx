@@ -33,19 +33,25 @@ const dynamicStyles = {
 };
 
 const ListItem = ({ item }) => {
+  const navigation = useNavigation();
+const onShowMorePress = (id) => {
+  console.log("SingleJob ",id)
+    navigation.navigate("SingleJob",{id});
+  
+};
   return (
-    <TouchableOpacity >
+    <TouchableOpacity onPress={() => onShowMorePress(item.title)}>
     <View style={styles.item}>
       <Image
         source={{
-          uri: item.uri,
+          uri: item.img,
         }}
         style={styles.itemPhoto}
         resizeMode="cover"
       />
       <View></View>
-      <Text style={styles.itemText1}>{item.text}</Text>
-      <Text style={styles.itemText2}>{item.description}</Text>
+      <Text style={styles.itemText1}>{item.title}</Text>
+      {/* <Text style={styles.itemText2}>{item.description}</Text> */}
       {/* <Text style={styles.itemText}>{item.experienceRequired}</Text> */}
     </View>
 
@@ -54,6 +60,13 @@ const ListItem = ({ item }) => {
 };
 
 export default () => {
+  const navigation = useNavigation();
+  const onShowMorePress = (id) => {
+    console.log("SingleJob ",id)
+      navigation.navigate("SingleJob",{id});
+    
+  };
+
   const [showMoreMap, setShowMoreMap] = useState({});
 
   const toggleShowMore = (index) => {
@@ -62,44 +75,73 @@ export default () => {
       [index]: !prevShowMoreMap[index],
     }));
   };
-  const navigation = useNavigation();
+ 
   const onApplyPress = (docId) => {
-    // Implement logic for handling the "Apply" button press
-    
+  
       navigation.navigate("ApplyPage", { docId });
     
-    
-    // You can add your navigation logic or any other actions here
   };
+
+
 
 //start fetching from jobLists
 const [posts, setPosts] = useState([]);
 const [jobId, setJobId] = useState([]);
 const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
 
-useEffect(() => {
-  const getJoblists = async () => {
-    try {
-      const data = await getDocs(jobListsCollectionRef);
+// useEffect(() => {
+//   const getJoblists = async () => {
+//     try {
+//       const data = await getDocs(jobListsCollectionRef);
 
-      // Check if data.docs is defined before mapping over it
-      if (data.docs && data.docs.length > 0) {
-        const jobIds = data.docs.map((doc) => doc.id);
-        setJobId((prevId) => [...prevId, ...jobIds]);
+//       // Check if data.docs is defined before mapping over it
+//       if (data.docs && data.docs.length > 0) {
+//         const jobIds = data.docs.map((doc) => doc.id);
+//         setJobId((prevId) => [...prevId, ...jobIds]);
 
-        // Set the posts state with the data and include IDs
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      } else {
-        console.error('No documents found');
-      }
-    } catch (error) {
-      console.error('Error fetching job lists: ', error);
+//         // Set the posts state with the data and include IDs
+//         setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+//       } else {
+//         console.error('No documents found');
+//       }
+//     } catch (error) {
+//       console.error('Error fetching job lists: ', error);
+//     }
+//   };
+
+//   getJoblists();
+// }, []);
+const fetchJobLists = async () => {
+  try {
+    const data = await getDocs(jobListsCollectionRef);
+
+    // Check if data.docs is defined before mapping over it
+    if (data.docs && data.docs.length > 0) {
+      const jobIds = data.docs.map((doc) => doc.id);
+      setJobId((prevId) => [...prevId, ...jobIds]);
+
+      // Set the posts state with the data and include IDs
+      setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } else {
+      console.error('No documents found');
     }
-  };
+  } catch (error) {
+    console.error('Error fetching job lists: ', error);
+  }
+};
 
-  getJoblists();
+useEffect(() => {
+  // Initial data fetch when the component mounts
+  fetchJobLists();
+
+  // Setting up interval to refetch data every 2000ms (2 seconds)
+  const intervalId = setInterval(() => {
+    fetchJobLists();
+  }, 2000);
+
+  // Cleanup the interval when the component unmounts
+  return () => clearInterval(intervalId);
 }, []);
-
 // useEffect(() => {
 //     const getJoblists = async () => {
 //         const data = await getDocs(jobListsCollectionRef);
@@ -125,22 +167,19 @@ useEffect(() => {
     info.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const renderJobItem = ({ item, index }) => (
+   
+
     <View key={index} style={styles.jobItem}>
       <Image source={{ uri: item.img}} style={styles.image} resizeMode="cover" />
+      <TouchableOpacity  onPress={() => onShowMorePress(item.jobId)}>
       <Text style={styles.title}>{item.title}</Text>
+      </TouchableOpacity>
       <Text style={styles.description}>
         {showMoreMap[index]
           ? item.description
           : `${item.description.substring(0, 100)}...`}
       </Text>
-      {item.description.length > 100 && (
-        <TouchableOpacity
-          onPress={() => toggleShowMore(index)}
-          style={styles.showMoreButton}
-        >
-          <Text>{showMoreMap[index] ? "Show Less" : "Show More"}</Text>
-        </TouchableOpacity>
-      )}
+    
       <TouchableOpacity
        onPress={() => onApplyPress(item.id)}
         style={styles.applyButton}
@@ -148,6 +187,7 @@ useEffect(() => {
         <Text style={styles.applyButtonText}>Apply</Text>
       </TouchableOpacity>
     </View>
+ 
   );
   return (
     
@@ -172,7 +212,7 @@ useEffect(() => {
 
                   <FlatList
                     horizontal
-                    data={section.data}
+                    data={posts}
                     renderItem={({ item }) => <ListItem item={item} />}
                     showsHorizontalScrollIndicator={false}
                   />

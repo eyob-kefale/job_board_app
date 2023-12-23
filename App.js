@@ -23,6 +23,7 @@ import { UserProvider } from './common/context/UserContext'
 
 import { collection, getDocs } from "firebase/firestore"; 
 import EditJobs from './screen/Employer/EditJobs';
+import SingleJob from './screen/JobList/SingleJob';
 
 // const querySnapshot = await getDocs(collection(db, "user"));
 // querySnapshot.forEach((doc) => {
@@ -124,6 +125,7 @@ const App = () => {
         <Stack.Screen name="JobListing" component={JobListing} />
         <Stack.Screen name="NavBar" component={NavBar} />
         <Stack.Screen name="LogIn" component={LogIn} />
+        <Stack.Screen name="SingleJob" component={SingleJob} />
        
         {/* Add more stack screens if needed */}
       </Stack.Navigator>

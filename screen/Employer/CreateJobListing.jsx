@@ -7,7 +7,7 @@ import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { collection, doc, setDoc } from 'firebase/firestore';
-
+import materialTheme from '../../constants/Theme'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from '../../FireBaseConfig';
 import { useUser } from '../../common/context/UserContext';
@@ -86,7 +86,7 @@ const CreateJobListing = ({ route, navigation }) => {
         const categoriesRef = collection(db, 'jobLists');
         const docRef = doc(categoriesRef);
         const newJobLists = {
-            id: docRef.id,
+            jobId: docRef.id,
             title:jobDetails.title,
             description:jobDetails.description,
             requirements:jobDetails.requirements,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   }
   ,
   saveButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     padding: 12,
     borderRadius: 8,
     marginTop: "10%",
