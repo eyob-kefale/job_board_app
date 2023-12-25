@@ -33,6 +33,7 @@ const EmployeerProfile = ({route, navigation }) => {
   //fetch from context
   const { userEmail } = useUser();
   const {id}=route.params;
+  console.log("employer id ",id);
   //   const { user } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
   const [showMoreMap, setShowMoreMap] = useState({});
@@ -43,31 +44,74 @@ const EmployeerProfile = ({route, navigation }) => {
     
   };
 //fetch from jobLists
-const [posts, setPosts] = useState([]);
+const [employerProfile, setemployerProfile] = useState([]);
 
-const jobListsCollectionRef = query(collection(db, 'jobLists'),where('jobId','==',id));
-const [jobId, setJobId] = useState([]);
+const userProfileCollectionRef = query(collection(db, 'user'),where('email','==',id));
+const [employerId, setemployerId] = useState([]);
 
 useEffect(() => {
-  const getJoblists = async () => {
-    const data = await getDocs(jobListsCollectionRef);
-    // Extract job IDs from data and update state
-    const jobIds = data.docs.map((doc) => doc.id);
-    setJobId((prevId) => [...prevId, ...jobIds]);
-    // Set the posts state with the data and include IDs
-    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    console.log("employer",posts)
+  const getEmployerProfile = async () => {
+    try {
+      const data = await getDocs(userProfileCollectionRef);
+
+      // Check if data.docs is defined before mapping over it
+      if (data.docs && data.docs.length > 0) {
+        const employerIds = data.docs.map((doc) => doc.id);
+        setemployerId((prevId) => [...prevId, ...employerIds]);
+
+        // Set the employerProfile state with the data and include IDs
+        setemployerProfile(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } else {
+        console.error('No documents found');
+      }
+    } catch (error) {
+      console.error('Error fetching job lists: ', error);
+    }
   };
 
-  getJoblists();
+  getEmployerProfile();
 }, []);
 
 
 
-const handleEditJobs = (posts) => {
-  console.log("ffggfgfgg "+posts);
+
+//fetch from jobLists
+const [post, setpost] = useState([]);
+
+const postCollectionRef = query(collection(db, 'jobLists'),where('employer','==',id));
+const [jobId, setJobId] = useState([]);
+
+useEffect(() => {
+  const getEmployerPost = async () => {
+    try {
+      const data = await getDocs(postCollectionRef);
+
+      // Check if data.docs is defined before mapping over it
+      if (data.docs && data.docs.length > 0) {
+        const jobIds = data.docs.map((doc) => doc.id);
+        setJobId((prevId) => [...prevId, ...jobIds]);
+
+        // Set the post state with the data and include IDs
+        setpost(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } else {
+        console.error('No documents found');
+      }
+    } catch (error) {
+      console.error('Error fetching job lists: ', error);
+    }
+  };
+
+  getEmployerPost();
+}, []);
+
+
+
+
+
+const handleEditJobs = (employerProfile) => {
+  console.log("ffggfgfgg "+employerProfile);
   // Navigate to the EditProfile screen with the item as a parameter
-  navigation.navigate('EditJobs', { posts,jobId });
+  navigation.navigate('EditJobs', { employerProfile,jobId });
 
 };
 
@@ -93,36 +137,33 @@ const handleEditJobs = (posts) => {
     setSearchTerm(text);
   };
 
-  const filteredInfo = posts.filter((info) =>
-    info.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredInfo = employerProfile.filter((info) =>
+  //   info.title.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
  
   const renderJobItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
+    <TouchableOpacity>
 
     <View key={index} style={styles.jobItem}>
       <Image source={{ uri: item.img}} style={styles.image} resizeMode="cover" />
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>
-        {showMoreMap[index]
-          ? item.description
-          : `${item.description.substring(0, 100)}...`} 
-          {/* {item.description} */}
+        {item.description.substring(0, 100)}
       </Text>
-      {item.description.length > 100 && (
+      {/* {item.description.length > 100 && (
         <TouchableOpacity
           onPress={() => toggleShowMore(index)}
           style={styles.showMoreButton}
         >
           <Text>{showMoreMap[index] ? "Show Less" : "Show More"}</Text>
         </TouchableOpacity>
-      )}
+      )} */}
       <TouchableOpacity
-        onPress={() => handleEditJobs(posts)}
+       onPress={() => onShowMorePress(item.jobId)}
 
         style={styles.applyButton}
       >
-        <Text style={styles.applyButtonText}>Edit</Text>
+        <Text style={styles.applyButtonText}>Show More</Text>
       </TouchableOpacity>
     </View>
     </TouchableOpacity>
@@ -138,21 +179,24 @@ const handleEditJobs = (posts) => {
   const handleEditProfile = () => {
     // Navigate to the EditProfile screen
     navigation.navigate('EditProfile', { user });
-
+//{uri:employerProfile[0].profileImage}
   };
-console.log("posts",posts)
+console.log("employerProfile",employerProfile)
+//console.log("employerProfile of index 0",employerProfile[0].profileImage)
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subCont}>
-        <Image style={styles.bgImage} source={require("../assets/job1.jpg")}></Image>
-        
+        <Image style={styles.bgImage} source={user.profileImage}></Image>
+         {employerProfile && employerProfile.length > 0 &&(
+            
         <Block style={styles.imgcont}>
           <Block style={styles.profileImageContainer}>
-            <Image source={user.profileImage} style={styles.profileImage} />
+           
+            <Image source={{uri:employerProfile[0].profileImage}} style={styles.profileImage} />
 
             <View style={styles.dptCont}>
               <Text style={styles.dpt}>
-                {user.department}
+                {employerProfile[0].department}
               </Text>
 
             </View>
@@ -160,20 +204,21 @@ console.log("posts",posts)
 
           <Block style={styles.header}>
             <Text p style={styles.title}>
-              {user.name}
+              {employerProfile[0].firstName} {employerProfile[0].lastName}
             </Text>
-            <Text style={styles.email}>{user.email}</Text>
+            <Text style={styles.email}>{employerProfile[0].email}</Text>
 
           </Block>
         </Block>
+           ) }
       </View>
       <ScrollView style={styles.detailsContainer}>
         <View style={styles.jobLists}>
           {/* <View>
-            <Text style={styles.text}>Recent Job Posts </Text>
+            <Text style={styles.text}>Recent Job employerProfile </Text>
           </View> */}
           <FlatList
-            data={filteredInfo}
+            data={post}
             renderItem={renderJobItem}
             keyExtractor={(item, index) => index.toString()}
             numColumns={1}
@@ -288,9 +333,9 @@ const styles = StyleSheet.create({
 
   profileImage: {
 
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
     resizeMode: "cover",
   },
   detailsContainer: {

@@ -14,6 +14,7 @@ import { useState } from 'react';
 const MyApplication = () => {
   const { userEmail, userDocId } = useUser();
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [employerId,setEmployerId]=useState();
   // const [jobs, setJobs] = useState();
   // Example data for job applications
   const jobApplications = [
@@ -58,7 +59,10 @@ const MyApplication = () => {
     // console.log(`See more for job ${jobId}`);
   };
 
-
+const handleEmployerProfile=(id)=>{
+  console.log("employer-id ",id);
+    navigation.navigate("EmployeerProfile",{id});
+}
 
 
   // Function to fetch jobs based on user's applied job IDs
@@ -99,6 +103,7 @@ const MyApplication = () => {
       // Fetch the user document
       const userDocSnapshot = await getDoc(userRef);
       const userData = userDocSnapshot.data();
+
       // console.log("userData ", userData.apply);
       // Fetch jobs based on the 'apply' field in the user document
       if(userData.apply){
@@ -133,7 +138,7 @@ const MyApplication = () => {
         <Image source={{uri:item.img}} style={styles.jobImage} />
         <View style={styles.jobDetails}>
           <Text style={styles.jobTitle}>{item.title}</Text>
-          <TouchableOpacity >
+          <TouchableOpacity  onPress={() => handleEmployerProfile(item.employer)}>
             <Text style={styles.jobOwner}>Company: {item.employer}</Text>
 
           </TouchableOpacity>

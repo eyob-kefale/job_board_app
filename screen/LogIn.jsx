@@ -205,7 +205,7 @@ signUp:{
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     width: '100%',
     padding: 15,
-    paddingHorizontal:127,
+    paddingHorizontal:"40%",
     borderRadius: 5,
     alignItems: 'center',
     marginBottom:10

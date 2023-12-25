@@ -52,8 +52,15 @@ const [id, setId] = useState([]);
       }
       
     };
-  
     getUserprofile();
+    const intervalId = setInterval(() => {
+      getUserprofile();
+    }, 100);
+  
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  
+    
   }, []);
   
 
@@ -92,7 +99,7 @@ const [id, setId] = useState([]);
 
             <Block style={styles.imgcont}>
               <Block style={styles.profileImageContainer}>
-                {!userP.profileImage && <Image source={user.profileImage} style={styles.profileImage} />}
+                {!userP.profileImage && <Image source={require("../../assets/default.jpeg")} style={styles.profileImage} />}
                 {userP.profileImage && <Image source={{ uri: userP.profileImage }} style={styles.profileImage} />}
                 <View style={styles.dptCont}>
                   <Text style={styles.dpt}>

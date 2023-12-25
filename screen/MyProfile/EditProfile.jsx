@@ -18,7 +18,7 @@ const EditProfile = ({ route, navigation }) => {
   const { userProfile } = route.params;
   //  const modifyId = userProfile[0].email;
   const { userIds } = route.params;
-  console.log("edddd",userIds[0]);
+  console.log("edddd", userIds[0]);
   // const [image, setImage] = useState(null);
   // const [ExistingImage, setExistingImage] = useState(user);
 
@@ -27,7 +27,7 @@ const EditProfile = ({ route, navigation }) => {
   const [editedUser, setEditedUser] = useState(userProfile);
 
   const [a, setA] = useState(false);
-  
+
 
   // picking image from file
   const pickImage = async () => {
@@ -57,38 +57,44 @@ const EditProfile = ({ route, navigation }) => {
   //start updating user profile
   const handleUpdate = async (event) => {
     event.preventDefault();
-
     try {
+      let url = '';
+      if(image){
 
-      const parts = image.split('/');
-
-      // Get the last part of the array, which contains the filename
-      const filename = parts[parts.length - 1];
-
-
-
-      const storageRef = getStorage();
-      const filePath = 'user/' + filename;
-
-      // Upload the file to Firebase Storage
-      const fileRef = ref(storageRef, filePath);
-      const snapshot = await uploadBytes(fileRef, file, { contentType: 'image/jpeg' });
-      console.log('Uploaded a file to Firebase Storage!');
-
-      // Get the download URL of the uploaded file
-      const url = await getDownloadURL(fileRef);
-      let urlImage = file;
-      if (a) {
-        urlImage = url;
+        const parts = image.split('/');
+  
+        // Get the last part of the array, which contains the filename
+        const filename = parts[parts.length - 1];
+  
+  
+  
+        const storageRef = getStorage();
+        const filePath = 'user/' + filename;
+  
+        // Upload the file to Firebase Storage
+        const fileRef = ref(storageRef, filePath);
+        const snapshot = await uploadBytes(fileRef, file, { contentType: 'image/jpeg' });
+        console.log('Uploaded a file to Firebase Storage!');
+  
+        // Get the download URL of the uploaded file
+         url = await getDownloadURL(fileRef);
+        let urlImage = file;
+        if (a) {
+          urlImage = url;
+        }
+        console.log('Got the download URL:', url);
       }
-      console.log('Got the download URL:', url);
+       
 
-    
+
       // Update the document with the new data and file URL
       const categoriesRef = collection(db, 'user');
       const docRef = doc(categoriesRef, userIds[0]); // replace 'document-id' with the ID of the document you want to update
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
-
+      var profileImages=editedUser[0].profileImage;
+      if (image) {
+        profileImages= url;
+      }
       // Ensure all fields are defined
       const userData = {
         firstName: editedUser[0]?.firstName || '',
@@ -99,7 +105,7 @@ const EditProfile = ({ route, navigation }) => {
         skills: editedUser[0]?.skills || '',
         profession: editedUser[0]?.profession || '',
         aboutMe: editedUser[0]?.aboutMe || '',
-        profileImage: url,
+        profileImage:profileImages,
         updatedDate: serverTimestamp(),
       };
 
@@ -110,9 +116,9 @@ const EditProfile = ({ route, navigation }) => {
       navigation.navigate('UserProfile', { userProfile: { ...editedUser } });
       // window.location.reload();
       // navigation.goBack();
-      
+
     } catch (error) {
-  
+
       console.error('Error updating category: ', error);
     }
   };
@@ -132,7 +138,16 @@ const EditProfile = ({ route, navigation }) => {
             <Ionicons style={styles.ImagePickerButton} name="image-sharp" size={24} />
           </TouchableOpacity>
           {image && <Image source={{ uri: image }} style={styles.image} />}
-          {/* {!image && user.profileImage && <Image source={user.profileImage} style={styles.image} />} */}
+          {
+            !image && (
+              editedUser[0].profileImage ? (
+                <Image source={{ uri: editedUser[0].profileImage }} style={styles.image} />
+              ) : (
+                <Image source={require("../../assets/default.jpeg")} style={styles.image} />
+              )
+            )
+          }
+
         </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>

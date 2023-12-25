@@ -44,7 +44,7 @@ const Register = ({ navigation }) => {
         lastName,
         email,
         password,
-
+        apply:[]
       };
 
       try {
