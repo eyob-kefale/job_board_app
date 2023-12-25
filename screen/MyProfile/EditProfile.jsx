@@ -136,7 +136,7 @@ const EditProfile = ({ route, navigation }) => {
           <TouchableOpacity onPress={pickImage}>
 
             <Ionicons style={styles.ImagePickerButton} name="image-sharp" size={24} />
-          </TouchableOpacity>
+         
           {image && <Image source={{ uri: image }} style={styles.image} />}
           {
             !image && (
@@ -147,7 +147,7 @@ const EditProfile = ({ route, navigation }) => {
               )
             )
           }
-
+ </TouchableOpacity>
         </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>

@@ -18,6 +18,7 @@ import materialTheme from '../constants/Theme';
 import { collection, getDocs, limit, query } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
+import { useUser } from "../common/context/UserContext";
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,7 +41,7 @@ const onShowMorePress = (id) => {
   
 };
   return (
-    <TouchableOpacity onPress={() => onShowMorePress(item.title)}>
+    <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
     <View style={styles.item}>
       <Image
         source={{
@@ -61,6 +62,7 @@ const onShowMorePress = (id) => {
 
 export default () => {
   const navigation = useNavigation();
+  const { role } = useUser();
   const onShowMorePress = (id) => {
     console.log("SingleJob ",id)
       navigation.navigate("SingleJob",{id});
@@ -82,35 +84,18 @@ export default () => {
     
   };
 
-
+  const onEditPress = (docId) => {
+  
+    navigation.navigate("EditJobs", { docId });
+  
+};
 
 //start fetching from jobLists
 const [posts, setPosts] = useState([]);
 const [jobId, setJobId] = useState([]);
 const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
 
-// useEffect(() => {
-//   const getJoblists = async () => {
-//     try {
-//       const data = await getDocs(jobListsCollectionRef);
 
-//       // Check if data.docs is defined before mapping over it
-//       if (data.docs && data.docs.length > 0) {
-//         const jobIds = data.docs.map((doc) => doc.id);
-//         setJobId((prevId) => [...prevId, ...jobIds]);
-
-//         // Set the posts state with the data and include IDs
-//         setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-//       } else {
-//         console.error('No documents found');
-//       }
-//     } catch (error) {
-//       console.error('Error fetching job lists: ', error);
-//     }
-//   };
-
-//   getJoblists();
-// }, []);
 const fetchJobLists = async () => {
   try {
     const data = await getDocs(jobListsCollectionRef);
@@ -142,17 +127,6 @@ useEffect(() => {
   // Cleanup the interval when the component unmounts
   return () => clearInterval(intervalId);
 }, []);
-// useEffect(() => {
-//     const getJoblists = async () => {
-//         const data = await getDocs(jobListsCollectionRef);
-//         setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-//         const jobIds=data.docs.map((doc) => doc.id);
-//         setjobId((prevId) => [...prevId, ...jobIds]);
-//     };
-//     getJoblists();
-// }, []);
-
-//end fetching from jobLists
 
 
 
@@ -179,13 +153,21 @@ useEffect(() => {
           ? item.description
           : `${item.description.substring(0, 100)}...`}
       </Text>
-    
+    {role=="employee" &&(
       <TouchableOpacity
        onPress={() => onApplyPress(item.id)}
         style={styles.applyButton}
       >
         <Text style={styles.applyButtonText}>Apply</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>)}
+
+     {role=="employer" && (
+     <TouchableOpacity
+       onPress={() => onEditPress(item.jobId)}
+        style={styles.applyButton}
+      >
+        <Text style={styles.applyButtonText}>Edit</Text>
+      </TouchableOpacity>)}
     </View>
  
   );

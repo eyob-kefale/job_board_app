@@ -13,10 +13,10 @@ const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
   
   const { userEmail,docId } = useUser();
-console.log(user);
+// console.log(user);
 const [id, setId] = useState([]);
 
- console.log(userEmail,"plm ",docId," emailllll");
+//  console.log(userEmail,"plm ",docId," emailllll");
 //  usertid=user[0].id;
   //start fetching from jobLists
   const [userProfile, setUser] = useState([]);
@@ -26,14 +26,6 @@ const [id, setId] = useState([]);
 
   useEffect(() => {
     const getUserprofile = async () => {
-      // try {
-      //   const querySnapshot = await getDocs(userCollectionRef);
-      //   const userData = querySnapshot.docs.map((doc) => ({ ...doc.data(), user: doc.user,  id: doc.id, }));
-      //   setUser(userData);
-      //   console.log("idddddddd "+id);
-      // } catch (error) {
-      //   console.error('Error fetching user profile: ', error);
-      // }
       try {
         const querySnapshot = await getDocs(userCollectionRef);
         const userData = querySnapshot.docs.map((doc) => ({
@@ -55,7 +47,7 @@ const [id, setId] = useState([]);
     getUserprofile();
     const intervalId = setInterval(() => {
       getUserprofile();
-    }, 100);
+    }, 2000);
   
     // Cleanup the interval when the component unmounts
     return () => clearInterval(intervalId);
@@ -66,8 +58,8 @@ const [id, setId] = useState([]);
 
   //end fetching from jobLists
 
-  const renderItem = ({ item }) => (
-    <View style={styles.socialLink}>
+  const renderItem = ({ item,index }) => (
+    <View key={index} style={styles.socialLink}>
       <Ionicons name={item.icon} size={24} color={theme.COLORS.INFO} />
       <Text style={styles.socialLinkText}>{item.label}</Text>
     </View>

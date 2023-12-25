@@ -14,7 +14,8 @@ const LogIn = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading,setLoading]=useState(false);
-  const {updateUser,updateDocId}=useUser();
+  const {updateUser,updateDocId,updateRole}=useUser();
+ 
   const auth=FIREBASE_AUTH;
   // jobdetails
   const jobDetails = [
@@ -106,7 +107,8 @@ const handleLogIn = async () => {
     // Update user context and ID
     updateUser(email);
     updateDocId(userData.map(user => user.id));
-
+    updateRole(userData[0].role);
+    // console.log("role for role ",userData[0].role);
     // Navigate to "NavBar"
     navigation.navigate("NavBar");
   } catch (error) {

@@ -10,33 +10,46 @@ import materialTheme from '../../constants/Theme'
 
 import { db } from '../../FireBaseConfig';
 
-import { doc, getDoc, collection, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, updateDoc, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { serverTimestamp } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 const EditJobs = ({ route, navigation }) => {
-  const { posts } = route.params;
-  const modifyId = posts[0].title;
-  const {jobId}=route.params;
-  console.log("id",jobId);
-  // const [image, setImage] = useState(null);
-  // const [ExistingImage, setExistingImage] = useState(user);
-
+  const { docId } = route.params;
+  const [posts, setPosts] = useState([]);
+  const [editedUser, setEditedUser] = useState([]);
   const [image, setImage] = useState(null);
   const [file, setFile] = useState('');
-  const [editedUser, setEditedUser] = useState(posts);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const [a, setA] = useState(false);
-  
+  useEffect(() => {
+    const jobListsCollectionRef = collection(db, 'jobLists');
+    const jobQuery = query(jobListsCollectionRef, where('jobId', '==', docId));
+
+    const getJoblists = async () => {
+      try {
+        const data = await getDocs(jobQuery);
+        console.log('employeryy ', data.docs[0].data());
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        console.log('employeryy', data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } catch (error) {
+        console.error('Error fetching job lists: ', error);
+      }
+    };
+
+    getJoblists();
+  }, [docId]);
+
+  useEffect(() => {
+    setEditedUser(posts[0] || {});
+  }, [posts]);
 
 
-  // const handleSaveChanges = () => {
-  //   // Implement logic to save changes to the user profile
-  //   // For simplicity, this example updates the user state directly.
-  //   // In a real app, you might want to make an API call or use state management.
-  //   navigation.navigate('UserProfile', { userProfile: { ...editedUser, profileImage: image } });
-  //   //navigation.goBack(); // Navigate back to the job list screen after creating the job
-  // };
+// useEffect(() => {
+//   setEditedUser(posts[0] || {});
+// }, [posts]);
 
 
   // picking image from file
@@ -61,7 +74,7 @@ const EditJobs = ({ route, navigation }) => {
       console.log("File Blob:", blob);
     }
   };
-
+  console.log(editedUser,"----- docId  -------",posts);
 
 
   //start updating user profile
@@ -69,6 +82,10 @@ const EditJobs = ({ route, navigation }) => {
     event.preventDefault();
 
     try {
+      if (!image) {
+        console.error('Image is undefined');
+        return;
+      }
 
       const parts = image.split('/');
 
@@ -96,9 +113,9 @@ const EditJobs = ({ route, navigation }) => {
     
       // Update the document with the new data and file URL
       const categoriesRef = collection(db, 'jobLists');
-      const docRef = doc(categoriesRef, jobId[0]); // replace 'document-id' with the ID of the document you want to update
+      const docRef = doc(categoriesRef, docId); // replace 'document-id' with the ID of the document you want to update
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() }; 
-        console.log(jobId[0]);
+        console.log(docId);
       // Ensure all fields are defined
       const userData = {
         title:editedUser[0]?.title||'',
@@ -125,7 +142,7 @@ const EditJobs = ({ route, navigation }) => {
     }
   };
 
-
+  console.log('Category updated successfully! ',editedUser[0]);
   // end updating user profile
 
 
@@ -136,10 +153,16 @@ const EditJobs = ({ route, navigation }) => {
     <View style={styles.container}>
     <View style={styles.imgCont}>
         <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
-     
-      
-        {!image && <Image source={{ uri:editedUser[0].img}} style={styles.image}/>}
         {image && <Image source={{ uri: image }} style={styles.image} />}
+          {
+            !image && (
+              editedUser[0].img ? (
+                <Image source={require("../../assets/default.jpeg")} style={styles.image} />
+              ) : (
+                <Image source={require("../../assets/default.jpeg")} style={styles.image} />
+              )
+            )
+          }
       </View>
       <Block style={styles.detailsContainer}>
         <Text h5 style={styles.sectionTitle}>
