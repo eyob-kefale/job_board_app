@@ -62,7 +62,7 @@ const onShowMorePress = (id) => {
 
 export default () => {
   const navigation = useNavigation();
-  const { role } = useUser();
+  const { role,userEmail } = useUser();
   const onShowMorePress = (id) => {
     console.log("SingleJob ",id)
       navigation.navigate("SingleJob",{id});
@@ -161,7 +161,7 @@ useEffect(() => {
         <Text style={styles.applyButtonText}>Apply</Text>
       </TouchableOpacity>)}
 
-     {role=="employer" && (
+     {(role=="employer") &&(item.employer==userEmail) &&(
      <TouchableOpacity
        onPress={() => onEditPress(item.jobId)}
         style={styles.applyButton}

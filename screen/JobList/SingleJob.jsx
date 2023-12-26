@@ -38,7 +38,7 @@ const dynamicStyles = {
 
 
 const SingleJob = ({ route }) => {
-  const { role } = useUser();
+  const { role,userEmail } = useUser();
   const { id } = route.params;
   console.log("asvsg ", id);
 
@@ -116,7 +116,7 @@ const SingleJob = ({ route }) => {
             <Text style={styles.applyButtonText}>Apply</Text>
           </TouchableOpacity>
         )}
-        {role == "employer" && (
+        {(role=="employer") &&(item.employer==userEmail) &&(
           <TouchableOpacity onPress={() => onEditPress(item.id)} style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Edit</Text>
           </TouchableOpacity>
