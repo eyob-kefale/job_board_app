@@ -57,9 +57,9 @@ const SingleJob = ({ route }) => {
   };
   const onEditPress = (docId) => {
   
-    navigation.navigate("EditJobs", { docId });
+    navigation.navigate("EditJobs", {posts, docId});
   
-};
+  };
 
   const onShowMorePress = (docId) => {
     navigation.navigate("ApplyPage", { docId });
@@ -117,7 +117,9 @@ const SingleJob = ({ route }) => {
           </TouchableOpacity>
         )}
         {(role=="employer") &&(item.employer==userEmail) &&(
-          <TouchableOpacity onPress={() => onEditPress(item.id)} style={styles.applyButton}>
+          <TouchableOpacity
+          onPress={() => onEditPress(item.jobId)}
+            style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Edit</Text>
           </TouchableOpacity>
         )}

@@ -90,21 +90,17 @@ export default () => {
 
  
     if (reversedToday > endDate) {
-      console.log(endDate," picked ")
+      //console.log(endDate," picked ")
       alert( "closed ");
       // Handle the case where the picked date is in the past
       return;
     }
-     console.log(reversedToday," picked ",endDate)
+     //console.log(reversedToday," picked ",endDate)
       navigation.navigate("ApplyPage", { docId });
     
   };
 
-  const onEditPress = (docId) => {
   
-    navigation.navigate("EditJobs", { docId });
-  
-};
 
 //start fetching from jobLists
 const [posts, setPosts] = useState([]);
@@ -145,7 +141,11 @@ useEffect(() => {
 }, []);
 
 
+const onEditPress = (docId) => {
+  
+  navigation.navigate("EditJobs", {posts, docId});
 
+};
 
   const [searchTerm, setSearchTerm] = useState("");
 
