@@ -78,8 +78,24 @@ export default () => {
     }));
   };
  
-  const onApplyPress = (docId) => {
-  
+  const onApplyPress = (docId,endDate) => {
+
+    const today = new Date()
+   
+    const today2 = today.toLocaleDateString();
+    const todayArray=today2.split('/');
+    const reverseTodayArray=todayArray.reverse();
+    const reversedToday = reverseTodayArray.join('/');
+    console.log(today2," todddd ",reversedToday)
+
+ 
+    if (reversedToday > endDate) {
+      console.log(endDate," picked ")
+      alert( "closed ");
+      // Handle the case where the picked date is in the past
+      return;
+    }
+     console.log(reversedToday," picked ",endDate)
       navigation.navigate("ApplyPage", { docId });
     
   };
@@ -155,7 +171,7 @@ useEffect(() => {
       </Text>
     {role=="employee" &&(
       <TouchableOpacity
-       onPress={() => onApplyPress(item.id)}
+       onPress={() => onApplyPress(item.id,item.endDate)}
         style={styles.applyButton}
       >
         <Text style={styles.applyButtonText}>Apply</Text>
