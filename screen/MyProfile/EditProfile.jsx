@@ -62,29 +62,29 @@ const EditProfile = ({ route, navigation }) => {
       if(image){
 
         const parts = image.split('/');
-  
+
         // Get the last part of the array, which contains the filename
         const filename = parts[parts.length - 1];
-  
-  
-  
+
+
+
         const storageRef = getStorage();
         const filePath = 'user/' + filename;
-  
+
         // Upload the file to Firebase Storage
         const fileRef = ref(storageRef, filePath);
         const snapshot = await uploadBytes(fileRef, file, { contentType: 'image/jpeg' });
         console.log('Uploaded a file to Firebase Storage!');
-  
+
         // Get the download URL of the uploaded file
-         url = await getDownloadURL(fileRef);
+        url = await getDownloadURL(fileRef);
         let urlImage = file;
         if (a) {
           urlImage = url;
         }
         console.log('Got the download URL:', url);
       }
-       
+
 
 
       // Update the document with the new data and file URL
@@ -136,18 +136,18 @@ const EditProfile = ({ route, navigation }) => {
           <TouchableOpacity onPress={pickImage}>
 
             <Ionicons style={styles.ImagePickerButton} name="image-sharp" size={24} />
-         
-          {image && <Image source={{ uri: image }} style={styles.image} />}
-          {
-            !image && (
-              editedUser[0].profileImage ? (
-                <Image source={{ uri: editedUser[0].profileImage }} style={styles.image} />
-              ) : (
-                <Image source={require("../../assets/default.jpeg")} style={styles.image} />
+
+            {image && <Image source={{ uri: image }} style={styles.image} />}
+            {
+              !image && (
+                editedUser[0].profileImage ? (
+                  <Image source={{ uri: editedUser[0].profileImage }} style={styles.image} />
+                ) : (
+                  <Image source={require("../../assets/default.jpeg")} style={styles.image} />
+                )
               )
-            )
-          }
- </TouchableOpacity>
+            }
+          </TouchableOpacity>
         </View>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>

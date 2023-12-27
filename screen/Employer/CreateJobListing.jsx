@@ -16,7 +16,8 @@ import DatePicker from "expo-datepicker";
 import { Entypo } from "@expo/vector-icons";
 const CreateJobListing = ({ route, navigation }) => {
   const { userEmail } = useUser();
-  const [date, setDate] = useState(new Date().toString());
+  const [endDate, setEndDate] = useState(new Date().toString());
+  const [startDate, setStartDate] = useState(new Date().toString());
   // console.log("create job   "+userEmail);
   const [image, setImage] = useState("");
   const [defaultImage, setDefaultImage] = useState(defaultImagee);
@@ -31,15 +32,15 @@ const CreateJobListing = ({ route, navigation }) => {
     image: '',
   });
 
-// date create date formate
-// Assuming you have a Firestore timestamp (serverTimestamp) stored in a variable
-// const firestoreTimestamp = serverTimestamp();
+  // date create date formate
+  // Assuming you have a Firestore timestamp (serverTimestamp) stored in a variable
+  // const firestoreTimestamp = serverTimestamp();
 
-// // Convert Firestore timestamp to JavaScript Date object
-// const jsDate = firestoreTimestamp.toDate();
+  // // Convert Firestore timestamp to JavaScript Date object
+  // const jsDate = firestoreTimestamp.toDate();
 
-// // Format the JavaScript Date object to the desired date format (year/month/day)
-// const formattedDate = jsDate.toLocaleDateString('en-US'); // You can adjust the locale based on your preference
+  // // Format the JavaScript Date object to the desired date format (year/month/day)
+  // const formattedDate = jsDate.toLocaleDateString('en-US'); // You can adjust the locale based on your preference
 
 
   const pickImage = async () => {
@@ -69,7 +70,7 @@ const CreateJobListing = ({ route, navigation }) => {
     event.preventDefault();
 
     if (!image) {
-      console.log("No file selected");
+      alert("No file selected");
       return;
     }
 
@@ -110,7 +111,8 @@ const CreateJobListing = ({ route, navigation }) => {
         employer: userEmail,
 
         createdDate: serverTimestamp(),
-        endDate:date
+        startDate: startDate,
+        endDate: endDate
       };
 
 
@@ -124,7 +126,7 @@ const CreateJobListing = ({ route, navigation }) => {
     }
   };
 
-console.log(date)
+  console.log(startDate);
   //insert into jobLists end
 
   return (
@@ -132,13 +134,16 @@ console.log(date)
     <ScrollView>
 
       <View style={styles.container}>
-        <View style={styles.imgCont}>
-          <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
+        <TouchableOpacity onPress={pickImage}>
+          <View style={styles.imgCont}>
+            <Ionicons style={styles.ImagePickerButton} onPress={pickImage} name="image-sharp" size={24} />
 
 
-          {!image && <Image source={defaultImage} style={styles.image} />}
-          {image && <Image source={{ uri: image }} style={styles.image} />}
-        </View>
+            {!image && <Image source={defaultImage} style={styles.image} />}
+            {image && <Image source={{ uri: image }} style={styles.image} />}
+          </View>
+
+        </TouchableOpacity>
         <Block style={styles.detailsContainer}>
           <Text h5 style={styles.sectionTitle}>
             Title:
@@ -198,14 +203,30 @@ console.log(date)
 
             onChangeText={(text) => setJobDetails({ ...jobDetails, education: text })}
           />
-          <View style={styles.datePickerContainer}>
-          <DatePicker
-            date={date}
-            onChange={(date) => setDate(date)}
-            icon={<Entypo name="chevron-right" size={40} color="#689CA3" />}
-            minimumDate={new Date()}  // Set minimum date to today
-            maximumDate={new Date(2025, 11, 31)}  // Set maximum date to the end of 2025
-          />
+          <View >
+
+            <Text h5 style={styles.sectionTitle}>
+              Start Date:
+            </Text>
+            <DatePicker
+              date={startDate}
+              onChange={(date) => setStartDate(date)}
+              icon={<Entypo name="chevron-right" size={40} color="#689CA3" />}
+              minimumDate={new Date()}  // Set minimum date to today
+              maximumDate={new Date(2025, 11, 3)}  // Set maximum date to the end of 2025
+            />
+
+            <Text h5 style={styles.sectionTitle}>
+              End Date:
+            </Text>
+            <DatePicker
+              date={endDate}
+
+              onChange={(date) => setEndDate(date)}
+              icon={<Entypo name="chevron-right" size={40} color="#689CA3" />}
+              minimumDate={new Date()}  // Set minimum date to today
+              maximumDate={new Date(2025, 11, 3)}  // Set maximum date to the end of 2025
+            />
           </View>
 
           <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
@@ -215,7 +236,7 @@ console.log(date)
 
       </View>
 
-    </ScrollView>
+    </ScrollView >
 
 
   );
@@ -230,11 +251,11 @@ const styles = StyleSheet.create({
 
   },
   datePickerContainer: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    
+
   },
   detailsContainer: {
     // marginTop: 20,

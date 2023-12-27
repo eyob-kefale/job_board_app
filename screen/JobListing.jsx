@@ -19,6 +19,7 @@ import { collection, getDocs, limit, query } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
 import { useUser } from "../common/context/UserContext";
+import { Block } from "galio-framework";
 
 const { width, height } = Dimensions.get('window');
 
@@ -142,7 +143,7 @@ useEffect(() => {
 
 
 const onEditPress = (docId) => {
-  
+  console.log("()(0(0 ",posts)
   navigation.navigate("EditJobs", {posts, docId});
 
 };
@@ -164,11 +165,20 @@ const onEditPress = (docId) => {
       <TouchableOpacity  onPress={() => onShowMorePress(item.jobId)}>
       <Text style={styles.title}>{item.title}</Text>
       </TouchableOpacity>
+     
       <Text style={styles.description}>
         {showMoreMap[index]
           ? item.description
-          : `${item.description.substring(0, 100)}...`}
+          : `${item.description.substring(0, 100)}... `}
+          <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More</Text>
       </Text>
+     
+        
+     
+
+    
+
+
     {role=="employee" &&(
       <TouchableOpacity
        onPress={() => onApplyPress(item.id,item.endDate)}
@@ -177,13 +187,13 @@ const onEditPress = (docId) => {
         <Text style={styles.applyButtonText}>Apply</Text>
       </TouchableOpacity>)}
 
-     {(role=="employer") &&(item.employer==userEmail) &&(
+     {/* {(role=="employer") &&(item.employer==userEmail) &&(
      <TouchableOpacity
        onPress={() => onEditPress(item.jobId)}
         style={styles.applyButton}
       >
         <Text style={styles.applyButtonText}>Edit</Text>
-      </TouchableOpacity>)}
+      </TouchableOpacity>)} */}
     </View>
  
   );
@@ -451,6 +461,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: "justify",
   },
+  seeMore:{
+    color: materialTheme.COLORS.BUTTON_COLOR,
+    
+    fontWeight:"300",
+    // fontFamily:"san-serif"
+    
+  }
+  ,
 
   showMoreButton: {
     alignSelf: "flex-end",
