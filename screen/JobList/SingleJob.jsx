@@ -20,6 +20,7 @@ import { db } from '../../FireBaseConfig';
 import { useEffect } from 'react';
 import { Block } from "galio-framework";
 import { useUser } from "../../common/context/UserContext";
+import { Ionicons } from "@expo/vector-icons";
 // import JobListing from "../JobListing";
 
 const { width, height } = Dimensions.get('window');
@@ -38,7 +39,7 @@ const dynamicStyles = {
 
 
 const SingleJob = ({ route }) => {
-  const { role,userEmail } = useUser();
+  const { role, userEmail } = useUser();
   const { id } = route.params;
   console.log("asvsg ", id);
 
@@ -56,9 +57,9 @@ const SingleJob = ({ route }) => {
     navigation.navigate("ApplyPage", { docId });
   };
   const onEditPress = (docId) => {
-  
-    navigation.navigate("EditJobs", {posts, docId});
-  
+
+    navigation.navigate("EditJobs", { posts, docId });
+
   };
 
   const onShowMorePress = (docId) => {
@@ -86,6 +87,17 @@ const SingleJob = ({ route }) => {
 
   const renderJobItem = ({ item, index }) => (
     <TouchableOpacity >
+      <Block style={styles.addPosts}>
+        <Text style={styles.MyJobs}>Job post </Text>
+        {(role == "employer") && (item.employer == userEmail) && (
+          <TouchableOpacity
+            onPress={() => onEditPress(item.jobId)}
+          >
+            <Ionicons name="ios-create" style={styles.editbtn} size={30} color={"#000"} />
+
+          </TouchableOpacity>
+        )}
+      </Block>
       <View key={index} style={styles.jobItem}>
         <Image source={{ uri: item.img }} style={styles.image} resizeMode="cover" />
         <Text style={styles.title}>{item.employer}</Text>
@@ -116,11 +128,11 @@ const SingleJob = ({ route }) => {
             <Text style={styles.applyButtonText}>Apply</Text>
           </TouchableOpacity>
         )}
-        {(role=="employer") &&(item.employer==userEmail) &&(
+        {(role == "employer") && (item.employer == userEmail) && (
           <TouchableOpacity
-          onPress={() => onEditPress(item.jobId)}
+            onPress={() => onEditPress(item.jobId)}
             style={styles.applyButton}>
-            <Text style={styles.applyButtonText}>Edit</Text>
+            <Text style={styles.applyButtonText}>View Applicants</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -129,9 +141,8 @@ const SingleJob = ({ route }) => {
 
   return (
     <View style={styles.allItems}>
-      <View>
-        <Text style={styles.text}> Job post </Text>
-      </View>
+
+      
       <FlatList
         data={posts}
         renderItem={renderJobItem}
@@ -147,6 +158,30 @@ const SingleJob = ({ route }) => {
 
 
 const styles = StyleSheet.create({
+
+  editbtn: {
+
+    color: materialTheme.COLORS.BUTTON_COLOR,
+
+  },
+  addPosts: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: "5%"
+  },
+  addPostIcon: {
+    color: materialTheme.COLORS.BUTTON_COLOR,
+    flexDirection: "row-reverse",
+    justifyContent: "flex-end",
+  },
+  MyJobs: {
+    color: materialTheme.COLORS.BUTTON_COLOR,
+    fontSize: 20,
+    fontWeight: "200",
+
+
+  }
+  ,
   allItems: {
     marginTop: "5%",
     padding: dynamicStyles.notificationItemPadding,

@@ -58,7 +58,7 @@ const NavBar = () => {
           tabBarIcon: ({ color }) => <Icon name="list" color={color} size={24} />,
         }}
       />
-     <Tab.Screen
+      <Tab.Screen
         name="My Profile"
         component={UserProfile}
         initialParams={{ user }}
@@ -82,7 +82,7 @@ const NavBar = () => {
       />)}
 
 
-{role == "employer" && (
+      {role == "employer" && (
         // <Tab.Screen
         //   name="Create Jobs"
         //   component={CreateJobListing}
@@ -94,15 +94,15 @@ const NavBar = () => {
         //   }}
         // />
         <Tab.Screen
-        name="My Jobs"
-        component={MyJobs}
+          name="My Jobs"
+          component={MyJobs}
 
-        options={{
-          headerShown: false,
-          tabBarLabel: 'Add job',
-          tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
-        }}
-      />
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Add job',
+            tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
+          }}
+        />
       )}
       <Tab.Screen
         name="Notification"
@@ -115,7 +115,7 @@ const NavBar = () => {
         }}
       />
 
-     
+
     </Tab.Navigator>
     // {/* </NavigationContainer> */}
   )

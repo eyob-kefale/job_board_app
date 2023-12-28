@@ -466,7 +466,7 @@ const EditJobs = ({ route, navigation }) => {
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
 
       // console.log('Category updated successfully! ',docRef);
-      navigation.navigate('JobListing');
+      navigation.navigate('SingleJob');
       // window.location.reload();
       // navigation.goBack();
 
