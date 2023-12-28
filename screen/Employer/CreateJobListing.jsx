@@ -120,7 +120,7 @@ const CreateJobListing = ({ route, navigation }) => {
 
 
       console.log('Jobs added successfully!');
-      navigation.goBack();
+      navigation.navigate("MyJobs");
     } catch (error) {
       console.error('Error adding Jobs: ', error);
     }

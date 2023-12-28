@@ -12,6 +12,7 @@ import { NavigationContainer, } from '@react-navigation/native';
 // import EmployeerProfile from '../screen/employeerProfile';
 import LogIn from '../screen/LogIn';
 import { useUser } from './context/UserContext';
+import MyJobs from '../screen/Employer/MyJobs';
 const Tab = createBottomTabNavigator();
 
 
@@ -82,16 +83,26 @@ const NavBar = () => {
 
 
 {role == "employer" && (
-        <Tab.Screen
-          name="Create Jobs"
-          component={CreateJobListing}
+        // <Tab.Screen
+        //   name="Create Jobs"
+        //   component={CreateJobListing}
 
-          options={{
-            headerShown: false,
-            tabBarLabel: 'Add job',
-            tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
-          }}
-        />
+        //   options={{
+        //     headerShown: false,
+        //     tabBarLabel: 'Add job',
+        //     tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
+        //   }}
+        // />
+        <Tab.Screen
+        name="My Jobs"
+        component={MyJobs}
+
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Add job',
+          tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
+        }}
+      />
       )}
       <Tab.Screen
         name="Notification"
