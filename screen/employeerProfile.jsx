@@ -33,13 +33,13 @@ const EmployeerProfile = ({route, navigation }) => {
   //fetch from context
   const { userEmail } = useUser();
   const {id}=route.params;
-  console.log("employer id ",id);
+  // console.log("employer id ",id);
   //   const { user } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
   const [showMoreMap, setShowMoreMap] = useState({});
 
   const onShowMorePress = (id) => {
-    console.log("SingleJob ",id)
+    // console.log("SingleJob ",id)
       navigation.navigate("SingleJob",{id});
     
   };
@@ -109,7 +109,7 @@ useEffect(() => {
 
 
 const handleEditJobs = (employerProfile) => {
-  console.log("ffggfgfgg "+employerProfile);
+  // console.log("ffggfgfgg "+employerProfile);
   // Navigate to the EditProfile screen with the item as a parameter
   navigation.navigate('EditJobs', { employerProfile,jobId });
 
@@ -128,7 +128,7 @@ const handleEditJobs = (employerProfile) => {
 
   const onApplyPress = (title) => {
     // Implement logic for handling the "Apply" button press
-    console.log("Apply button pressed for job:", title);
+    // console.log("Apply button pressed for job:", title);
     // You can add your navigation logic or any other actions here
   };
 
@@ -181,7 +181,7 @@ const handleEditJobs = (employerProfile) => {
     navigation.navigate('EditProfile', { user });
 //{uri:employerProfile[0].profileImage}
   };
-console.log("employerProfile",employerProfile)
+// console.log("employerProfile",employerProfile)
 //console.log("employerProfile of index 0",employerProfile[0].profileImage)
   return (
     <ScrollView style={styles.container}>

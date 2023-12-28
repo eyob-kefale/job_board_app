@@ -12,7 +12,7 @@ import { useUser } from "../../common/context/UserContext";
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
   
-  const { userEmail,docId } = useUser();
+  const { userEmail,docId,role } = useUser();
 // console.log(user);
 const [id, setId] = useState([]);
 
@@ -21,7 +21,12 @@ const [id, setId] = useState([]);
   //start fetching from jobLists
   const [userProfile, setUser] = useState([]);
 
-  const userCollectionRef = query(collection(db, 'user'), where("email", "==",userEmail), limit(10));
+  if(role=="employer"){
+  var userCollectionRef = query(collection(db, 'user'), where("email", "==",user), limit(10));
+  }else{
+    var userCollectionRef = query(collection(db, 'user'), where("email", "==",userEmail), limit(10));
+
+  }
 
 
   useEffect(() => {
@@ -117,10 +122,11 @@ const [id, setId] = useState([]);
                   </Block>
 
                 </Block>
+                if(role=="employee"){
                 <TouchableOpacity onPress={handleEditProfile}>
                   <Ionicons name="ios-create" style={styles.editbtn} size={30} color={"#000"} />
-               
                 </TouchableOpacity>
+}
               </Block>
             </Block>
           </View>

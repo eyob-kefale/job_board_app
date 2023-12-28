@@ -40,7 +40,7 @@ const MyJobs = ({ route, navigation }) => {
     const [showMoreMap, setShowMoreMap] = useState({});
 
     const onShowMorePress = (id) => {
-        console.log("SingleJob ", id)
+        // console.log("SingleJob ", id)
         navigation.navigate("SingleJob", { id });
 
     };

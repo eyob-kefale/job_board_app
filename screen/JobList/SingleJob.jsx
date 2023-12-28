@@ -41,7 +41,7 @@ const dynamicStyles = {
 const SingleJob = ({ route }) => {
   const { role, userEmail } = useUser();
   const { id } = route.params;
-  console.log("asvsg ", id);
+  // console.log("asvsg ", id);
 
   const [showMoreMap, setShowMoreMap] = useState({});
   const navigation = useNavigation();
@@ -53,6 +53,9 @@ const SingleJob = ({ route }) => {
     }));
   };
 
+  const onViewApplicantsPress = (jobId) => {
+    navigation.navigate("applicants", { jobId });
+  };
   const onApplyPress = (docId) => {
     navigation.navigate("ApplyPage", { docId });
   };
@@ -130,7 +133,7 @@ const SingleJob = ({ route }) => {
         )}
         {(role == "employer") && (item.employer == userEmail) && (
           <TouchableOpacity
-            onPress={() => onEditPress(item.jobId)}
+            onPress={() => onViewApplicantsPress(item.id)}
             style={styles.applyButton}>
             <Text style={styles.applyButtonText}>View Applicants</Text>
           </TouchableOpacity>

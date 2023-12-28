@@ -26,6 +26,7 @@ import EditJobs from './screen/Employer/EditJobs';
 import SingleJob from './screen/JobList/SingleJob';
 import CreateJobListing from './screen/Employer/CreateJobListing';
 import MyJobs from './screen/Employer/MyJobs';
+import Applicants from './screen/Employer/applicants';
 
 // const querySnapshot = await getDocs(collection(db, "user"));
 // querySnapshot.forEach((doc) => {
@@ -130,6 +131,8 @@ const App = () => {
         <Stack.Screen name="SingleJob" component={SingleJob} />
        <Stack.Screen name="CreateJobListing" component={CreateJobListing}/>
        <Stack.Screen name="MyJobs" component={MyJobs}/>
+       <Stack.Screen name="applicants" component={Applicants}/>
+       
         {/* Add more stack screens if needed */}
       </Stack.Navigator>
       </UserProvider>

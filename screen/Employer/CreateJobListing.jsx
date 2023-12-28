@@ -60,8 +60,8 @@ const CreateJobListing = ({ route, navigation }) => {
       setImage(uri);
       setJobDetails({ ...jobDetails, image: uri });
 
-      console.log("Image URI:", uri, "aaaaaaaa");
-      console.log("File Blob:", blob);
+      // console.log("Image URI:", uri, "aaaaaaaa");
+      // console.log("File Blob:", blob);
     }
   };
 
@@ -89,11 +89,11 @@ const CreateJobListing = ({ route, navigation }) => {
       // // Upload the file to Firebase Storage
       const fileRef = ref(storageRef, filePath);
       const snapshot = await uploadBytes(fileRef, file, { contentType: 'image/jpeg' });
-      console.log('Uploaded an image to Firebase Storage!');
+      // console.log('Uploaded an image to Firebase Storage!');
 
       // Get the download URL of the uploaded file
       const url = await getDownloadURL(fileRef);
-      console.log('Got the download URL:', url);
+      // console.log('Got the download URL:', url);
 
       // Store the download URL and category name in Firestore
       const categoriesRef = collection(db, 'jobLists');
@@ -109,7 +109,7 @@ const CreateJobListing = ({ route, navigation }) => {
         img: url,
         education: jobDetails.education,
         employer: userEmail,
-
+        applicants:[],
         createdDate: serverTimestamp(),
         startDate: startDate,
         endDate: endDate
@@ -126,7 +126,7 @@ const CreateJobListing = ({ route, navigation }) => {
     }
   };
 
-  console.log(startDate);
+  // console.log(startDate);
   //insert into jobLists end
 
   return (

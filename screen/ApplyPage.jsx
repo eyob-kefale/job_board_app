@@ -354,7 +354,7 @@ const ApplyPage = ({ route }) => {
 
       upload(blob, file);
       // console.log('Selected blob:', blob);
-      console.log('Selected response:', response);
+      // console.log('Selected response:', response);
     } catch (error) {
       console.error('Error picking document:', error);
     }
@@ -439,6 +439,9 @@ const ApplyPage = ({ route }) => {
       };
 
       await updateDoc(docRef, updatedUserData);
+
+// update jobPosts applicant field
+
 
       console.log('Application submitted successfully!');
       navigation.navigate("MyApplication");

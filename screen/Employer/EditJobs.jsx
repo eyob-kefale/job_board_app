@@ -364,7 +364,7 @@ const EditJobs = ({ route, navigation }) => {
   const { posts, docId } = route.params;
   //  const modifyId = userProfile[0].email;
 
-  console.log("edddd", docId, " docId ");
+  // console.log("edddd", docId, " docId ");
   // const [image, setImage] = useState(null);
   // const [ExistingImage, setExistingImage] = useState(user);
 
@@ -393,8 +393,8 @@ const EditJobs = ({ route, navigation }) => {
       setImage(uri);
       setEditedUser({ ...editedUser, image: uri });
 
-      console.log("Image URI:", uri, "aaaaaaaa");
-      console.log("File Blob:", blob);
+      // console.log("Image URI:", uri, "aaaaaaaa");
+      // console.log("File Blob:", blob);
     }
   };
 
@@ -466,9 +466,9 @@ const EditJobs = ({ route, navigation }) => {
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
 
       // console.log('Category updated successfully! ',docRef);
-      navigation.navigate('SingleJob');
+      // navigation.navigate('SingleJob');
       // window.location.reload();
-      // navigation.goBack();
+       navigation.goBack();
 
     } catch (error) {
 

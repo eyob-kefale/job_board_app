@@ -37,7 +37,7 @@ const dynamicStyles = {
 const ListItem = ({ item }) => {
   const navigation = useNavigation();
 const onShowMorePress = (id) => {
-  console.log("SingleJob ",id)
+  // console.log("SingleJob ",id)
     navigation.navigate("SingleJob",{id});
   
 };
@@ -65,7 +65,7 @@ export default () => {
   const navigation = useNavigation();
   const { role,userEmail } = useUser();
   const onShowMorePress = (id) => {
-    console.log("SingleJob ",id)
+    // console.log("SingleJob ",id)
       navigation.navigate("SingleJob",{id});
     
   };
@@ -87,7 +87,7 @@ export default () => {
     const todayArray=today2.split('/');
     const reverseTodayArray=todayArray.reverse();
     const reversedToday = reverseTodayArray.join('/');
-    console.log(today2," todddd ",reversedToday)
+    // console.log(today2," todddd ",reversedToday)
 
  
     if (reversedToday > endDate) {
@@ -143,7 +143,7 @@ useEffect(() => {
 
 
 const onEditPress = (docId) => {
-  console.log("()(0(0 ",posts)
+  // console.log("()(0(0 ",posts)
   navigation.navigate("EditJobs", {posts, docId});
 
 };
