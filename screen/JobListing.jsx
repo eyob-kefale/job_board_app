@@ -15,7 +15,7 @@ import {
 import Search from "../common/Search";
 import { useNavigation } from '@react-navigation/native';
 import materialTheme from '../constants/Theme';
-import { collection, getDocs, limit, query } from 'firebase/firestore';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
 import { useUser } from "../common/context/UserContext";
@@ -36,26 +36,26 @@ const dynamicStyles = {
 
 const ListItem = ({ item }) => {
   const navigation = useNavigation();
-const onShowMorePress = (id) => {
-  // console.log("SingleJob ",id)
-    navigation.navigate("SingleJob",{id});
-  
-};
+  const onShowMorePress = (id) => {
+    // console.log("SingleJob ",id)
+    navigation.navigate("SingleJob", { id });
+
+  };
   return (
     <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
-    <View style={styles.item}>
-      <Image
-        source={{
-          uri: item.img,
-        }}
-        style={styles.itemPhoto}
-        resizeMode="cover"
-      />
-      <View></View>
-      <Text style={styles.itemText1}>{item.title}</Text>
-      {/* <Text style={styles.itemText2}>{item.description}</Text> */}
-      {/* <Text style={styles.itemText}>{item.experienceRequired}</Text> */}
-    </View>
+      <View style={styles.item}>
+        <Image
+          source={{
+            uri: item.img,
+          }}
+          style={styles.itemPhoto}
+          resizeMode="cover"
+        />
+        <View></View>
+        <Text style={styles.itemText1}>{item.title}</Text>
+        {/* <Text style={styles.itemText2}>{item.description}</Text> */}
+        {/* <Text style={styles.itemText}>{item.experienceRequired}</Text> */}
+      </View>
 
     </TouchableOpacity>
   );
@@ -63,11 +63,11 @@ const onShowMorePress = (id) => {
 
 export default () => {
   const navigation = useNavigation();
-  const { role,userEmail } = useUser();
+  const { role, userEmail } = useUser();
   const onShowMorePress = (id) => {
     // console.log("SingleJob ",id)
-      navigation.navigate("SingleJob",{id});
-    
+    navigation.navigate("SingleJob", { id });
+
   };
 
   const [showMoreMap, setShowMoreMap] = useState({});
@@ -78,75 +78,92 @@ export default () => {
       [index]: !prevShowMoreMap[index],
     }));
   };
- 
-  const onApplyPress = (docId,endDate) => {
 
+  const onApplyPress = async (docId, endDate) => {
+    // check if apply before
+    const fetchFromApplication = query
+      (collection(db, "application"),
+        where("jobId", "==", docId),
+        where("email", "==", userEmail),
+      );
+    try {
+      const data = await getDocs(fetchFromApplication);
+
+      // Check if data.docs is defined before mapping over it
+      if (data.docs && data.docs.length > 0) {
+        alert("already applied")
+        return;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    // checking the expeired date
     const today = new Date()
-   
+
     const today2 = today.toLocaleDateString();
-    const todayArray=today2.split('/');
-    const reverseTodayArray=todayArray.reverse();
+    const todayArray = today2.split('/');
+    const reverseTodayArray = todayArray.reverse();
     const reversedToday = reverseTodayArray.join('/');
     // console.log(today2," todddd ",reversedToday)
 
- 
+
     if (reversedToday > endDate) {
       //console.log(endDate," picked ")
-      alert( "closed ");
+      alert("closed ");
       // Handle the case where the picked date is in the past
       return;
     }
-     //console.log(reversedToday," picked ",endDate)
-      navigation.navigate("ApplyPage", { docId });
-    
+    //console.log(reversedToday," picked ",endDate)
+    navigation.navigate("ApplyPage", { docId });
+
   };
 
-  
-
-//start fetching from jobLists
-const [posts, setPosts] = useState([]);
-const [jobId, setJobId] = useState([]);
-const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
 
 
-const fetchJobLists = async () => {
-  try {
-    const data = await getDocs(jobListsCollectionRef);
+  //start fetching from jobLists
+  const [posts, setPosts] = useState([]);
+  const [jobId, setJobId] = useState([]);
+  const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
 
-    // Check if data.docs is defined before mapping over it
-    if (data.docs && data.docs.length > 0) {
-      const jobIds = data.docs.map((doc) => doc.id);
-      setJobId((prevId) => [...prevId, ...jobIds]);
 
-      // Set the posts state with the data and include IDs
-      setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    } else {
-      console.error('No documents found');
+  const fetchJobLists = async () => {
+    try {
+      const data = await getDocs(jobListsCollectionRef);
+
+      // Check if data.docs is defined before mapping over it
+      if (data.docs && data.docs.length > 0) {
+        const jobIds = data.docs.map((doc) => doc.id);
+        setJobId((prevId) => [...prevId, ...jobIds]);
+
+        // Set the posts state with the data and include IDs
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } else {
+        console.error('No documents found');
+      }
+    } catch (error) {
+      console.error('Error fetching job lists: ', error);
     }
-  } catch (error) {
-    console.error('Error fetching job lists: ', error);
-  }
-};
+  };
 
-useEffect(() => {
-  // Initial data fetch when the component mounts
-  fetchJobLists();
-
-  // Setting up interval to refetch data every 2000ms (2 seconds)
-  const intervalId = setInterval(() => {
+  useEffect(() => {
+    // Initial data fetch when the component mounts
     fetchJobLists();
-  }, 2000);
 
-  // Cleanup the interval when the component unmounts
-  return () => clearInterval(intervalId);
-}, []);
+    // Setting up interval to refetch data every 2000ms (2 seconds)
+    const intervalId = setInterval(() => {
+      fetchJobLists();
+    }, 2000);
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
 
-const onEditPress = (docId) => {
-  // console.log("()(0(0 ",posts)
-  navigation.navigate("EditJobs", {posts, docId});
+  const onEditPress = (docId) => {
+    // console.log("()(0(0 ",posts)
+    navigation.navigate("EditJobs", { posts, docId });
 
-};
+  };
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -158,36 +175,36 @@ const onEditPress = (docId) => {
     info.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const renderJobItem = ({ item, index }) => (
-   
+
 
     <View key={index} style={styles.jobItem}>
-      <Image source={{ uri: item.img}} style={styles.image} resizeMode="cover" />
-      <TouchableOpacity  onPress={() => onShowMorePress(item.jobId)}>
-      <Text style={styles.title}>{item.title}</Text>
+      <Image source={{ uri: item.img }} style={styles.image} resizeMode="cover" />
+      <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
+        <Text style={styles.title}>{item.title}</Text>
       </TouchableOpacity>
-     
+
       <Text style={styles.description}>
         {showMoreMap[index]
           ? item.description
           : `${item.description.substring(0, 100)}... `}
-          <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More</Text>
+        <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More</Text>
       </Text>
-     
-        
-     
-
-    
 
 
-    {role=="employee" &&(
-      <TouchableOpacity
-       onPress={() => onApplyPress(item.id,item.endDate)}
-        style={styles.applyButton}
-      >
-        <Text style={styles.applyButtonText}>Apply</Text>
-      </TouchableOpacity>)}
 
-     {/* {(role=="employer") &&(item.employer==userEmail) &&(
+
+
+
+
+      {role == "employee" && (
+        <TouchableOpacity
+          onPress={() => onApplyPress(item.id, item.endDate)}
+          style={styles.applyButton}
+        >
+          <Text style={styles.applyButtonText}>Apply</Text>
+        </TouchableOpacity>)}
+
+      {/* {(role=="employer") &&(item.employer==userEmail) &&(
      <TouchableOpacity
        onPress={() => onEditPress(item.jobId)}
         style={styles.applyButton}
@@ -195,10 +212,10 @@ const onEditPress = (docId) => {
         <Text style={styles.applyButtonText}>Edit</Text>
       </TouchableOpacity>)} */}
     </View>
- 
+
   );
   return (
-    
+
     <View style={styles.allItems}>
       <Search
         searchTerm={jobDetails}
@@ -347,34 +364,34 @@ const SECTIONS = [
 
 const styles = StyleSheet.create({
   allItems: {
-    marginTop:"5%",
+    marginTop: "5%",
     padding: dynamicStyles.notificationItemPadding,
     backgroundColor: "#fff",
     height: "100%"
   },
-  itemText1:{
+  itemText1: {
     color: "#000",
     marginTop: 5,
     // fontSize: 18,
     fontFamily: "serif",
-   fontStyle: "italic",
-   fontWeight: "bold",
-   width: '100%'
+    fontStyle: "italic",
+    fontWeight: "bold",
+    width: '100%'
     // color:"#3498db"
   },
-  itemText2:{
+  itemText2: {
     color: "#000",
     marginTop: 5,
     // fontSize: 18,
     fontFamily: "serif",
-   fontStyle: "italic",
-   
-    
+    fontStyle: "italic",
+
+
     // color:"#3498db"
   },
-  text:{
-    paddingTop:"10%",
-    paddingBottom:"2%",
+  text: {
+    paddingTop: "10%",
+    paddingBottom: "2%",
     width: '100%', // Set the width to 100%
     fontSize: 18,
     fontFamily: "serif",
@@ -424,7 +441,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 16,
   },
-  
+
   card: {
     // backgroundColor:"#BB9CC0",
     padding: 16,
@@ -461,12 +478,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: "justify",
   },
-  seeMore:{
+  seeMore: {
     color: materialTheme.COLORS.BUTTON_COLOR,
-    
-    fontWeight:"300",
+
+    fontWeight: "300",
     // fontFamily:"san-serif"
-    
+
   }
   ,
 
@@ -480,7 +497,7 @@ const styles = StyleSheet.create({
   applyButton: {
     // backgroundColor: "#3498db",
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
-    
+
     padding: 12,
     borderRadius: 4,
     marginTop: 8,
@@ -497,7 +514,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
- 
+
 });
 
 

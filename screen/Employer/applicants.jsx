@@ -60,7 +60,7 @@ const Applicants = ({route}) => {
 
 const handleEmployerProfile=(user)=>{
   console.log("employer-id ",user);
-    navigation.navigate("UserProfile",{user});
+    navigation.navigate("MyEmployeeProfile",{user});
 }
 
 

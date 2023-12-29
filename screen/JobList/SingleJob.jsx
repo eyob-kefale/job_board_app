@@ -42,7 +42,7 @@ const SingleJob = ({ route }) => {
   const { role, userEmail } = useUser();
   const { id } = route.params;
   // console.log("asvsg ", id);
-
+const [ifApplied,setIfApplied]=useState(false);
   const [showMoreMap, setShowMoreMap] = useState({});
   const navigation = useNavigation();
 
@@ -56,7 +56,24 @@ const SingleJob = ({ route }) => {
   const onViewApplicantsPress = (jobId) => {
     navigation.navigate("applicants", { jobId });
   };
-  const onApplyPress = (docId) => {
+  const onApplyPress = async(docId) => {
+    const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId));
+    try {
+      const data = await getDocs(fetchFromApplication);
+
+      // Check if data.docs is defined before mapping over it
+      if (data.docs && data.docs.length > 0) {
+        setIfApplied(true);
+        alert("already applied");
+        return;
+      }
+      else{
+        setIfApplied(false);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
     navigation.navigate("ApplyPage", { docId });
   };
   const onEditPress = (docId) => {
@@ -84,8 +101,24 @@ const SingleJob = ({ route }) => {
         console.error('Error fetching job lists: ', error);
       }
     };
-
     getJoblists();
+    // check if applied
+
+  //   const CheckIfApplied = async () => {
+  //   const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId));
+  //   try {
+  //     const data = await getDocs(fetchFromApplication);
+
+  //     // Check if data.docs is defined before mapping over it
+  //     if (data.docs && data.docs.length > 0) {
+  //       setIfApplied(false);
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  // CheckIfApplied();
+    
   }, [id]);
 
   const renderJobItem = ({ item, index }) => (
@@ -126,7 +159,7 @@ const SingleJob = ({ route }) => {
           <Text style={styles.title}>Professions</Text>
           <Text >{item.professions}</Text>
         </Block>
-        {role == "employee" && (
+        {role == "employee" && !ifApplied && (
           <TouchableOpacity onPress={() => onApplyPress(item.id)} style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Apply</Text>
           </TouchableOpacity>

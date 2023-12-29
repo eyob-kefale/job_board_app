@@ -318,7 +318,7 @@ const ApplyPage = ({ route }) => {
   const [age, setAge] = useState('');
   const [profession, setProfession] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
-  const [resume,setResume]=useState('');
+  const [resume, setResume] = useState('');
   const [fileUri, setFileUri] = useState(null);
   const [file, setFile] = useState(null);
   const [docUri, setDocUri] = useState(null);
@@ -362,15 +362,15 @@ const ApplyPage = ({ route }) => {
 
 
   const upload = (result, file) => {
-    const name=file._data.name;
+    const name = file._data.name;
     const storageRef = ref(storage, `allFiles/${name}`);
 
     const uploadTask = uploadBytesResumable(storageRef, file);
 
-   
+
     uploadTask.on('state_changed',
       (snapshot) => {
-       
+
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         switch (snapshot.state) {
@@ -404,18 +404,27 @@ const ApplyPage = ({ route }) => {
 
 
 
-    if (!firstName || !lastName || !age || !profession || !coverLetter ||!resume ) {
+    if (!firstName || !lastName || !age || !profession || !coverLetter || !resume) {
       alert('All fields must be filled out');
       return;
     }
 
     try {
-    
+
       const userRef = collection(db, 'user');
       const docRef = doc(userRef, userDocId);
       const getDocRef = doc(userRef, userDocId);
       const docSnapshot = await getDoc(getDocRef);
       const userData = docSnapshot.data();
+
+
+      // start update jobPosts applicant field
+      const jobRef = collection(db, 'jobLists');
+      const docJobRef = doc(jobRef, docId);
+      const getJobDocRef = doc(jobRef, docId);
+      const docJobSnapshot = await getDoc(getJobDocRef);
+      const jobData = docJobSnapshot.data();
+     
 
       const categoriesRef = collection(db, 'application');
       const newJobLists = {
@@ -430,30 +439,28 @@ const ApplyPage = ({ route }) => {
         createdDate: serverTimestamp(),
       };
 
-      setDoc(doc(categoriesRef), newJobLists);
-
+      
+// update user
       const updatedApply = [...userData.apply, docId];
       const updatedUserData = {
         apply: updatedApply,
         updatedDate: serverTimestamp(),
       };
 
+      console.log(userEmail,"job update ",jobData.applicants)
+      console.log(docId,"user update ",userData.apply)
+      // update jobLists
+      const updatedJobApply = [...jobData.applicants, userEmail];
+      const updatedJobData = {
+        applicants: updatedJobApply,
+        updatedDate: serverTimestamp(),
+      };
       await updateDoc(docRef, updatedUserData);
+      await updateDoc(getJobDocRef, updatedJobData);
 
-//start update jobPosts applicant field
-// const jobRef = collection(db, 'jobLists');
-
-// const getJobDocRef = doc(jobRef, docId);
-// const docJobSnapshot = await getDoc(getJobDocRef);
-// const jobData = docJobSnapshot.data();
-// const updatedJobApply = [...jobData.applicants, userDocId];
-// const updatedJobData = {
-//   applicants: updatedJobApply,
-//   updatedDate: serverTimestamp(),
-// };
-
-// await updateDoc(getJobDocRef, updatedJobData);
-// //end update jobPosts applicant field
+      // set to application collection
+      setDoc(doc(categoriesRef), newJobLists);
+      //end update jobPosts applicant field
 
 
 
