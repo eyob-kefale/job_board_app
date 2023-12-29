@@ -440,7 +440,21 @@ const ApplyPage = ({ route }) => {
 
       await updateDoc(docRef, updatedUserData);
 
-// update jobPosts applicant field
+//start update jobPosts applicant field
+// const jobRef = collection(db, 'jobLists');
+
+// const getJobDocRef = doc(jobRef, docId);
+// const docJobSnapshot = await getDoc(getJobDocRef);
+// const jobData = docJobSnapshot.data();
+// const updatedJobApply = [...jobData.applicants, userDocId];
+// const updatedJobData = {
+//   applicants: updatedJobApply,
+//   updatedDate: serverTimestamp(),
+// };
+
+// await updateDoc(getJobDocRef, updatedJobData);
+// //end update jobPosts applicant field
+
 
 
       console.log('Application submitted successfully!');

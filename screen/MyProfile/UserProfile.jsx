@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { Block, Text, theme } from "galio-framework";
-import { Ionicons,MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import materialTheme from '../../constants/Theme';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
@@ -11,22 +11,22 @@ import { useState } from "react";
 import { useUser } from "../../common/context/UserContext";
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
-  
-  const { userEmail,docId,role } = useUser();
-// console.log(user);
-const [id, setId] = useState([]);
 
-//  console.log(userEmail,"plm ",docId," emailllll");
-//  usertid=user[0].id;
+  const { userEmail, docId, role } = useUser();
+  // console.log(user);
+  const [id, setId] = useState([]);
+
+  //  console.log(userEmail,"plm ",docId," emailllll");
+  //  usertid=user[0].id;
   //start fetching from jobLists
   const [userProfile, setUser] = useState([]);
 
-  if(role=="employer"){
-  var userCollectionRef = query(collection(db, 'user'), where("email", "==",user), limit(10));
-  }else{
-    var userCollectionRef = query(collection(db, 'user'), where("email", "==",userEmail), limit(10));
+  // if(role=="employer"){
+  //var userCollectionRef = query(collection(db, 'user'), where("email", "==",user), limit(10));
+  // }else{
+  var userCollectionRef = query(collection(db, 'user'), where("email", "==", userEmail));
 
-  }
+  // }
 
 
   useEffect(() => {
@@ -39,31 +39,31 @@ const [id, setId] = useState([]);
           id: doc.id, // Access the document ID directly here
         }));
         setUser(userData);
-        //  console.log("idddddddd ", userData.map(user => user.id));
+        console.log("idddddddd ", userData);
         setId(prevId => [...prevId, ...userData.map(user => user.id)]);
-    //      id = userData.map(user => user.id);
-    // console.log("idddddddd ", id);
+        //      id = userData.map(user => user.id);
+        // console.log("idddddddd ", id);
 
       } catch (error) {
         console.error('Error fetching user profile: ', error);
       }
-      
+
     };
     getUserprofile();
-    const intervalId = setInterval(() => {
-      getUserprofile();
-    }, 2000);
-  
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  
-    
+    // const intervalId = setInterval(() => {
+    //   getUserprofile();
+    // }, 2000);
+
+    // // Cleanup the interval when the component unmounts
+    // return () => clearInterval(intervalId);
+
+
   }, []);
-  
+
 
   //end fetching from jobLists
 
-  const renderItem = ({ item,index }) => (
+  const renderItem = ({ item, index }) => (
     <View key={index} style={styles.socialLink}>
       <Ionicons name={item.icon} size={24} color={theme.COLORS.INFO} />
       <Text style={styles.socialLinkText}>{item.label}</Text>
@@ -73,7 +73,7 @@ const [id, setId] = useState([]);
   const handleEditProfile = () => {
     // console.log("idddddddd ", id);
     // Navigate to the EditProfile screen
-    navigation.navigate('EditProfile', { userProfile,userIds: id  });
+    navigation.navigate('EditProfile', { userProfile, userIds: id });
 
   };
   // const myApplications = () => {
@@ -90,7 +90,7 @@ const [id, setId] = useState([]);
     <ScrollView style={styles.container}>
       {userProfile.map((userP) => (
         <>
-        
+
           <View style={styles.subCont}>
             <Image style={styles.bgImage} source={require("../../assets/job1.jpg")}></Image>
 
@@ -107,34 +107,33 @@ const [id, setId] = useState([]);
                 </View>
               </Block>
               <Block style={styles.editCont}>
-
                 <Block style={styles.header}>
                   <Text style={styles.emailCont}>
-                  <Entypo style={styles.nameIcon} name="man"></Entypo>
-                  <Text p style={styles.title}>
-                    {userP.firstName} {userP.lastName}
-                  </Text>
-
+                    <Entypo style={styles.nameIcon} name="man"></Entypo>
+                    <Text style={styles.title}>
+                      {userP.firstName} {userP.lastName}
+                    </Text>
                   </Text>
                   <Block style={styles.emailCont}>
-                  <MaterialCommunityIcons style={styles.emailIcon} name="email"></MaterialCommunityIcons>
-                  <Text style={styles.email}>{userP.email}</Text>
+                    <MaterialCommunityIcons style={styles.emailIcon} name="email"></MaterialCommunityIcons>
+                    <Text style={styles.email}>{userP.email}</Text>
                   </Block>
-
                 </Block>
-                if(role=="employee"){
-                <TouchableOpacity onPress={handleEditProfile}>
-                  <Ionicons name="ios-create" style={styles.editbtn} size={30} color={"#000"} />
-                </TouchableOpacity>
-}
+                  <TouchableOpacity onPress={handleEditProfile}>
+                    <Ionicons name="ios-create" style={styles.editbtn} size={30} color={"#000"} />
+                  </TouchableOpacity>
+                
+
+               
               </Block>
+
             </Block>
           </View>
 
           <ScrollView style={styles.detailsContainer}>
             {userP.skills && (
               <>
-                <Text h5 style={styles.sectionTitle}>
+                <Text style={styles.sectionTitle}>
                   Skills:
                 </Text>
                 <Text style={styles.desc}>{userP.skills}</Text>
@@ -143,7 +142,7 @@ const [id, setId] = useState([]);
             )}
             {userP.education && (
               <>
-                <Text h5 style={styles.sectionTitle}>
+                <Text style={styles.sectionTitle}>
                   Educational Details:
                 </Text>
                 <Text style={styles.desc}>{userP.education}</Text>
@@ -151,7 +150,7 @@ const [id, setId] = useState([]);
             )}
             {userP.profession && (
               <>
-                <Text h5 style={styles.sectionTitle}>
+                <Text style={styles.sectionTitle}>
                   Profession:
                 </Text>
                 <Text style={styles.desc}>{userP.profession}</Text>
@@ -159,7 +158,7 @@ const [id, setId] = useState([]);
             )}
             {userP.aboutMe && (
               <>
-                <Text h5 style={styles.sectionTitle}>
+                <Text style={styles.sectionTitle}>
                   About Me:
                 </Text>
                 <Text style={styles.desc}>{userP.aboutMe}</Text>
@@ -187,7 +186,7 @@ const [id, setId] = useState([]);
 
           </ScrollView>
         </>
-))}
+      ))}
       {/* <TouchableOpacity style={styles.followButton}>
         <Text style={styles.followButtonText}>{user.isFollowing ? "Unfollow" : "Follow"}</Text>
       </TouchableOpacity> */}
@@ -210,14 +209,14 @@ const styles = StyleSheet.create({
     //  backgroundColor:"#543"
   },
   editbtn: {
-   marginRight:'10%',
-   marginBottom:'37%',
+    marginRight: '10%',
+    marginBottom: '37%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-   
+
     color: materialTheme.COLORS.BUTTON_COLOR,
-   
+
   },
   editButton: {
     flexDirection: 'row',
@@ -319,31 +318,31 @@ const styles = StyleSheet.create({
 
     color: "#000",
     marginBottom: 8,
-    marginLeft:8
+    marginLeft: 8
   },
   email: {
     fontSize: 15,
-    
+
     fontFamily: "serif",
     fontStyle: "italic",
     fontWeight: "normal",
-    marginTop:8
+    marginTop: 8
   },
-  emailCont:{
-    flexDirection:"row",
+  emailCont: {
+    flexDirection: "row",
 
   }
   ,
-  emailIcon:{
-    marginTop:"5%",
-    color:materialTheme.COLORS.BUTTON_COLOR,
+  emailIcon: {
+    marginTop: "5%",
+    color: materialTheme.COLORS.BUTTON_COLOR,
     // marginRight:"5%"
   }
   ,
-  nameIcon:{
-    marginTop:"5%",
-    paddingRight:"15%",
-    color:materialTheme.COLORS.BUTTON_COLOR,
+  nameIcon: {
+    marginTop: "5%",
+    paddingRight: "15%",
+    color: materialTheme.COLORS.BUTTON_COLOR,
   }
   ,
 

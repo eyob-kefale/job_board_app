@@ -182,7 +182,7 @@ useEffect(() => {
 
           <Block  center>
           <Text style={styles.sign}  color="black" size={12}>
-                If you haven't an account
+                If you don't have an account
               </Text>
             <TouchableOpacity
              
