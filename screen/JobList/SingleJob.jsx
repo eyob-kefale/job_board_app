@@ -57,7 +57,7 @@ const [ifApplied,setIfApplied]=useState(false);
     navigation.navigate("applicants", { jobId });
   };
   const onApplyPress = async(docId) => {
-    const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId));
+    const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId),where('email','==',userEmail));
     try {
       const data = await getDocs(fetchFromApplication);
 
@@ -122,7 +122,7 @@ const [ifApplied,setIfApplied]=useState(false);
   }, [id]);
 
   const renderJobItem = ({ item, index }) => (
-    <TouchableOpacity >
+<>
       <Block style={styles.addPosts}>
         <Text style={styles.MyJobs}>Job post </Text>
         {(role == "employer") && (item.employer == userEmail) && (
@@ -172,7 +172,8 @@ const [ifApplied,setIfApplied]=useState(false);
           </TouchableOpacity>
         )}
       </View>
-    </TouchableOpacity>
+</>
+   
   );
 
   return (

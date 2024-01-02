@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import materialTheme from '../constants/Theme';
 const AboutUs = ({ navigation }) => {
   const navigateToHome = () => {
     // Navigate back to the home page or any other page
@@ -42,12 +42,12 @@ const AboutUs = ({ navigation }) => {
           style={styles.githubLink}
           onPress={() => openLink('https://github.com/eyob-kefale/job_board_app')}
         >
-          <Icon name="github" size={20} color="#000" />
+          <Icon name="github" size={20} color="#4267B2" />
           <Text style={styles.githubText}>GitHub Repository</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.goBackButton} onPress={navigateToHome}>
-          <Icon name="arrow-left" size={20} color="#007AFF" />
+          <Icon name="arrow-left" size={20} color="#4267B2" />
           <Text style={styles.goBackButtonText}>Go Back</Text>
         </TouchableOpacity>
       </View>
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: materialTheme.COLORS.BUTTON_COLOR,
   },
   content: {
     flex: 1,
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 20,
+textAlign:"justify"
   },
   authorInfo: {
     marginBottom: 20,
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
   goBackButtonText: {
     marginLeft: 10,
     fontSize: 18,
-    color: '#007AFF',
+    color:  materialTheme.COLORS.BUTTON_COLOR,
   },
 });
 
