@@ -43,7 +43,7 @@ const Register = ({ navigation }) => {
         firstName,
         lastName,
         email,
-        password,
+        // password,
         role:"employee",
         apply:[]
       };
