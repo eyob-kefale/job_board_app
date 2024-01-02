@@ -105,16 +105,16 @@ const MyJobs = ({ route, navigation }) => {
         getEmployerPost();
         const intervalId = setInterval(() => {
             getEmployerPost();
-          }, 2000);
-        
-          // Cleanup the interval when the component unmounts
-          return () => clearInterval(intervalId);
+        }, 2000);
+
+        // Cleanup the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
-   
-      
-    
-      
+
+
+
+
 
 
 
@@ -155,31 +155,19 @@ const MyJobs = ({ route, navigation }) => {
     // );
 
     const renderJobItem = ({ item, index }) => (
-        <TouchableOpacity>
+        <>
 
             <View key={index} style={styles.jobItem}>
                 <Image source={{ uri: item.img }} style={styles.image} resizeMode="cover" />
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.description}>
-                    {item.description.substring(0, 100)}
+                    {showMoreMap[index]
+                        ? item.description
+                        : `${item.description.substring(0, 100)}... `}
+                    <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>see more</Text>
                 </Text>
-                {/* {item.description.length > 100 && (
-        <TouchableOpacity
-          onPress={() => toggleShowMore(index)}
-          style={styles.showMoreButton}
-        >
-          <Text>{showMoreMap[index] ? "Show Less" : "Show More"}</Text>
-        </TouchableOpacity>
-      )} */}
-                <TouchableOpacity
-                    onPress={() => onShowMorePress(item.jobId)}
-
-                    style={styles.applyButton}
-                >
-                    <Text style={styles.applyButtonText}>Show More</Text>
-                </TouchableOpacity>
             </View>
-        </TouchableOpacity>
+        </>
     );
 
     const renderItem = ({ item }) => (
@@ -217,10 +205,10 @@ const MyJobs = ({ route, navigation }) => {
                         </Block>
 
                         <Block style={styles.header}>
-                            <Text p style={styles.title}>
+                            {/* <Text p style={styles.title}>
                                 {employerProfile[0].firstName} {employerProfile[0].lastName}
-                            </Text>
-                            <Text style={styles.email}>{employerProfile[0].email}</Text>
+                            </Text> */}
+                            <Text style={styles.title}>{employerProfile[0].email}</Text>
 
                         </Block>
                     </Block>
@@ -268,7 +256,7 @@ const styles = StyleSheet.create({
     MyJobs: {
         color: materialTheme.COLORS.BUTTON_COLOR,
         fontSize: 20,
-        fontWeight: "200",
+        fontWeight: "400",
 
 
     }
@@ -300,7 +288,7 @@ const styles = StyleSheet.create({
 
     subCont: {
         flex: 1,
-        marginBottom: "40%"
+        marginBottom: "20%"
         //  backgroundColor:"#543"
     },
     editButton: {
@@ -349,7 +337,7 @@ const styles = StyleSheet.create({
         fontFamily: "serif",
         fontStyle: "italic",
         fontWeight: "bold",
-        textAlign: 'center',
+        textAlign: 'auto',
         color: materialTheme.COLORS.BUTTON_COLOR,
 
 
@@ -357,13 +345,16 @@ const styles = StyleSheet.create({
     ,
     title: {
         width: '100%', // Set the width to 100%
-        fontSize: 20,
+        // fontSize: 20,
         fontFamily: "serif",
         fontStyle: "italic",
-        fontWeight: "normal",
+        // fontWeight: "normal",
 
 
-        color: "#000",
+        fontSize: 15,
+        fontWeight: "bold",
+        marginBottom: 2,
+        color: "#000110",
         marginBottom: 8,
     },
     email: {
@@ -396,7 +387,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         padding: 16,
-        marginTop: "5%",
+       
     },
 
     jobItem: {
@@ -412,11 +403,11 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
 
-    title: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
+    // title: {
+    //     fontSize: 18,
+    //     fontWeight: "bold",
+    //     marginBottom: 8,
+    // },
 
     horizontalTitle: {
         fontSize: 14,
@@ -429,7 +420,14 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         textAlign: "justify",
     },
+    seeMore: {
+        color: materialTheme.COLORS.BUTTON_COLOR,
 
+        fontWeight: "350",
+        // fontFamily:"san-serif"
+
+    }
+    ,
     showMoreButton: {
         alignSelf: "flex-end",
         padding: 8,

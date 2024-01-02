@@ -56,6 +56,12 @@ const [ifApplied,setIfApplied]=useState(false);
   const onViewApplicantsPress = (jobId) => {
     navigation.navigate("applicants", { jobId });
   };
+  const handleEmployerProfile=(id)=>{
+    console.log("employer-id ",id);
+      navigation.navigate("EmployeerProfile",{id});
+  }
+  
+
   const onApplyPress = async(docId) => {
     const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId),where('email','==',userEmail));
     try {
@@ -136,28 +142,34 @@ const [ifApplied,setIfApplied]=useState(false);
       </Block>
       <View key={index} style={styles.jobItem}>
         <Image source={{ uri: item.img }} style={styles.image} resizeMode="cover" />
-        <Text style={styles.title}>{item.employer}</Text>
+        <TouchableOpacity onPress={() => handleEmployerProfile(item.employer)}>
 
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>
+        <Text style={styles.title}>{item.employer}</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.title}>Title</Text>
+        <Text style={styles.detail}>{item.title}</Text>
+
+        <Text style={styles.title}>Description</Text>
+        <Text style={styles.detail}>
           {item.description}
         </Text>
         <Block>
           <Text style={styles.title}>Requirements</Text>
-          <Text >{item.requirements}</Text>
+          <Text style={styles.detail}>{item.requirements}</Text>
         </Block>
         <Block>
           <Text style={styles.title}>Education Background</Text>
-          <Text >{item.education}</Text>
+          <Text style={styles.detail}>{item.education}</Text>
         </Block>
 
         <Block>
           <Text style={styles.title}>Skills</Text>
-          <Text >{item.skills}</Text>
+          <Text style={styles.detail}>{item.skills}</Text>
         </Block>
         <Block>
           <Text style={styles.title}>Professions</Text>
-          <Text >{item.professions}</Text>
+          <Text style={styles.detail}>{item.professions}</Text>
         </Block>
         {role == "employee" && !ifApplied && (
           <TouchableOpacity onPress={() => onApplyPress(item.id)} style={styles.applyButton}>
@@ -195,6 +207,10 @@ const [ifApplied,setIfApplied]=useState(false);
 
 
 const styles = StyleSheet.create({
+  allItems:{
+    marginHorizontal:"5%",
+    marginBottom:"5%"
+  },
 
   editbtn: {
 
@@ -204,148 +220,18 @@ const styles = StyleSheet.create({
   addPosts: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: "5%"
-  },
-  addPostIcon: {
-    color: materialTheme.COLORS.BUTTON_COLOR,
-    flexDirection: "row-reverse",
-    justifyContent: "flex-end",
+    margin: "5%",
   },
   MyJobs: {
     color: materialTheme.COLORS.BUTTON_COLOR,
     fontSize: 20,
     fontWeight: "200",
-
-
-  }
-  ,
-  allItems: {
-    marginTop: "5%",
-    padding: dynamicStyles.notificationItemPadding,
-    backgroundColor: "#fff",
-    height: "100%"
   },
-  itemText1: {
-    color: "#000",
-    marginTop: 5,
-    // fontSize: 18,
-    fontFamily: "serif",
-    fontStyle: "italic",
-    fontWeight: "bold",
-    width: '100%'
-    // color:"#3498db"
-  },
-  itemText2: {
-    color: "#000",
-    marginTop: 5,
-    // fontSize: 18,
-    fontFamily: "serif",
-    fontStyle: "italic",
-
-
-    // color:"#3498db"
-  },
-  text: {
-    paddingTop: "10%",
-    paddingBottom: "2%",
-    width: '100%', // Set the width to 100%
-    fontSize: 18,
-    fontFamily: "serif",
-    // fontStyle: "italic",
-    fontWeight: "bold",
-    textAlign: 'left',
-    // color:"#3498db"
+  editbtn: {
     color: materialTheme.COLORS.BUTTON_COLOR,
-  }
-  ,
-  container: {
-    // flex: 1,
-    // backgroundColor: '#fff',
-
-    height: "30%",
-    // borderRadius: 8,
-    // marginRight: 16,
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: "2%",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  sectionHeader: {
-
-    fontWeight: "800",
-    fontSize: 18,
-    color: "#000",
-    marginTop: 1,
-    marginBottom: 15,
-  },
-  item: {
-    marginHorizontal: 1,
-
-    // marginBottom: 20,
-  },
-  itemPhoto: {
-    // width: 200,
-    // height: 200,
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-    marginRight: 16,
-  },
-
-  card: {
-    // backgroundColor:"#BB9CC0",
-    padding: 16,
-    marginBottom: 70,
-  },
-
-  jobItem: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-
-  horizontalTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 6,
-  },
-
-  description: {
-    fontSize: 16,
-    marginBottom: 8,
-    textAlign: "justify",
-  },
-
-  showMoreButton: {
-    alignSelf: "flex-end",
-    padding: 8,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 4,
   },
   applyButton: {
-    // backgroundColor: "#3498db",
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
-
     padding: 12,
     borderRadius: 4,
     marginTop: 8,
@@ -354,6 +240,26 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: "#fff",
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  jobItem: {
+    // ... (Your existing styles)
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginBottom: 2,
+    color: materialTheme.COLORS.BUTTON_COLOR, // Adjust text color
+  },
+
+  detail:{
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 8,
+    textAlign: "justify",
+    color: "#555", // Adjust text color
   },
   image: {
     width: "100%",
