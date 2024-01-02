@@ -194,7 +194,7 @@ const MyJobs = ({ route, navigation }) => {
         navigation.navigate('EditProfile', { user });
         //{uri:employerProfile[0].profileImage}
     };
-    console.log("employerProfile", employerProfile)
+    // console.log("employerProfile", employerProfile)
     //console.log("employerProfile of index 0",employerProfile[0].profileImage)
     return (
         <ScrollView style={styles.container}>

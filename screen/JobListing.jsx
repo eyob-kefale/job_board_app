@@ -196,13 +196,13 @@ export default () => {
 
 
 
-      {role == "employee" && (
+      {/* {role == "employee" && (
         <TouchableOpacity
           onPress={() => onApplyPress(item.id, item.endDate)}
           style={styles.applyButton}
         >
           <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>)}
+        </TouchableOpacity>)} */}
 
       {/* {(role=="employer") &&(item.employer==userEmail) &&(
      <TouchableOpacity

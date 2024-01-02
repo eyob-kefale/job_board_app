@@ -7,6 +7,7 @@ import Setting from '../screen/Setting';
 import Register from '../screen/Register';
 import CreateJobListing from '../screen/Employer/CreateJobListing'
 import MyApplication from '../screen/MyApplication';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/Feather';
 import { NavigationContainer, } from '@react-navigation/native';
 // import EmployeerProfile from '../screen/employeerProfile';
@@ -58,7 +59,7 @@ const NavBar = () => {
           tabBarIcon: ({ color }) => <Icon name="list" color={color} size={24} />,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="My Profile"
         component={UserProfile}
         initialParams={{ user }}
@@ -68,7 +69,7 @@ const NavBar = () => {
           tabBarLabel: 'My Profile',
           tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
         }}
-      />
+      /> */}
       {role == "employee" && (<Tab.Screen
         name="MyApplication"
         component={MyApplication}
@@ -77,7 +78,7 @@ const NavBar = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'MyApplication',
-          tabBarIcon: ({ color }) => <Icon name="settings" color={color} size={24} />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="application-outline" color={color} size={24} />,
         }}
       />)}
 
@@ -99,8 +100,8 @@ const NavBar = () => {
 
           options={{
             headerShown: false,
-            tabBarLabel: 'Add job',
-            tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
+            tabBarLabel: 'My Jobs',
+            tabBarIcon: ({ color }) => <MaterialCommunityIcons name="application-outline" color={color} size={24} />,
           }}
         />
       )}
@@ -114,7 +115,16 @@ const NavBar = () => {
           tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
         }}
       />
+      <Tab.Screen
+        name="Setting"
+        component={Setting}
 
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Setting',
+          tabBarIcon: ({ color }) => <Icon name="settings" color={color} size={24} />,
+        }}
+      />
 
     </Tab.Navigator>
     // {/* </NavigationContainer> */}

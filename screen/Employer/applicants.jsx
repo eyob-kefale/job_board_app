@@ -11,11 +11,11 @@ import { db } from '../../FireBaseConfig';
 import { useUser } from '../../common/context/UserContext';
 import { useEffect } from 'react';
 import { useState } from 'react';
-const Applicants = ({route}) => {
-  const {jobId}=route.params;
+const Applicants = ({ route }) => {
+  const { jobId } = route.params;
   const { userEmail, userDocId } = useUser();
   const [appliedJobs, setAppliedJobs] = useState([]);
- 
+
   // const jobApplications = [
   //   {
   //     jobId: 1,
@@ -48,8 +48,8 @@ const Applicants = ({route}) => {
   //   // Add more job applications as needed
   // ];
   const navigation = useNavigation();
-  const handleMyApplocation = (id,jobId) => {
-    navigation.navigate("SingleJob",{id,jobId});
+  const handleMyApplication = (email) => {
+    navigation.navigate("ViewEmployeeApplication", { email, jobId });
     // navigation.navigate("EmployeerProfile",{id});
   }
   // const handleSeeMore = (jobId) => {
@@ -58,60 +58,57 @@ const Applicants = ({route}) => {
   //   // console.log(`See more for job ${jobId}`);
   // };
 
-const handleEmployerProfile=(user)=>{
-  console.log("employer-id ",user);
-    navigation.navigate("MyEmployeeProfile",{user});
-}
+  const handleEmployerProfile = (user) => {
+    console.log("employer-id ", user);
+    navigation.navigate("MyEmployeeProfile", { user });
+  }
 
 
   // Function to fetch jobs based on user's applied job IDs
   const fetchAppliedJobs = async (applicantIds) => {
     try {
-
-      const jobListsCollectionRef = collection(db, 'user');
-      const queryRef = query(jobListsCollectionRef, where('uid', 'array-contains', applicantIds));
-      // console.log("jobs ")
-      // const querySnapshot = await getDocs(queryRef);
-
-
-      // // Extract and return the job data
-      // // const jobs = querySnapshot.cs.map((c) => ({ ...c.data(), id: doc.id }));
-      // setJobs(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       const users = [];
+      const jobListsCollectionRef = collection(db, "user");
+  
       for (const applicantId of applicantIds) {
-        const docRef = doc(jobListsCollectionRef, applicantId);
-        const docSnapshot = await getDoc(docRef);
-        if (docSnapshot.exists) {
-          users.push(docSnapshot.data());
+        const queryRef = query(jobListsCollectionRef, where("email", "==", applicantId));
+        const querySnapshot = await getDocs(queryRef);
+  
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach((doc) => {
+            users.push({ id: doc.id, ...doc.data() });
+          });
         }
       }
-    
+  
+      // console.log("users ", users);
       return users;
     } catch (error) {
       console.error('Error fetching applied user: ', error);
       return [];
     }
   };
-
+  
+  
 
 
   useEffect(() => {
     const fetchData = async () => {
-      // console.log(userDocId)
-      // Assuming you have the user document with the 'apply' field containing job IDs
-     const jobRef=doc(db,'jobLists',jobId);
+      const fetchFromJobList = query(collection(db, "jobLists"), where("jobId", "==", jobId));
 
-      // const userRef = doc(db, 'user', userDocId);
+      const dataDoc = await getDocs(fetchFromJobList);
 
-      // Fetch the user document
-      const jobDocSnapshot = await getDoc(jobRef);
-      const jobData = jobDocSnapshot.data();
-
-      // console.log("userData ", userData.apply);
-      // Fetch jobs based on the 'apply' field in the user document
-      if(jobData.applicants){
+      const jobData = dataDoc.docs.map((doc) => ({
+        ...doc.data(),
+        user: doc.user,
+        id: doc.id,
+      }));
+      // const data=await(dataDoc);
+      // console.log("dataDoc aa",jobData[0].applicants)
+     
+      if (jobData[0].applicants) {
         // console.log("aplicants qw",jobData.applicants);
-        const appliedJobsData = await fetchAppliedJobs(jobData.applicants);
+        const appliedJobsData = await fetchAppliedJobs(jobData[0].applicants);
         // console.log("appliedJobsData ", appliedJobsData);
         // Now, 'appliedJobsData' contains an array of jobs that the user has applied to
         setAppliedJobs(appliedJobsData);
@@ -123,11 +120,11 @@ const handleEmployerProfile=(user)=>{
     const intervalId = setInterval(() => {
       fetchData();
     }, 1000);
-  
+
     // Cleanup the interval when the component unmounts
     return () => clearInterval(intervalId);
 
-    
+
   }, [userDocId]);
   // Now, 'appliedJobs' contains an array of jobs that the user has applied to
   // console.log('Applied Jobs:', appliedJobs);
@@ -139,10 +136,10 @@ const handleEmployerProfile=(user)=>{
     <View key={index} style={styles.container}>
 
       <View key={item.id} style={styles.jobContainer}>
-        <Image source={{uri:item.profileImage}} style={styles.jobImage} />
+        <Image source={{ uri: item.profileImage }} style={styles.jobImage} />
         <View style={styles.jobDetails}>
           <Text style={styles.firstName}>{item.title}</Text>
-          <TouchableOpacity  onPress={() => handleEmployerProfile(item.email)}>
+          <TouchableOpacity onPress={() => handleEmployerProfile(item.email)}>
             <Text style={styles.jobOwner}>{item.email}</Text>
 
           </TouchableOpacity>
@@ -151,7 +148,7 @@ const handleEmployerProfile=(user)=>{
           </Text>
           <TouchableOpacity
             style={styles.seeMoreButton}
-            onPress={() => handleMyApplocation(item.id,jobId)}>
+            onPress={() => handleMyApplication(item.email)}>
             <Text style={styles.seeMoreButtonText}>See Applications</Text>
           </TouchableOpacity>
         </View>
@@ -168,18 +165,18 @@ const handleEmployerProfile=(user)=>{
           source={require("../../assets/job1.jpg")} // Replace with the actual path to your image
         >
           <Text style={styles.textTitle}>
-            My users
+            My Applicants
           </Text>
         </ImageBackground>
       </View>
       {appliedJobs && (
-  <FlatList
-    data={appliedJobs}
-    renderItem={renderApplicationItem}
-    keyExtractor={(item, index) => index.toString()}
-    numColumns={1}
-  />
-)}
+        <FlatList
+          data={appliedJobs}
+          renderItem={renderApplicationItem}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={1}
+        />
+      )}
     </View>
 
   );

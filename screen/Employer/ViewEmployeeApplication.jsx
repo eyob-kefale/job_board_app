@@ -20,6 +20,7 @@ import { db } from '../../FireBaseConfig';
 import { useEffect } from 'react';
 import { Block } from "galio-framework";
 import { useUser } from "../../common/context/UserContext";
+// import {FontAwesome} from 'react-native-vector-icons '
 import { Ionicons } from "@expo/vector-icons";
 // import JobListing from "../JobListing";
 
@@ -38,11 +39,11 @@ const dynamicStyles = {
 
 
 
-const SingleJob = ({ route }) => {
+const ViewEmployeeApplication = ({ route }) => {
   const { role, userEmail } = useUser();
-  const { id } = route.params;
+  const { email, jobId } = route.params;
   // console.log("asvsg ", id);
-const [ifApplied,setIfApplied]=useState(false);
+  const [ifApplied, setIfApplied] = useState(false);
   const [showMoreMap, setShowMoreMap] = useState({});
   const navigation = useNavigation();
 
@@ -53,138 +54,109 @@ const [ifApplied,setIfApplied]=useState(false);
     }));
   };
 
-  const onViewApplicantsPress = (jobId) => {
-    navigation.navigate("applicants", { jobId });
-  };
-  const onApplyPress = async(docId) => {
-    const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId));
-    try {
-      const data = await getDocs(fetchFromApplication);
 
-      // Check if data.docs is defined before mapping over it
-      if (data.docs && data.docs.length > 0) {
-        setIfApplied(true);
-        alert("already applied");
-        return;
-      }
-      else{
-        setIfApplied(false);
-      }
-    } catch (error) {
-      console.log(error)
-    }
-
-    navigation.navigate("ApplyPage", { docId });
-  };
-  const onEditPress = (docId) => {
-
-    navigation.navigate("EditJobs", { posts, docId });
-
-  };
-
-  const onShowMorePress = (docId) => {
-    navigation.navigate("ApplyPage", { docId });
-  };
 
   // Fetch job data
   const [posts, setPosts] = useState([]);
-
+  const [user, setUser] = useState([]);
   useEffect(() => {
-    const jobListsCollectionRef = query(collection(db, 'jobLists'), where('jobId', '==', id));
-
+    const jobListsCollectionRef = query(collection(db, 'application'));
+    console.log("jobListsCollectionRef", jobListsCollectionRef);
+    // const userProfile=query(collection(db,"user"),where("email","==",email));
     const getJoblists = async () => {
       try {
-        const data = await getDocs(jobListsCollectionRef);
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-        console.log("employeryy", posts);
+        const jobData = await getDocs(jobListsCollectionRef);
+        setPosts(jobData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        console.log("employeryy", jobData);
       } catch (error) {
         console.error('Error fetching job lists: ', error);
       }
     };
+
+    // const getuser = async () => {
+    //   try {
+    //     const userData = await getDocs(userProfile);
+    //     setUser(userData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    //     console.log("employeryy", user);
+    //   } catch (error) {
+    //     console.error('Error fetching job lists: ', error);
+    //   }
+    // };
     getJoblists();
-    // check if applied
+    // getuser();
 
-  //   const CheckIfApplied = async () => {
-  //   const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId));
-  //   try {
-  //     const data = await getDocs(fetchFromApplication);
-
-  //     // Check if data.docs is defined before mapping over it
-  //     if (data.docs && data.docs.length > 0) {
-  //       setIfApplied(false);
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // CheckIfApplied();
-    
-  }, [id]);
+  }, []);
 
   const renderJobItem = ({ item, index }) => (
     <TouchableOpacity >
       <Block style={styles.addPosts}>
-        <Text style={styles.MyJobs}>Job post </Text>
-        {(role == "employer") && (item.employer == userEmail) && (
+        <Text style={styles.MyJobs}>employee application </Text>
+        {/* {(role == "employer") && (item.employer == userEmail) && (
           <TouchableOpacity
             onPress={() => onEditPress(item.jobId)}
           >
             <Ionicons name="ios-create" style={styles.editbtn} size={30} color={"#000"} />
 
           </TouchableOpacity>
-        )}
+        )} */}
       </Block>
       <View key={index} style={styles.jobItem}>
-        <Image source={{ uri: item.img }} style={styles.image} resizeMode="cover" />
-        <Text style={styles.title}>{item.employer}</Text>
+        {/* <Image source={{ uri: user.profileImage }} style={styles.image} resizeMode="cover" /> */}
+        <Text style={styles.title}>{item.firstName} {item.lastName}</Text>
 
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.title}>{item.email}</Text>
         <Text style={styles.description}>
-          {item.description}
+          {item.profession}
         </Text>
         <Block>
-          <Text style={styles.title}>Requirements</Text>
-          <Text >{item.requirements}</Text>
+          <Text style={styles.title}>Cover Letter</Text>
+          <Text >{item.coverLetter}</Text>
         </Block>
         <Block>
-          <Text style={styles.title}>Education Background</Text>
-          <Text >{item.education}</Text>
+          <Text style={styles.title}>Age</Text>
+          <Text >{item.age}</Text>
         </Block>
 
         <Block>
-          <Text style={styles.title}>Skills</Text>
-          <Text >{item.skills}</Text>
+          <Text style={styles.title}>Applied Date</Text>
+          <Text >{item.createdDate}</Text>
         </Block>
         <Block>
-          <Text style={styles.title}>Professions</Text>
-          <Text >{item.professions}</Text>
+          <Text style={styles.title}>Resume</Text>
+          {/* <FontAwesome name={download} size={24} /> */}
+          {/* <TouchableOpacity onPress={downloadDocument}>
+            <Text>Download Document</Text>
+          </TouchableOpacity> */}
         </Block>
-        {role == "employee" && !ifApplied && (
+        {/* {role == "employee" && !ifApplied && (
           <TouchableOpacity onPress={() => onApplyPress(item.id)} style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Apply</Text>
           </TouchableOpacity>
         )}
         {(role == "employer") && (item.employer == userEmail) && (
           <TouchableOpacity
-            onPress={() => onViewApplicantsPress(item.jobId)}
+            onPress={() => onViewApplicantsPress(item.employer)}
             style={styles.applyButton}>
             <Text style={styles.applyButtonText}>View Applicants</Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.allItems}>
-
-      
-      <FlatList
-        data={posts}
-        renderItem={renderJobItem}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={1}
-      />
+      <Text>my applicants</Text>
+      {posts.length === 0 ? (
+        <Text>No employee applications found</Text>
+      ) : (
+        <FlatList
+          data={posts}
+          renderItem={renderJobItem}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={1}
+        />
+      )}
     </View>
   );
 };
@@ -365,4 +337,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SingleJob;
+export default ViewEmployeeApplication;

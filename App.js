@@ -28,6 +28,8 @@ import CreateJobListing from './screen/Employer/CreateJobListing';
 import MyJobs from './screen/Employer/MyJobs';
 import Applicants from './screen/Employer/applicants';
 import MyEmployeeProfile from './screen/Employer/MyEmployeeProfile';
+import ViewEmployeeApplication from './screen/Employer/ViewEmployeeApplication';
+import AboutUs from './screen/aboutUs';
 
 // const querySnapshot = await getDocs(collection(db, "user"));
 // querySnapshot.forEach((doc) => {
@@ -134,7 +136,8 @@ const App = () => {
        <Stack.Screen name="MyJobs" component={MyJobs}/>
        <Stack.Screen name="applicants" component={Applicants}/>
        <Stack.Screen name="MyEmployeeProfile" component={MyEmployeeProfile}/>
-
+       <Stack.Screen name="ViewEmployeeApplication" component={ViewEmployeeApplication}/>
+       <Stack.Screen name="AboutUs" component={AboutUs}/>
        
         {/* Add more stack screens if needed */}
       </Stack.Navigator>

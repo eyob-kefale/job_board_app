@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useState } from "react";
 import { useUser } from "../../common/context/UserContext";
 const UserProfile = ({ route, navigation }) => {
-  const { user } = route.params;
+  // const { user } = route.params;
 
   const { userEmail, docId, role } = useUser();
   // console.log(user);
