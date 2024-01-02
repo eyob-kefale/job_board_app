@@ -118,6 +118,8 @@ const handleLogIn = async () => {
   }
 };
 
+
+
 const [userProfile, setUser] = useState([]);
 const userCollectionRef = query(collection(db, 'user'), where("email", "==", email));
 

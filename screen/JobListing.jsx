@@ -107,6 +107,8 @@ export default () => {
     // console.log(today2," todddd ",reversedToday)
 
 
+console.log("today2 ",today2);
+
     if (reversedToday > endDate) {
       //console.log(endDate," picked ")
       alert("closed ");

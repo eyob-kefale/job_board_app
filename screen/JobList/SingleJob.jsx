@@ -62,11 +62,29 @@ const [ifApplied,setIfApplied]=useState(false);
   }
   
 
-  const onApplyPress = async(docId) => {
+  const onApplyPress = async(docId,endDate) => {
     const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId),where('email','==',userEmail));
     try {
       const data = await getDocs(fetchFromApplication);
 
+      const today = new Date()
+
+      const today2 = today.toLocaleDateString();
+      const todayArray = today2.split('/');
+      const reverseTodayArray = todayArray.reverse();
+      const reversedToday = reverseTodayArray.join('/');
+      // console.log(today2," todddd ",reversedToday)
+  
+  
+  console.log("today2 ",today2);
+  
+      if (reversedToday > endDate) {
+        //console.log(endDate," picked ")
+        alert("closed ");
+        // Handle the case where the picked date is in the past
+        return;
+      }
+      
       // Check if data.docs is defined before mapping over it
       if (data.docs && data.docs.length > 0) {
         setIfApplied(true);
@@ -172,7 +190,7 @@ const [ifApplied,setIfApplied]=useState(false);
           <Text style={styles.detail}>{item.professions}</Text>
         </Block>
         {role == "employee" && !ifApplied && (
-          <TouchableOpacity onPress={() => onApplyPress(item.id)} style={styles.applyButton}>
+          <TouchableOpacity onPress={() => onApplyPress(item.id,item.endDate)} style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Apply</Text>
           </TouchableOpacity>
         )}
