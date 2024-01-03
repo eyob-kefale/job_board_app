@@ -4,6 +4,7 @@ import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import {MaterialIcons} from 'react-native-vector-icons/MaterialIcons';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Setting = ({ navigation }) => {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
@@ -16,9 +17,8 @@ const Setting = ({ navigation }) => {
     setDarkModeEnabled(!darkModeEnabled);
   };
 
-  const handleLogout = () => {
-    // Implement your logout logic here
-    // For example, navigate to the login screen
+  const handleLogout = async() => {
+    await AsyncStorage.setItem('isLoggedIn', "");
     navigation.navigate('LogIn');
   };
 const handleAboutUs=()=>{

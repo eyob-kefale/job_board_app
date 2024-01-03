@@ -11,7 +11,7 @@ const UserProvider = ({ children }) => {
     setUserEmail(email);
   };
   const updateDocId=(id)=>{
-    setUserDocId(id[0]);
+    setUserDocId(id);
   }
   const updateRole=(id)=>{
     setRole(id);

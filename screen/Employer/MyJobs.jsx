@@ -103,12 +103,12 @@ const MyJobs = ({ route, navigation }) => {
         };
 
         getEmployerPost();
-        const intervalId = setInterval(() => {
-            getEmployerPost();
-        }, 2000);
+        // const intervalId = setInterval(() => {
+        //     getEmployerPost();
+        // }, 2000);
 
-        // Cleanup the interval when the component unmounts
-        return () => clearInterval(intervalId);
+        // // Cleanup the interval when the component unmounts
+        // return () => clearInterval(intervalId);
     }, []);
 
 

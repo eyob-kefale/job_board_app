@@ -152,12 +152,12 @@ console.log("today2 ",today2);
     fetchJobLists();
 
     // Setting up interval to refetch data every 2000ms (2 seconds)
-    const intervalId = setInterval(() => {
-      fetchJobLists();
-    }, 2000);
+    // const intervalId = setInterval(() => {
+    //   fetchJobLists();
+    // }, 2000);
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    // // Cleanup the interval when the component unmounts
+    // return () => clearInterval(intervalId);
   }, []);
 
 

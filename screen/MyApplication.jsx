@@ -17,6 +17,7 @@ const MyApplication = () => {
   const [employerId,setEmployerId]=useState();
   // const [jobs, setJobs] = useState();
   // Example data for job applications
+  console.log("qwert ",userDocId)
   const jobApplications = [
     {
       jobId: 1,
@@ -104,7 +105,7 @@ const handleEmployerProfile=(id)=>{
       const userDocSnapshot = await getDoc(userRef);
       const userData = userDocSnapshot.data();
 
-      // console.log("userData ", userData.apply);
+       console.log("userData aa", userData);
       // Fetch jobs based on the 'apply' field in the user document
       if(userData.apply){
         const appliedJobsData = await fetchAppliedJobs(userData.apply);
@@ -116,12 +117,12 @@ const handleEmployerProfile=(id)=>{
 
     };
 
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 1000);
+    fetchData();
+    // const intervalId = setInterval(() => {
+    // }, 1000);
   
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    // // Cleanup the interval when the component unmounts
+    // return () => clearInterval(intervalId);
 
     
   }, [userDocId]);

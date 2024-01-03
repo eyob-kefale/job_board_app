@@ -9,6 +9,7 @@ import { useUser } from '../common/context/UserContext';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LogIn = ({navigation}) => {
   const [id,setId]=useState('');
   const [email, setEmail] = useState('');
@@ -106,10 +107,23 @@ const handleLogIn = async () => {
 
     // Update user context and ID
     updateUser(email);
-    updateDocId(userData.map(user => user.id));
+    updateDocId(userData.map(user =>
+      console.log("user.id",user.id),
+      user.id));
+    console.log("uid ",userData[0].role);
     updateRole(userData[0].role);
     // console.log("role for role ",userData[0].role);
     // Navigate to "NavBar"
+    const token=await response.user.getIdToken();
+    const tokenUserId=userData.map(user =>
+      console.log("user.id",user.id),
+      user.id)
+      console.log("userData[0].id ",userData[0].id);
+
+    await AsyncStorage.setItem('uId', userData[0].id);
+    await AsyncStorage.setItem('uRole', userData[0].role);
+    await AsyncStorage.setItem('uEmail',email);
+    await AsyncStorage.setItem('isLoggedIn', token);
     navigation.navigate("NavBar");
   } catch (error) {
     alert("Sign in failed: " + error.message);

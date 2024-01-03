@@ -117,12 +117,12 @@ const Applicants = ({ route }) => {
 
     };
 
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 1000);
+    fetchData();
+    // const intervalId = setInterval(() => {
+    // }, 1000);
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    // // Cleanup the interval when the component unmounts
+    // return () => clearInterval(intervalId);
 
 
   }, [userDocId]);

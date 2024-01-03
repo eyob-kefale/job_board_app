@@ -16,7 +16,9 @@ import { useUser } from './context/UserContext';
 import MyJobs from '../screen/Employer/MyJobs';
 const Tab = createBottomTabNavigator();
 
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 // userProfile
 
@@ -36,11 +38,40 @@ const user = {
 
 const NavBar = () => {
   const { role } = useUser();
+  const {updateUser,updateDocId,updateRole}=useUser();
+
+const auth = getAuth().currentUser;
+//  console.log("authauth ",auth.email);
+ useEffect(()=>{
+  const usId=async()=>{
+    const uId = await AsyncStorage.getItem('uId');
+    const uEmail = await AsyncStorage.getItem('uEmail');
+    const uRole = await AsyncStorage.getItem('uRole');
+    console.log("uIduIduId ",uId)
+    console.log("uEmailuEmail ",uEmail)
+    console.log("uRoleuRole ",uRole)
+
+    updateUser(uEmail);
+    updateDocId(uId);
+    updateRole(uRole);
+  }
+  usId();
+ },[])
+
+// // context
+// updateUser(email);
+// updateDocId(userData.map(user =>
+//   console.log("user.id",user.id),
+//   user.id));
+// console.log("uid ",userData[0].role);
+// updateRole(userData[0].role);
+
   // console.log("roleeee ",role);
   return (
     //  <NavigationContainer>
 
     <Tab.Navigator
+    initialRouteName="Job Listing"
       tabBarOptions={{
         labelStyle: { paddingBottom: 10, fontSize: 10 },
         style: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 90, backgroundColor: '#000' },
@@ -70,11 +101,9 @@ const NavBar = () => {
           tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
         }}
       /> */}
-      {role == "employee" && (<Tab.Screen
+      {((role == "employee")) && (<Tab.Screen
         name="MyApplication"
         component={MyApplication}
-
-
         options={{
           headerShown: false,
           tabBarLabel: 'MyApplication',

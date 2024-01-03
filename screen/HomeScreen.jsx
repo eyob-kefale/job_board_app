@@ -5,9 +5,24 @@ import materialTheme from '../constants/Theme';
 import {theme } from 'galio-framework';
 import Images from '../constants/Images';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth } from 'firebase/auth';
 const { height, width } = Dimensions.get('screen');
 
 const HomeScreen = () => {
+const handleLogIn=async()=>{
+  const value = await AsyncStorage.getItem('isLoggedIn');
+  const uId = await AsyncStorage.getItem('uId');
+  console.log("uIduIduId ",uId)
+ if(value){
+  const auth = getAuth().currentUser;
+//  console.log("authauthh ",auth.email);
+
+  navigation.navigate('NavBar')
+ }else{
+   navigation.navigate('LogIn')
+ }
+}
     // Use useNavigation hook to get the navigation prop
     const navigation = useNavigation();
       return (
@@ -43,7 +58,7 @@ const HomeScreen = () => {
                   shadowless
                   style={styles.button}
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                  onPress={() => navigation.navigate('LogIn')}>
+                  onPress={handleLogIn}>
                   GET STARTED
                 </Button>
               </Block>
