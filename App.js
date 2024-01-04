@@ -119,9 +119,9 @@ const App = () => {
     <NavigationContainer>
       <UserProvider>
       {/* <StatusBar style="auto" /> */}
-      <Stack.Navigator  screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="Register" component={Register} />
+      <Stack.Navigator >
+        <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="SingleNotification" component={SingleNotification} />
@@ -129,8 +129,8 @@ const App = () => {
         <Stack.Screen name="EditJobs" component={EditJobs} />
         <Stack.Screen name="ApplyPage" component={ApplyPage} />
         <Stack.Screen name="JobListing" component={JobListing} />
-        <Stack.Screen name="NavBar" component={NavBar} />
-        <Stack.Screen name="LogIn" component={LogIn} />
+        <Stack.Screen  options={{ headerShown: false }} name="NavBar" component={NavBar}  />
+        <Stack.Screen options={{ headerShown: false }} name="LogIn" component={LogIn} />
         <Stack.Screen name="SingleJob" component={SingleJob} />
        <Stack.Screen name="CreateJobListing" component={CreateJobListing}/>
        <Stack.Screen name="MyJobs" component={MyJobs}/>

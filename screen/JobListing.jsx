@@ -219,6 +219,7 @@ console.log("today2 ",today2);
   return (
 
     <View style={styles.allItems}>
+      
       <Search
         searchTerm={jobDetails}
         placeholder="Search office requirement here"
