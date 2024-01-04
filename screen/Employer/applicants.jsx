@@ -12,50 +12,20 @@ import { useUser } from '../../common/context/UserContext';
 import { useEffect } from 'react';
 import { useState } from 'react';
 const Applicants = ({ route }) => {
-  const { jobId } = route.params;
+  const { docId } = route.params;
   const { userEmail, userDocId } = useUser();
   const [appliedJobs, setAppliedJobs] = useState([]);
 
-  // const jobApplications = [
-  //   {
-  //     jobId: 1,
-  //     jobTitle: 'Software Developer',
-  //     jobOwner: 'Tech Co',
-  //     jobImage: require('../../assets/job1.jpg'),
-  //     jobDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-  //   },
-  //   {
-  //     jobId: 1,
-  //     jobTitle: 'Software Developer',
-  //     jobOwner: 'Tech Co',
-  //     jobImage: require('../../assets/job1.jpg'),
-  //     jobDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-  //   },
-  //   {
-  //     jobId: 1,
-  //     jobTitle: 'Software Developer',
-  //     jobOwner: 'Tech Co',
-  //     jobImage: require('../../assets/job1.jpg'),
-  //     jobDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-  //   },
-  //   {
-  //     jobId: 1,
-  //     jobTitle: 'Software Developer',
-  //     jobOwner: 'Tech Co',
-  //     jobImage: require('../../assets/job1.jpg'),
-  //     jobDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-  //   },
-  //   // Add more job applications as needed
-  // ];
+
   const navigation = useNavigation();
   const handleMyApplication = (email) => {
-    navigation.navigate("ViewEmployeeApplication", { email, jobId });
+    navigation.navigate("ViewEmployeeApplication", { email, docId });
     // navigation.navigate("EmployeerProfile",{id});
   }
-  // const handleSeeMore = (jobId) => {
+  // const handleSeeMore = (docId) => {
   //   // Handle navigation to see more details about the job (you can implement this based on your navigation structure)
   //   // For example, you can use React Navigation to navigate to a detailed job view.
-  //   // console.log(`See more for job ${jobId}`);
+  //   // console.log(`See more for job ${docId}`);
   // };
 
   const handleEmployerProfile = (user) => {
@@ -69,18 +39,18 @@ const Applicants = ({ route }) => {
     try {
       const users = [];
       const jobListsCollectionRef = collection(db, "user");
-  
+
       for (const applicantId of applicantIds) {
         const queryRef = query(jobListsCollectionRef, where("email", "==", applicantId));
         const querySnapshot = await getDocs(queryRef);
-  
+
         if (!querySnapshot.empty) {
           querySnapshot.forEach((doc) => {
             users.push({ id: doc.id, ...doc.data() });
           });
         }
       }
-  
+
       // console.log("users ", users);
       return users;
     } catch (error) {
@@ -88,27 +58,29 @@ const Applicants = ({ route }) => {
       return [];
     }
   };
-  
-  
 
 
+
+  console.log("docId ", docId)
   useEffect(() => {
     const fetchData = async () => {
-      const fetchFromJobList = query(collection(db, "jobLists"), where("jobId", "==", jobId));
+      // const fetchFromJobList = query(collection(db, "jobLists"), where("id", "==", docId));
+      const fetchFromJobList = doc(db, 'jobLists', docId)
+      const dataDoc = await getDoc(fetchFromJobList);
 
-      const dataDoc = await getDocs(fetchFromJobList);
+      // const jobData = dataDoc.docs.map((doc) => ({
+      //   ...doc.data(),
+      //   user: doc.user,
+      //   id: doc.id,
+      // }));
+      console.log("Cached document data:", dataDoc.data().applicants);
 
-      const jobData = dataDoc.docs.map((doc) => ({
-        ...doc.data(),
-        user: doc.user,
-        id: doc.id,
-      }));
       // const data=await(dataDoc);
       // console.log("dataDoc aa",jobData[0].applicants)
-     
-      if (jobData[0].applicants) {
+
+      if (dataDoc.data().applicants) {
         // console.log("aplicants qw",jobData.applicants);
-        const appliedJobsData = await fetchAppliedJobs(jobData[0].applicants);
+        const appliedJobsData = await fetchAppliedJobs(dataDoc.data().applicants);
         // console.log("appliedJobsData ", appliedJobsData);
         // Now, 'appliedJobsData' contains an array of jobs that the user has applied to
         setAppliedJobs(appliedJobsData);

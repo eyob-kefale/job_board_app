@@ -53,8 +53,8 @@ const [ifApplied,setIfApplied]=useState(false);
     }));
   };
 
-  const onViewApplicantsPress = (jobId) => {
-    navigation.navigate("applicants", { jobId });
+  const onViewApplicantsPress = (docId) => {
+    navigation.navigate("applicants", { docId });
   };
   const handleEmployerProfile=(id)=>{
     console.log("employer-id ",id);
@@ -128,20 +128,7 @@ const [ifApplied,setIfApplied]=useState(false);
     getJoblists();
     // check if applied
 
-  //   const CheckIfApplied = async () => {
-  //   const fetchFromApplication = query(collection(db, "application"), where("jobId", "==", docId));
-  //   try {
-  //     const data = await getDocs(fetchFromApplication);
-
-  //     // Check if data.docs is defined before mapping over it
-  //     if (data.docs && data.docs.length > 0) {
-  //       setIfApplied(false);
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // CheckIfApplied();
+ 
     
   }, [id]);
 
@@ -196,7 +183,7 @@ const [ifApplied,setIfApplied]=useState(false);
         )}
         {(role == "employer") && (item.employer == userEmail) && (
           <TouchableOpacity
-            onPress={() => onViewApplicantsPress(item.jobId)}
+            onPress={() => onViewApplicantsPress(item.id)}
             style={styles.applyButton}>
             <Text style={styles.applyButtonText}>View Applicants</Text>
           </TouchableOpacity>
