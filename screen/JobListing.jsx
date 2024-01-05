@@ -20,6 +20,8 @@ import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
 import { useUser } from "../common/context/UserContext";
 import { Block } from "galio-framework";
+import Images from "../constants/Images";
+import { ImageBackground } from "react-native";
 
 const { width, height } = Dimensions.get('window');
 
@@ -107,7 +109,7 @@ export default () => {
     // console.log(today2," todddd ",reversedToday)
 
 
-console.log("today2 ",today2);
+    console.log("today2 ", today2);
 
     if (reversedToday > endDate) {
       //console.log(endDate," picked ")
@@ -217,16 +219,32 @@ console.log("today2 ",today2);
 
   );
   return (
-
+<ScrollView >
     <View style={styles.allItems}>
-      
-      <Search
-        searchTerm={jobDetails}
-        placeholder="Search office requirement here"
-        handleSearch={handleSearch}
-      />
+      <View >
+        {/* <Image style={styles.headerBg} source={require("../assets/job.jpeg")}></Image> */}
+        <ImageBackground
+          source={require("../assets/job.jpeg")}
+          style={styles.headerBg}
+        >
+          <View style={styles.Search}>
 
-      <ScrollView >
+            <Search
+              searchTerm={jobDetails}
+              placeholder="Search Jobs"
+              handleSearch={handleSearch}
+
+            />
+          </View>
+        </ImageBackground>
+        <View style={styles.discoverCont}>
+          <Text style={styles.discover}>
+            Discover Amazing jobs for you!
+          </Text>
+        </View>
+      </View>
+
+      
 
         <View style={styles.container}>
           <SafeAreaView>
@@ -263,8 +281,8 @@ console.log("today2 ",today2);
             numColumns={1}
           />
         </View>
-      </ScrollView>
     </View>
+      </ScrollView>
   );
 };
 
@@ -366,9 +384,36 @@ const SECTIONS = [
 ];
 
 const styles = StyleSheet.create({
+  Search: {
+   width:"80%",
+   marginBottom:"-35%",
+  //  marginLeft:"-15%"
+  },
+  discoverCont:{
+    marginHorizontal: 7,
+  },
+  discover:{
+    color: materialTheme.COLORS.BUTTON_COLOR,
+    //  marginHorizontal:"10%",
+    fontSize: 30,
+    fontFamily: "serif",
+   
+    fontWeight: "bold",
+    width: '100%'
+  },
+  headerBg: {
+    
+    width: "100%",
+    height: 250, // Set the height as per your requirement
+    resizeMode: "cover", // or "contain" based on your preference
+    justifyContent: "center", // or "flex-end" or "flex-start"
+    alignItems: "center",
+
+    // Other background properties can be added here
+  },
   allItems: {
-    marginTop: "5%",
-    padding: dynamicStyles.notificationItemPadding,
+    // marginTop: "5%",
+    // padding: dynamicStyles.notificationItemPadding,
     backgroundColor: "#fff",
     height: "100%"
   },
@@ -408,7 +453,7 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     // backgroundColor: '#fff',
-
+    padding: dynamicStyles.notificationItemPadding,
     height: "30%",
     // borderRadius: 8,
     // marginRight: 16,

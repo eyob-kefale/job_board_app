@@ -9,6 +9,7 @@ import { db } from '../../FireBaseConfig';
 import { useEffect } from 'react';
 import { useState } from "react";
 import { useUser } from "../../common/context/UserContext";
+import {onSnapshot } from 'firebase/firestore';
 const UserProfile = ({ route, navigation }) => {
   // const { user } = route.params;
 
@@ -27,7 +28,19 @@ const UserProfile = ({ route, navigation }) => {
   var userCollectionRef = query(collection(db, 'user'), where("email", "==", userEmail));
 
   // }
-
+  // const q = query(collection(db, "cities"), where("state", "==", "CA"));
+  // const unsubscribe = onSnapshot(userCollectionRef, (querySnapshot) => {
+  //   const cities = [];
+  //   const docId=[];
+  //   querySnapshot.forEach((doc) => {
+  //       cities.push(doc.data());
+  //       docId.push(doc.id);
+  //       setId(doc.id);
+  //   });
+  //   console.log("Current cities in CA: ", cities);
+  //   setUser(cities);
+  //   setId(docId);
+  // });
 
   useEffect(() => {
     const getUserprofile = async () => {
@@ -58,7 +71,7 @@ const UserProfile = ({ route, navigation }) => {
     // return () => clearInterval(intervalId);
 
 
-  }, []);
+  }, [userProfile]);
 
 
   //end fetching from jobLists
@@ -73,6 +86,7 @@ const UserProfile = ({ route, navigation }) => {
   const handleEditProfile = () => {
     // console.log("idddddddd ", id);
     // Navigate to the EditProfile screen
+    console.log(id)
     navigation.navigate('EditProfile', { userProfile, userIds: id });
 
   };
@@ -244,7 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
     padding: 16,
-    marginTop: "5%",
+    // marginTop: "5%",
 
   },
 

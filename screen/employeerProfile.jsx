@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
     padding: 16,
-    marginTop: "5%",
+    // marginTop: "5%",
   },
 
   jobItem: {

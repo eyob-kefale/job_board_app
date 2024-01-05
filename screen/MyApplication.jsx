@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import materialTheme from '../constants/Theme'
 import { firebase } from 'firebase/app'; // Make sure to import 'firebase/app' to get the 'firebase' namespace
 
-import { FieldPath } from 'firebase/firestore';
+import { FieldPath,onSnapshot } from 'firebase/firestore';
 import { collection, getDocs, query, where, arrayContains, getDoc, doc } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useUser } from '../common/context/UserContext';
@@ -97,38 +97,40 @@ const handleEmployerProfile=(id)=>{
 
   useEffect(() => {
     const fetchData = async () => {
-      // console.log(userDocId)
-      // Assuming you have the user document with the 'apply' field containing job IDs
+     
       const userRef = doc(db, 'user', userDocId);
-
-      // Fetch the user document
-      const userDocSnapshot = await getDoc(userRef);
-      const userData = userDocSnapshot.data();
-
-       console.log("userData aa", userData);
-      // Fetch jobs based on the 'apply' field in the user document
-      if(userData.apply){
-        const appliedJobsData = await fetchAppliedJobs(userData.apply);
-        // console.log("appliedJobsData ", appliedJobsData);
-        // Now, 'appliedJobsData' contains an array of jobs that the user has applied to
-        setAppliedJobs(appliedJobsData);
-
-      }
-
-    };
-
-    fetchData();
-    // const intervalId = setInterval(() => {
-    // }, 1000);
   
-    // // Cleanup the interval when the component unmounts
-    // return () => clearInterval(intervalId);
-
     
+      const unsubscribe = onSnapshot(userRef, async (userDocSnapshot) => {
+        const userData = userDocSnapshot.data();
+  
+        console.log("userData aa", userData.apply);
+     
+        if (userData.apply) {
+          try {
+            const appliedJobsData = await fetchAppliedJobs(userData.apply);
+            // Now, 'appliedJobsData' contains an array of jobs that the user has applied to
+            setAppliedJobs(appliedJobsData);
+            console.log("appliedJobsData ", appliedJobsData);
+          } catch (error) {
+            console.error("Error fetching applied jobs: ", error);
+          }
+        }
+      });
+  
+    
+      return () => unsubscribe();
+    };
+  
+   
+    fetchData();
+  
+   
+  
   }, [userDocId]);
-  // Now, 'appliedJobs' contains an array of jobs that the user has applied to
-  // console.log('Applied Jobs:', appliedJobs);
-  // console.log(appliedJobs, "gghhhhhhhhhhhhhhhh");
+  
+  
+  
 
 
   const renderApplicationItem = ({ item, index }) => (
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    marginTop: "5%",
+    // marginTop: "5%",
   },
   jobContainer: {
     flexDirection: 'row',

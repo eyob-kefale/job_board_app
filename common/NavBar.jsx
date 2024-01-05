@@ -50,10 +50,13 @@ const auth = getAuth().currentUser;
     console.log("uIduIduId ",uId)
     console.log("uEmailuEmail ",uEmail)
     console.log("uRoleuRole ",uRole)
+    console.log("RoleRole ",role)
+if(!role){
+  updateUser(uEmail);
+  updateDocId(uId);
+  updateRole(uRole);
 
-    updateUser(uEmail);
-    updateDocId(uId);
-    updateRole(uRole);
+}
   }
   usId();
  },[])

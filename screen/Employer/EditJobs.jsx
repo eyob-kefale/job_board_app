@@ -636,7 +636,7 @@ const EditJobs = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: "5%",
+    // marginTop: "5%",
     backgroundColor: '#fff',
     flex: 1,
     padding: 16,

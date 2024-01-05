@@ -85,7 +85,10 @@ const EditProfile = ({ route, navigation }) => {
         console.log('Got the download URL:', url);
       }
 
-
+      if (!userIds || userIds.length === 0) {
+        console.error('Invalid document ID');
+        return;
+      }
 
       // Update the document with the new data and file URL
       const categoriesRef = collection(db, 'user');
@@ -113,6 +116,7 @@ const EditProfile = ({ route, navigation }) => {
       // const newData = { name: category, photo: urlImage, updatedDate: serverTimestamp() };
 
       console.log('Category updated successfully!');
+      
       navigation.navigate('UserProfile', { userProfile: { ...editedUser } });
       // window.location.reload();
       // navigation.goBack();
@@ -288,7 +292,7 @@ const EditProfile = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: "5%",
+    // marginTop: "5%",
     backgroundColor: '#fff',
     flex: 1,
     padding: 16,
