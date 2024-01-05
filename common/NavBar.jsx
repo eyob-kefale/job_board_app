@@ -45,18 +45,19 @@ const auth = getAuth().currentUser;
  useEffect(()=>{
   const usId=async()=>{
     const uId = await AsyncStorage.getItem('uId');
+  
     const uEmail = await AsyncStorage.getItem('uEmail');
     const uRole = await AsyncStorage.getItem('uRole');
-    console.log("uIduIduId ",uId)
-    console.log("uEmailuEmail ",uEmail)
-    console.log("uRoleuRole ",uRole)
-    console.log("RoleRole ",role)
-if(!role){
+       console.log("uIduIduId ",uId)
+      // console.log("uEmailuEmail ",uEmail)
+      // console.log("uRoleuRole ",uRole)
+      // console.log("RoleRole ",role)
+
   updateUser(uEmail);
   updateDocId(uId);
   updateRole(uRole);
 
-}
+
   }
   usId();
  },[])

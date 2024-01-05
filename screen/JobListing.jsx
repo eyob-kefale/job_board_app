@@ -65,13 +65,13 @@ const ListItem = ({ item }) => {
 
 export default () => {
   const navigation = useNavigation();
-  const { role, userEmail } = useUser();
+  const { role, userEmail,apply } = useUser();
   const onShowMorePress = (id) => {
     // console.log("SingleJob ",id)
     navigation.navigate("SingleJob", { id });
 
   };
-
+  // console.log(" roleololol ", role)
   const [showMoreMap, setShowMoreMap] = useState({});
 
   const toggleShowMore = (index) => {
@@ -80,7 +80,7 @@ export default () => {
       [index]: !prevShowMoreMap[index],
     }));
   };
-
+console.log("applyapply ",apply);
   const onApplyPress = async (docId, endDate) => {
     // check if apply before
     const fetchFromApplication = query
@@ -168,6 +168,13 @@ export default () => {
     navigation.navigate("EditJobs", { posts, docId });
 
   };
+ const [expired,setexpired]=useState();
+ const today = new Date()
+
+      const today2 = today.toLocaleDateString();
+      const todayArray = today2.split('/');
+      const reverseTodayArray = todayArray.reverse();
+      const reversedToday = reverseTodayArray.join('/');
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -186,14 +193,29 @@ export default () => {
       <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
         <Text style={styles.title}>{item.title}</Text>
       </TouchableOpacity>
-
+      
       <Text style={styles.description}>
         {showMoreMap[index]
           ? item.description
           : `${item.description.substring(0, 100)}... `}
-        <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More</Text>
+        <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More 
+        </Text>
+    
+       
       </Text>
-
+        
+          {apply.includes(item.id) &&(
+            
+            <Text  style={styles.isApplied}>Applied</Text>
+            )}
+      
+       
+          {(reversedToday>item.endDate) &&(
+            
+            <Text  style={styles.isApplied}>Closed</Text>
+            )}
+       
+      
 
 
 
@@ -219,32 +241,32 @@ export default () => {
 
   );
   return (
-<ScrollView >
-    <View style={styles.allItems}>
-      <View >
-        {/* <Image style={styles.headerBg} source={require("../assets/job.jpeg")}></Image> */}
-        <ImageBackground
-          source={require("../assets/job.jpeg")}
-          style={styles.headerBg}
-        >
-          <View style={styles.Search}>
+    <ScrollView >
+      <View style={styles.allItems}>
+        <View >
+          {/* <Image style={styles.headerBg} source={require("../assets/job.jpeg")}></Image> */}
+          <ImageBackground
+            source={require("../assets/job.jpeg")}
+            style={styles.headerBg}
+          >
+            <View style={styles.Search}>
 
-            <Search
-              searchTerm={jobDetails}
-              placeholder="Search Jobs"
-              handleSearch={handleSearch}
+              <Search
+                searchTerm={jobDetails}
+                placeholder="Search Jobs"
+                handleSearch={handleSearch}
 
-            />
+              />
+            </View>
+          </ImageBackground>
+          <View style={styles.discoverCont}>
+            <Text style={styles.discover}>
+              Discover Amazing jobs for you!
+            </Text>
           </View>
-        </ImageBackground>
-        <View style={styles.discoverCont}>
-          <Text style={styles.discover}>
-            Discover Amazing jobs for you!
-          </Text>
         </View>
-      </View>
 
-      
+
 
         <View style={styles.container}>
           <SafeAreaView>
@@ -281,8 +303,8 @@ export default () => {
             numColumns={1}
           />
         </View>
-    </View>
-      </ScrollView>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -384,25 +406,30 @@ const SECTIONS = [
 ];
 
 const styles = StyleSheet.create({
-  Search: {
-   width:"80%",
-   marginBottom:"-35%",
-  //  marginLeft:"-15%"
+  isApplied:{
+    fontWeight: "300",
+    color:materialTheme.COLORS.BUTTON_COLOR,
   },
-  discoverCont:{
+
+  Search: {
+    width: "80%",
+    marginBottom: "-35%",
+    //  marginLeft:"-15%"
+  },
+  discoverCont: {
     marginHorizontal: 7,
   },
-  discover:{
+  discover: {
     color: materialTheme.COLORS.BUTTON_COLOR,
     //  marginHorizontal:"10%",
     fontSize: 30,
     fontFamily: "serif",
-   
+
     fontWeight: "bold",
     width: '100%'
   },
   headerBg: {
-    
+
     width: "100%",
     height: 250, // Set the height as per your requirement
     resizeMode: "cover", // or "contain" based on your preference
@@ -528,7 +555,7 @@ const styles = StyleSheet.create({
   },
   seeMore: {
     color: materialTheme.COLORS.BUTTON_COLOR,
-
+    paddingRight:3,
     fontWeight: "300",
     // fontFamily:"san-serif"
 

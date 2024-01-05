@@ -12,8 +12,8 @@ const { height, width } = Dimensions.get('screen');
 const HomeScreen = () => {
 const handleLogIn=async()=>{
   const value = await AsyncStorage.getItem('isLoggedIn');
-  const uId = await AsyncStorage.getItem('uId');
-  console.log("uIduIduId ",uId)
+  // const uId = await AsyncStorage.getItem('uId');
+  // console.log("uIduIduId ",uId)
  if(value){
   const auth = getAuth().currentUser;
 //  console.log("authauthh ",auth.email);

@@ -326,16 +326,16 @@ const ApplyPage = ({ route }) => {
   const { userEmail, userDocId } = useUser();
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const requestPermissions = async () => {
-      const { status } = await DocumentPicker.requestPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('DocumentPicker permissions not granted');
-      }
-    };
+  // useEffect(() => {
+  //   const requestPermissions = async () => {
+  //     const { status } = await DocumentPicker.requestPermissionsAsync();
+  //     if (status !== 'granted') {
+  //       console.log('DocumentPicker permissions not granted');
+  //     }
+  //   };
 
-    requestPermissions();
-  }, []);
+  //   requestPermissions();
+  // }, []);
 
 
   const pickDocument = async () => {
@@ -352,7 +352,7 @@ const ApplyPage = ({ route }) => {
       setFileUri(uri);
       setDocUri(uri);
 
-      upload(blob, file);
+      upload(blob);
       // console.log('Selected blob:', blob);
       // console.log('Selected response:', response);
     } catch (error) {
@@ -361,7 +361,7 @@ const ApplyPage = ({ route }) => {
   };
 
 
-  const upload = (result, file) => {
+  const upload = (file) => {
     const name = file._data.name;
     const storageRef = ref(storage, `allFiles/${name}`);
 

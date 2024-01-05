@@ -5,10 +5,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // import {MaterialIcons} from 'react-native-vector-icons/MaterialIcons';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUser } from '../common/context/UserContext';
 const Setting = ({ navigation }) => {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
-
+  const {role, updateUser, updateDocId, updateRole } = useUser();
   const toggleNotifications = () => {
     setNotificationsEnabled(!notificationsEnabled);
   };
@@ -17,13 +18,17 @@ const Setting = ({ navigation }) => {
     setDarkModeEnabled(!darkModeEnabled);
   };
 
-  const handleLogout = async() => {
-    await AsyncStorage.setItem('isLoggedIn', "");
+  const handleLogout = async () => {
+    await AsyncStorage.setItem('isLoggedIn', '');
+    updateUser(null);
+    updateDocId(null);
+    updateRole(null);
+    console.log("logOut role ",role);
     navigation.navigate('LogIn');
   };
-const handleAboutUs=()=>{
-  navigation.navigate('AboutUs');
-}
+  const handleAboutUs = () => {
+    navigation.navigate('AboutUs');
+  }
   const navigateToProfile = () => {
     // Navigate to the profile page
     navigation.navigate('UserProfile');
@@ -89,17 +94,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: '#ccc',
   },
-  profileItem:{
+  profileItem: {
     flexDirection: 'row',
     // justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 30,
-    marginVertical:10,
+    marginVertical: 10,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#ccc',
-    paddingHorizontal:15,
-    height:"8%",
+    paddingHorizontal: 15,
+    height: "8%",
 
     elevation: 3,
     // Add the following properties for shadow on iOS
@@ -118,12 +123,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 30,
-    marginVertical:10,
+    marginVertical: 10,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#ccc',
-    paddingHorizontal:15,
-    height:"8%",
+    paddingHorizontal: 15,
+    height: "8%",
     elevation: 3,
     // Add the following properties for shadow on iOS
     shadowColor: '#000',
@@ -132,7 +137,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
 
-  aboutUs:{
+  aboutUs: {
     marginLeft: 10,
     fontSize: 18,
     color: '#C21292',

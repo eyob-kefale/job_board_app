@@ -15,9 +15,10 @@ const LogIn = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading,setLoading]=useState(false);
-  const {updateUser,updateDocId,updateRole}=useUser();
+  const {role,updateUser,updateDocId,updateRole,updateApply}=useUser();
  
   const auth=FIREBASE_AUTH;
+  console.log("logOut role ",role);
   // jobdetails
   const jobDetails = [
     {
@@ -110,8 +111,11 @@ const handleLogIn = async () => {
     updateDocId(userData.map(user =>
       console.log("user.id",user.id),
       user.id));
-    console.log("uid ",userData[0].role);
+      console.log("uid ",userData[0].role);
+      // updateDocId(userData[0].id);
     updateRole(userData[0].role);
+    console.log("userData[0].apply ",userData[0])
+    updateApply(userData[0].apply);
     // console.log("role for role ",userData[0].role);
     // Navigate to "NavBar"
     const token=await response.user.getIdToken();
@@ -121,6 +125,8 @@ const handleLogIn = async () => {
       console.log("userData[0].id ",userData[0].id);
 
     await AsyncStorage.setItem('uId', userData[0].id);
+    console.log("asyn ",userData[0].id)
+    updateDocId(userData[0].id);
     await AsyncStorage.setItem('uRole', userData[0].role);
     await AsyncStorage.setItem('uEmail',email);
     await AsyncStorage.setItem('isLoggedIn', token);
