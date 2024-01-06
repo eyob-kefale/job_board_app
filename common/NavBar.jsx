@@ -7,7 +7,7 @@ import Setting from '../screen/Setting';
 import Register from '../screen/Register';
 import CreateJobListing from '../screen/Employer/CreateJobListing'
 import MyApplication from '../screen/MyApplication';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/Feather';
 import { NavigationContainer, } from '@react-navigation/native';
 // import EmployeerProfile from '../screen/employeerProfile';
@@ -20,6 +20,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 
+import * as Notifications from 'expo-notifications';
+import { useNavigation } from '@react-navigation/native';
 // userProfile
 
 const user = {
@@ -35,47 +37,84 @@ const user = {
 
 
 
-
 const NavBar = () => {
   const { role } = useUser();
-  const {updateUser,updateDocId,updateRole}=useUser();
+  const { updateUser, updateDocId, updateRole, updateApply, updateNotification } = useUser();
+  const navigation = useNavigation();
 
-const auth = getAuth().currentUser;
-//  console.log("authauth ",auth.email);
- useEffect(()=>{
-  const usId=async()=>{
-    const uId = await AsyncStorage.getItem('uId');
-  
-    const uEmail = await AsyncStorage.getItem('uEmail');
-    const uRole = await AsyncStorage.getItem('uRole');
-       console.log("uIduIduId ",uId)
+  const auth = getAuth().currentUser;
+  //  console.log("authauth ",auth.email);
+  useEffect(() => {
+    const usId = async () => {
+      const uId = await AsyncStorage.getItem('uId');
+
+      const uEmail = await AsyncStorage.getItem('uEmail');
+      const uRole = await AsyncStorage.getItem('uRole');
+      // const uApply = await AsyncStorage.getItem('uApply');
+
+      const jsonValue = await AsyncStorage.getItem('uApply');
+      const uApply = jsonValue != null ? JSON.parse(jsonValue) : null;
+
+      const notificationToken = await AsyncStorage.getItem('notificationToken');
+      console.log("uApply ", uApply)
       // console.log("uEmailuEmail ",uEmail)
       // console.log("uRoleuRole ",uRole)
       // console.log("RoleRole ",role)
 
-  updateUser(uEmail);
-  updateDocId(uId);
-  updateRole(uRole);
+      updateUser(uEmail);
+      updateDocId(uId);
+      updateRole(uRole);
+      updateApply(uApply);
+      updateNotification(notificationToken)
+    }
+    usId();
+  }, [])
 
 
-  }
-  usId();
- },[])
 
-// // context
-// updateUser(email);
-// updateDocId(userData.map(user =>
-//   console.log("user.id",user.id),
-//   user.id));
-// console.log("uid ",userData[0].role);
-// updateRole(userData[0].role);
+
+  // Add a listener for incoming notifications
+  // useEffect(() => {
+  //   const subscription = Notifications.addNotificationReceivedListener((notification) => {
+  //     // Handle the incoming notification
+  //     console.log('Notification received:', notification);
+  //     // Update UI or navigate to relevant screen based on notification data
+  //   });
+
+  //   return () => {
+  //     subscription.remove(); // Remove the listener when the component unmounts
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener((notification) => {
+      console.log('Notification received:', notification);
+      
+      // Check notification data and navigate to the relevant screen
+      if (notification.data && notification.data.targetScreen) {
+        navigation.navigate(notification.data.targetScreen);
+      }
+    });
+  
+    return () => {
+      subscription.remove();
+    };
+  }, [navigation]);
+  
+  // // context
+  // updateUser(email);
+  // updateDocId(userData.map(user =>
+  //   console.log("user.id",user.id),
+  //   user.id));
+  // console.log("uid ",userData[0].role);
+  // updateRole(userData[0].role);
 
   // console.log("roleeee ",role);
   return (
     //  <NavigationContainer>
 
     <Tab.Navigator
-    initialRouteName="Job Listing"
+      initialRouteName="Job Listing"
       tabBarOptions={{
         labelStyle: { paddingBottom: 10, fontSize: 10 },
         style: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 90, backgroundColor: '#000' },

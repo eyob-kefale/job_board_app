@@ -17,7 +17,7 @@ const MyApplication = () => {
   const [employerId,setEmployerId]=useState();
   // const [jobs, setJobs] = useState();
   // Example data for job applications
-  console.log("qwert ",userDocId)
+  // console.log("qwert ",userDocId)
   const jobApplications = [
     {
       jobId: 1,
@@ -97,37 +97,26 @@ const handleEmployerProfile=(id)=>{
 
   useEffect(() => {
     const fetchData = async () => {
-     
       const userRef = doc(db, 'user', userDocId);
-  
-    
-      const unsubscribe = onSnapshot(userRef, async (userDocSnapshot) => {
+      try {
+        const userDocSnapshot = await getDoc(userRef);
         const userData = userDocSnapshot.data();
   
-        console.log("userData aa", userData.apply);
-     
         if (userData.apply) {
-          try {
-            const appliedJobsData = await fetchAppliedJobs(userData.apply);
-            // Now, 'appliedJobsData' contains an array of jobs that the user has applied to
-            setAppliedJobs(appliedJobsData);
-            console.log("appliedJobsData ", appliedJobsData);
-          } catch (error) {
-            console.error("Error fetching applied jobs: ", error);
-          }
+          const appliedJobsData = await fetchAppliedJobs(userData.apply);
+          setAppliedJobs(appliedJobsData);
         }
-      });
-  
-    
-      return () => unsubscribe();
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
+      }
     };
   
-   
     fetchData();
   
-   
+    // Ensure to clean up any subscriptions or side effects if necessary
   
-  }, [userDocId]);
+  }, [userDocId, setAppliedJobs]);
+  
   
   
   

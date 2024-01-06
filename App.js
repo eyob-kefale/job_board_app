@@ -31,6 +31,7 @@ import MyEmployeeProfile from './screen/Employer/MyEmployeeProfile';
 import ViewEmployeeApplication from './screen/Employer/ViewEmployeeApplication';
 import AboutUs from './screen/aboutUs';
 
+import * as Notifications from 'expo-notifications';
 // const querySnapshot = await getDocs(collection(db, "user"));
 // querySnapshot.forEach((doc) => {
 //   console.log(`${doc.id} => ${doc.data()}`);
@@ -113,6 +114,14 @@ const user = {
 
 const App = () => {
   // const [user,setUser]=useState<User|null>(null);
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
   return (
 
 

@@ -311,6 +311,7 @@ import { useUser } from '../common/context/UserContext';
 import { uploadBytes, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import * as DocumentPicker from 'expo-document-picker';
 import { serverTimestamp } from 'firebase/firestore';
+import { AntDesign } from '@expo/vector-icons';
 
 const ApplyPage = ({ route }) => {
   const [firstName, setFirstName] = useState('');
@@ -325,7 +326,8 @@ const ApplyPage = ({ route }) => {
   const { docId } = route.params;
   const { userEmail, userDocId } = useUser();
   const navigation = useNavigation();
-
+ const [loading,setLoading]=useState(false);
+ const [success,setSuccess]=useState(false);
   // useEffect(() => {
   //   const requestPermissions = async () => {
   //     const { status } = await DocumentPicker.requestPermissionsAsync();
@@ -343,6 +345,7 @@ const ApplyPage = ({ route }) => {
       let result = await DocumentPicker.getDocumentAsync({
         type: '*/*',
       });
+      // setLoading(true);
       // console.log('Selected file index: ',result.assets[0].uri);
       const uri = result.assets[0].uri;
       const response = await fetch(uri);
@@ -360,7 +363,13 @@ const ApplyPage = ({ route }) => {
     }
   };
 
+  // useEffect(()=>{
+  //   const pro=()=>{
+      
+  //   }
+  // },[success,loading]
 
+  // )
   const upload = (file) => {
     const name = file._data.name;
     const storageRef = ref(storage, `allFiles/${name}`);
@@ -373,16 +382,28 @@ const ApplyPage = ({ route }) => {
 
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
-        if(progress==100){
-          alert("document upload success")
+        if (progress == 100) {
+          setSuccess(true);
+          setLoading(false);
+          console.log("successs",loading);
+          alert("document upload successed")
         }
         switch (snapshot.state) {
           case 'paused':
             console.log('Upload is paused');
             break;
           case 'running':
+            setSuccess(false);
+            setLoading(true)
             console.log('Upload is running');
-            break;
+             break;
+          case 'success':
+            setSuccess(true);
+            setLoading(false);
+            // console.log("successs", loading);
+            // alert("document upload success");
+            break;  
+          
         }
       },
       (error) => {
@@ -427,7 +448,7 @@ const ApplyPage = ({ route }) => {
       const getJobDocRef = doc(jobRef, docId);
       const docJobSnapshot = await getDoc(getJobDocRef);
       const jobData = docJobSnapshot.data();
-     
+
 
       const categoriesRef = collection(db, 'application');
       const newJobLists = {
@@ -442,16 +463,16 @@ const ApplyPage = ({ route }) => {
         createdDate: serverTimestamp(),
       };
 
-      
-// update user
+
+      // update user
       const updatedApply = [...userData.apply, docId];
       const updatedUserData = {
         apply: updatedApply,
         updatedDate: serverTimestamp(),
       };
 
-      console.log(userEmail,"job update ",jobData.applicants)
-      console.log(docId,"user update ",userData.apply)
+      console.log(userEmail, "job update ", jobData.applicants)
+      console.log(docId, "user update ", userData.apply)
       // update jobLists
       const updatedJobApply = [...jobData.applicants, userEmail];
       const updatedJobData = {
@@ -465,7 +486,7 @@ const ApplyPage = ({ route }) => {
       setDoc(doc(categoriesRef), newJobLists);
       //end update jobPosts applicant field
 
-
+    console.log("rtryf",loading);
 
       console.log('Application submitted successfully!');
       navigation.navigate("MyApplication");
@@ -516,6 +537,12 @@ const ApplyPage = ({ route }) => {
           />
           <TouchableOpacity style={styles.filePickerButton} onPress={pickDocument}>
             <Text style={styles.filePickerButtonText}>Pick Document</Text>
+           {(loading&& !success)&&(
+             <AntDesign name='loading1' color='blue' size={24} />
+           )}
+           {(success && !loading)&&(
+             <AntDesign name='checkcircleo' color='green' size={24} />
+           )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.submitButton} onPress={handleSaveChanges}>
             <Text style={styles.submitButtonText}>Submit Application</Text>
@@ -586,6 +613,7 @@ const styles = StyleSheet.create({
     color: '#090909',
     fontSize: 16,
     fontWeight: 'bold',
+    paddingRight: 19
   },
 });
 

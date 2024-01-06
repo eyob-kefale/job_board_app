@@ -14,12 +14,13 @@ import { } from 'react-native';
 import Textarea from 'react-native-textarea/src/Textarea';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import materialTheme from '../../constants/Theme'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from '../../FireBaseConfig';
 import { useUser } from '../../common/context/UserContext';
 import { serverTimestamp } from 'firebase/firestore';
+import * as Notifications from 'expo-notifications';
 // import DatePicker from "expo-datepicker";
 import { Entypo } from "@expo/vector-icons";
 
@@ -28,7 +29,7 @@ import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 
 const CreateJobListing = ({ route, navigation }) => {
-  const { userEmail } = useUser();
+  const { userEmail, notification, role, userDocId } = useUser();
   const [endDate, setEndDate] = useState(new Date().toString());
   const [startDate, setStartDate] = useState(new Date().toString());
   // console.log("create job   "+userEmail);
@@ -104,6 +105,39 @@ const CreateJobListing = ({ route, navigation }) => {
     }
   };
 
+  
+  const sendNotification = async () => {
+    try {
+      // Retrieve all users with the role "employee"
+      const employeeUsersRef =query( collection(db, 'user'),where('role', '==', 'employee'));
+      const employeeUsersSnapshot = await getDocs(employeeUsersRef);
+  
+      // Iterate through employee users and send notifications
+      employeeUsersSnapshot.forEach(async (userDoc) => {
+        console.log("userDoc.data(); ",userDoc.data());
+        const { deviceToken } = userDoc.data();
+  
+        try {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              to: deviceToken,
+              title: "New Job Posted! 📬",
+              body: 'Check out the latest job opportunity.',
+              data: {
+                // Add any additional data you want to send
+              },
+              sound: "default",
+            },
+            trigger: { seconds: 2 },
+          });
+        } catch (error) {
+          console.error("Error scheduling notification:", error);
+        }
+      });
+    } catch (error) {
+      console.error("Error sending notifications to employees:", error);
+    }
+  };
   // insert in to jobLists begin
   const handleSaveChanges = async (event) => {
     event.preventDefault();
@@ -159,12 +193,18 @@ const CreateJobListing = ({ route, navigation }) => {
 
 
       console.log('Jobs added successfully!');
+      // Send notification before navigation
+       sendNotification();
+
+
       navigation.navigate("MyJobs");
     } catch (error) {
       console.error('Error adding Jobs: ', error);
     }
   };
 
+
+ 
   // console.log(startDate);
   //insert into jobLists end
 
@@ -273,7 +313,7 @@ const CreateJobListing = ({ route, navigation }) => {
 
 
 
-{/* end */}
+          {/* end */}
           <View style={{ width: "100%", paddingHorizontal: 22, marginTop: 64 }}>
             <View>
               <Text style={{ fontSize: 18 }}>Select End Date</Text>

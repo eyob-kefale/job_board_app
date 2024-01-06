@@ -1,141 +1,156 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Dimensions, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Search from '../../common/Search';
+// // import React from 'react';
+// // import { View, Text, Button } from 'react-native';
+// // import messaging, { firebase } from '@react-native-firebase/messaging';
+// // import { useUser } from '../../common/context/UserContext';
 
-const { width, height } = Dimensions.get('window');
-const avatarSizeRatio = 0.15; // You can adjust the fraction as needed
+// import { TouchableOpacity } from "react-native";
 
-const notifications = [
-  {
-    id: '1',
-    avatar: 'https://placekitten.com/50/50',
-    title: 'Notification 1',
-    description: 'This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.This is the first notification description.',
-  },
-  {
-    id: '2',
-    avatar: 'https://placekitten.com/50/51',
-    title: 'Notification 2',
-    description: 'This is the second notification description.',
-  },
-  {
-    id: '3',
-    avatar: 'https://placekitten.com/50/50',
-    title: 'Notification 3',
-    description: 'This is the third notification description.',
-  },
-  {
-    id: '4',
-    avatar: 'https://placekitten.com/50/51',
-    title: 'Notification 4',
-    description: 'This is the fourth notification description.',
-  },
-  {
-    id: '5',
-    avatar: 'https://placekitten.com/50/50',
-    title: 'Notification 5',
-    description: 'This is the fifth notification description.',
-  },
-  {
-    id: '6',
-    avatar: 'https://placekitten.com/50/51',
-    title: 'Notification 6',
-    description: 'This is the sixth notification description.',
-  },
-];
+// // const Notification = () => {
+// //   const notificationToken = useUser(); // Replace with the user's notification token
+// //   console.log("notificationtoken ",notificationToken.notification)
+// //   const handleSendNotification = async () => {
+// //     if (notificationToken.notification) {
+// //       try {
+// //         const response = await messaging().sendToDevice(notificationToken.notification, {
+// //           notification: {
+// //             title: "You've got mail! 📬",
+// //             body: "Hey, you've received a new notification!",
+// //           },
+// //         });
 
-const dynamicStyles = {
-  avatarSize: width * avatarSizeRatio,
-  notificationItemMarginBottom: height * 0.02,
-  notificationItemPadding: width * 0.04,
-  borderRadius: width * 0.02,
-  titleFontSize: width * 0.05,
-  descriptionFontSize: width * 0.035,
-};
+// //         console.log('Notification sent:', response);
+// //       } catch (error) {
+// //         console.error('Error sending notification:', error);
+// //       }
+// //     }
+// //   };
+
+// //   return (
+// //     <View>
+// //       <Text>Notification Component</Text>
+// //       <Button title="Send Notification" onPress={handleSendNotification} />
+// //     </View>
+// //   );
+// // };
+
+// // export default Notification;
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import * as Device from 'expo-device';
+// import * as Notifications from 'expo-notifications';
+// import {  Platform } from 'react-native';
+// import { Text } from "react-native-elements";
+// import { useEffect } from "react";
+// import { useUser } from "../../common/context/UserContext";
+// const Notification=()=>{
+// const {notification}=useUser();
+//   async function schedulePushNotification() {
+  
+//       await Notifications.scheduleNotificationAsync({
+//         content: {
+//           to:notification,
+//           title: "You've got mail! 📬",
+//           body: 'Here is the notification body',
+//           data: { data: 'goes here' },
+//           sound: "default",
+//         },
+//         trigger: { seconds: 2 },
+//       });
+
+ 
+//   }
+//   return(
+//     <TouchableOpacity onPress={async()=>await schedulePushNotification()}><Text>
+//     click  </Text></TouchableOpacity>
+//   )
+// }
+
+// export default Notification;
 
 
+// // exports.sendNotification = async (req, res) => {
+// //   console.log(req.params.id);
+// //   console.log(req.body);
+// //   const currentUser = await User.findById(req.params.id);
+// //   const { msg } = req.body;
+// //   console.log(currentUser);
+// //   const pushToken = currentUser.pushToken;
+// //   const expo = new Expo();
+// //   if (pushToken) {
+// //     const chunks = expo.chunkPushNotifications([
+// //       {
+// //         to: pushToken,
+// //         title: "You've got mail! 📬",
+// //         sound: "default",
+// //         body: msg,
+// //       },
+// //     ]);
+
+// //     const sendChunks = async () => {
+// //       chunks.forEach(async (chunk) => {
+// //         try {
+// //           const tickets = await expo.sendPushNotificationsAsync(chunk);
+// //         } catch (error) {
+// //           console.log("Error sending chunk", error);
+// //         }
+// //       });
+// //     };
+
+// //     await sendChunks();
+// //     res.status(201).json({
+// //       status: "success",
+// //       data: {
+// //         msg: "success",
+// //       },
+// //     });
+// //   }
+// // };
+
+
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { Text } from "react-native-elements";
+import { useEffect } from "react";
+import { useUser } from "../../common/context/UserContext";
 
 const Notification = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  
-    const handleSearch = (text) => {
-      setSearchTerm(text);
-    };
-  
-    const filteredInfo = notifications.filter(info => info.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  const { notification, role,userDocId } = useUser();
 
-    const navigation = useNavigation();
+  useEffect(() => {
+    // Check if the user is logged in and has a specific role (modify this condition accordingly)
+    if (role === 'employer' && notification) {
+      sendNotification();
+    }
+    // if (role === 'employee' && notification) {
+    //   sendNotification();
+    // }
+  }, [role, notification,userDocId]);
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={[styles.notificationItem, { marginBottom: dynamicStyles.notificationItemMarginBottom, padding: dynamicStyles.notificationItemPadding }]}
-      onPress={() => navigation.navigate('SingleNotification',{notifications,item})}
-    >
-      <Image source={{ uri: item.avatar }} style={[styles.avatar, { width: dynamicStyles.avatarSize, height: dynamicStyles.avatarSize }]} />
-      <View style={styles.notificationContent}>
-        <Text style={[styles.notificationTitle, { fontSize: dynamicStyles.titleFontSize }]}>{item.title}</Text>
-        <Text style={[styles.notificationDescription, { fontSize: dynamicStyles.descriptionFontSize }]}>
-          {item.description=`${item.description.substring(0, 100)}...`}
-          </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const sendNotification = async () => {
+    try {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          to: notification,
+          title: "You've got mail! 📬"+role,
+          body: 'new job',
+          data: {
+            data: 'goes here',
+            icon: '🌟', // Add your desired icon or use emojis
+            date: new Date().toLocaleDateString(), // Add the current date
+          },
+          sound: "default",
+        },
+        trigger: { seconds: 2 },
+      });
+    } catch (error) {
+      console.error("Error scheduling notification:", error);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      
-   <Search 
-   searchTerm={searchTerm} 
-   placeholder="Search Notification here" 
-   handleSearch={handleSearch}
-   />
-
-      <FlatList
-        data={filteredInfo}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-      />
-    </View>
+    <Text>Notification component</Text>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop:"5%",
-    flex: 1,
-    padding: dynamicStyles.notificationItemPadding,
-  //  backgroundColor:"#6DB9EF"
-  },
-  notificationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: dynamicStyles.borderRadius,
-    // borderBottomWidth: 2,
-    // borderBottomColor:"blue"
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  avatar: {
-    borderRadius: dynamicStyles.avatarSize / 2,
-    marginRight: dynamicStyles.notificationItemPadding,
-  },
-  notificationContent: {
-    flex: 1,
-  },
-  notificationTitle: {
-    fontSize: dynamicStyles.titleFontSize,
-    fontWeight: 'bold',
-  },
-  notificationDescription: {
-    fontSize: dynamicStyles.descriptionFontSize,
-  },
-  
-
-});
+}
 
 export default Notification;

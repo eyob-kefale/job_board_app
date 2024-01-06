@@ -65,7 +65,8 @@ const ListItem = ({ item }) => {
 
 export default () => {
   const navigation = useNavigation();
-  const { role, userEmail,apply } = useUser();
+  const { role, userEmail, apply } = useUser();
+  // console.log("apply gsdggh ",apply);
   const onShowMorePress = (id) => {
     // console.log("SingleJob ",id)
     navigation.navigate("SingleJob", { id });
@@ -80,7 +81,7 @@ export default () => {
       [index]: !prevShowMoreMap[index],
     }));
   };
-console.log("applyapply ",apply);
+  // console.log("applyapply ", apply);
   const onApplyPress = async (docId, endDate) => {
     // check if apply before
     const fetchFromApplication = query
@@ -160,7 +161,7 @@ console.log("applyapply ",apply);
 
     // // Cleanup the interval when the component unmounts
     // return () => clearInterval(intervalId);
-  }, []);
+  }, [posts,apply]);
 
 
   const onEditPress = (docId) => {
@@ -168,13 +169,13 @@ console.log("applyapply ",apply);
     navigation.navigate("EditJobs", { posts, docId });
 
   };
- const [expired,setexpired]=useState();
- const today = new Date()
+  const [expired, setexpired] = useState();
+  const today = new Date()
 
-      const today2 = today.toLocaleDateString();
-      const todayArray = today2.split('/');
-      const reverseTodayArray = todayArray.reverse();
-      const reversedToday = reverseTodayArray.join('/');
+  const today2 = today.toLocaleDateString();
+  const todayArray = today2.split('/');
+  const reverseTodayArray = todayArray.reverse();
+  const reversedToday = reverseTodayArray.join('/');
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -193,50 +194,26 @@ console.log("applyapply ",apply);
       <TouchableOpacity onPress={() => onShowMorePress(item.jobId)}>
         <Text style={styles.title}>{item.title}</Text>
       </TouchableOpacity>
-      
+
       <Text style={styles.description}>
         {showMoreMap[index]
           ? item.description
           : `${item.description.substring(0, 100)}... `}
-        <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More 
+        <Text style={styles.seeMore} onPress={() => onShowMorePress(item.jobId)}>See More
         </Text>
-    
-       
+
       </Text>
+
+
+      {(reversedToday > item.endDate) && (
         
-          {apply.includes(item.id) &&(
-            
-            <Text  style={styles.isApplied}>Applied</Text>
-            )}
-      
-       
-          {(reversedToday>item.endDate) &&(
-            
-            <Text  style={styles.isApplied}>Closed</Text>
-            )}
-       
-      
-
-
-
-
-
-
-      {/* {role == "employee" && (
-        <TouchableOpacity
-          onPress={() => onApplyPress(item.id, item.endDate)}
-          style={styles.applyButton}
-        >
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>)} */}
-
-      {/* {(role=="employer") &&(item.employer==userEmail) &&(
-     <TouchableOpacity
-       onPress={() => onEditPress(item.jobId)}
-        style={styles.applyButton}
-      >
-        <Text style={styles.applyButtonText}>Edit</Text>
-      </TouchableOpacity>)} */}
+        <Text style={styles.isApplied}>Closed</Text>
+        )}
+        {(apply && apply.includes(item.id)) && (
+  
+          <Text style={styles.isApplied}>Applied</Text>
+        )}
+        
     </View>
 
   );
@@ -406,9 +383,9 @@ const SECTIONS = [
 ];
 
 const styles = StyleSheet.create({
-  isApplied:{
+  isApplied: {
     fontWeight: "300",
-    color:materialTheme.COLORS.BUTTON_COLOR,
+    color: materialTheme.COLORS.BUTTON_COLOR,
   },
 
   Search: {
@@ -555,7 +532,7 @@ const styles = StyleSheet.create({
   },
   seeMore: {
     color: materialTheme.COLORS.BUTTON_COLOR,
-    paddingRight:3,
+    paddingRight: 3,
     fontWeight: "300",
     // fontFamily:"san-serif"
 

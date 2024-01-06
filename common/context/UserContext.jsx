@@ -7,6 +7,7 @@ const UserProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [userDocId, setUserDocId] = useState(null);
   const [role, setRole] = useState(null);
+  const [notification, setNotification] = useState(null);
   const [apply, setapply] = useState([]);
   const updateUser = (email) => {
     setUserEmail(email);
@@ -20,14 +21,17 @@ const UserProvider = ({ children }) => {
   const updateApply=(id)=>{
     setapply(...apply,id);
   }
+  const updateNotification=(id)=>{
+    setNotification(id);
+  }
     // console.log("emailllllll "+userEmail+" emailllll");
   return (
     <UserContext.Provider value={{ 
       userEmail, updateUser,
       userDocId,updateDocId,
       role,updateRole,
-      apply, updateApply
-      
+      apply, updateApply,
+      notification,updateNotification
       }}>
       {children}
     </UserContext.Provider>

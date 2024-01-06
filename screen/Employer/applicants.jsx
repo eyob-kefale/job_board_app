@@ -11,6 +11,7 @@ import { db } from '../../FireBaseConfig';
 import { useUser } from '../../common/context/UserContext';
 import { useEffect } from 'react';
 import { useState } from 'react';
+
 const Applicants = ({ route }) => {
   const { docId } = route.params;
   const { userEmail, userDocId } = useUser();
@@ -18,8 +19,8 @@ const Applicants = ({ route }) => {
 
 
   const navigation = useNavigation();
-  const handleMyApplication = (email) => {
-    navigation.navigate("ViewEmployeeApplication", { email, docId });
+  const handleMyApplication = (email,aplicansImage) => {
+    navigation.navigate("ViewEmployeeApplication", { email, docId,aplicansImage });
     // navigation.navigate("EmployeerProfile",{id});
   }
   // const handleSeeMore = (docId) => {
@@ -120,7 +121,7 @@ const Applicants = ({ route }) => {
           </Text>
           <TouchableOpacity
             style={styles.seeMoreButton}
-            onPress={() => handleMyApplication(item.email)}>
+            onPress={() => handleMyApplication(item.email,item.profileImage)}>
             <Text style={styles.seeMoreButtonText}>See Applications</Text>
           </TouchableOpacity>
         </View>
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
   },
 
   TitleCont: {
-    marginVertical: "5%",
+    marginVertical: 0,
     // backgroundColor:"#fff",
 
     height: "25%",
