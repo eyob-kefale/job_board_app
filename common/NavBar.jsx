@@ -86,20 +86,20 @@ const NavBar = () => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener((notification) => {
-      console.log('Notification received:', notification);
+  // useEffect(() => {
+  //   const subscription = Notifications.addNotificationReceivedListener((notification) => {
+  //     console.log('Notification received:', notification);
       
-      // Check notification data and navigate to the relevant screen
-      if (notification.data && notification.data.targetScreen) {
-        navigation.navigate(notification.data.targetScreen);
-      }
-    });
+  //     // Check notification data and navigate to the relevant screen
+  //     if (notification.data && notification.data.targetScreen) {
+  //       navigation.navigate(notification.data.targetScreen);
+  //     }
+  //   });
   
-    return () => {
-      subscription.remove();
-    };
-  }, [navigation]);
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, []);
   
   // // context
   // updateUser(email);

@@ -132,7 +132,7 @@ const Notification = () => {
       await Notifications.scheduleNotificationAsync({
         content: {
           to: notification,
-          title: "You've got mail! 📬"+role,
+          title: "//You've got mail! 📬"+role,
           body: 'new job',
           data: {
             data: 'goes here',

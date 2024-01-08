@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     seeMore: {
         color: materialTheme.COLORS.BUTTON_COLOR,
 
-        fontWeight: "350",
+        fontWeight: "400",
         // fontFamily:"san-serif"
 
     }

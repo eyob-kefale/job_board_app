@@ -344,7 +344,7 @@
 // export default EditJobs;
 
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Button, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Button, Image, TouchableOpacity, Modal } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
 import { } from 'react-native';
@@ -358,8 +358,8 @@ import { db } from '../../FireBaseConfig';
 import { doc, getDoc, collection, updateDoc, getDocs, where, query } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { serverTimestamp } from 'firebase/firestore';
-import DatePicker from 'expo-datepicker';
-import { Entypo } from "@expo/vector-icons";
+import DatePicker from "react-native-modern-datepicker";
+import { getFormatedDate } from "react-native-modern-datepicker";
 const EditJobs = ({ route, navigation }) => {
   const { posts, docId } = route.params;
   //  const modifyId = userProfile[0].email;
@@ -373,8 +373,23 @@ const EditJobs = ({ route, navigation }) => {
   const [editedUser, setEditedUser] = useState(posts);
   const [date, setDate] = useState(new Date().toString());
   const [a, setA] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [startedDate, setStartedDate] = useState("12/12/2023");
+  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
+  const today = new Date();
+  const startDates = getFormatedDate(
+    today.setDate(today.getDate() + 1),
+    "YYYY/MM/DD"
+  );
+  function handleChangeStartDate(propDate) {
+    setStartedDate(propDate);
+    console.log("selectedStartDate ", selectedStartDate)
+  }
 
-
+  const handleOnPressStartDate = () => {
+    setOpenStartDatePicker(!openStartDatePicker);
+    console.log("selectedStartDate ", selectedStartDate)
+  };
   // picking image from file
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -456,7 +471,8 @@ const EditJobs = ({ route, navigation }) => {
           skills: editedUser[0]?.skills || '',
           requirements: editedUser[0]?.requirements || '',
           img: profileImages,
-          endDate: date,
+          // startDate: startDate,
+          endDate: selectedStartDate,
           updatedDate: serverTimestamp(),
         };
 
@@ -468,7 +484,7 @@ const EditJobs = ({ route, navigation }) => {
       // console.log('Category updated successfully! ',docRef);
       // navigation.navigate('SingleJob');
       // window.location.reload();
-       navigation.goBack();
+      navigation.goBack();
 
     } catch (error) {
 
@@ -611,14 +627,66 @@ const EditJobs = ({ route, navigation }) => {
               }));
             }}
           />
-          <DatePicker
+          {/* <DatePicker
             date={date}
             onChange={(date) => setDate(date)}
             icon={<Entypo name="chevron-right" size={40} color="#689CA3" />}
             minimumDate={new Date()}  // Set minimum date to today
             maximumDate={new Date(2025, 11, 31)}  // Set maximum date to the end of 2025
-          />
+          /> */}
 
+
+          <View style={{ width: "100%", paddingHorizontal: 22, marginTop: 64 }}>
+            <View>
+              <Text style={{ fontSize: 18 }}>Select End Date</Text>
+              <TouchableOpacity
+                style={styles.inputBtn}
+                onPress={handleOnPressStartDate}
+              >
+                <Text>{selectedStartDate}</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* <TouchableOpacity
+              onPress={() => console.log("Subimit data")}
+              style={styles.submitBtn}
+            >
+              <Text style={{ fontSize: 20, color: "white" }}>Submit</Text>
+            </TouchableOpacity> */}
+          </View>
+
+          {/* Create modal for date picker */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={openStartDatePicker}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <DatePicker
+                  mode="calendar"
+                  minimumDate={startDates}
+                  selected={startedDate}
+                  onDateChanged={handleChangeStartDate}
+                  onSelectedChange={(date) => setSelectedStartDate(date)}
+                  options={{
+                    backgroundColor: "#080516",
+                    textHeaderColor: "#469ab6",
+                    textDefaultColor: "#FFFFFF",
+                    selectedTextColor: "#FFF",
+                    mainColor: "#469ab6",
+                    textSecondaryColor: "#FFFFFF",
+                    borderColor: "rgba(122, 146, 165, 0.1)",
+                  }}
+                />
+
+                <TouchableOpacity onPress={handleOnPressStartDate}>
+                  <Text style={{ color: "white" }}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          {/* add from src */}
 
 
           <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
@@ -659,6 +727,17 @@ const styles = StyleSheet.create({
     padding: 8,
     // marginBottom: 16,
   },
+  inputBtn: {
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: "#222",
+    height: 50,
+    paddingLeft: 8,
+    fontSize: 18,
+    justifyContent: "center",
+    marginTop: 14,
+  },
+  
   textareaContainer: {
     height: 70,
     padding: 5,
@@ -667,8 +746,29 @@ const styles = StyleSheet.create({
   textareaAboutContainer: {
     height: 150,
     padding: 5,
-  }
-  ,
+  },
+  centeredView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "#080516",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    padding: 35,
+    width: "90%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
   saveButton: {
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     padding: 12,

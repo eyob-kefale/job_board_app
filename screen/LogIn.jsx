@@ -143,54 +143,54 @@ const handleLogIn = async () => {
     
 
 
-// notification
-async function registerForPushNotificationsAsync() {
-  let token;
+// // notification
+// async function registerForPushNotificationsAsync() {
+//   let token;
 
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
+//   if (Platform.OS === 'android') {
+//     await Notifications.setNotificationChannelAsync('default', {
+//       name: 'default',
+//       importance: Notifications.AndroidImportance.MAX,
+//       vibrationPattern: [0, 250, 250, 250],
+//       lightColor: '#FF231F7C',
+//     });
+//   }
 
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-    token = (await Notifications.getExpoPushTokenAsync({ projectId: 'b1134ed4-c689-49dc-aadf-2e22206366f8' })).data;
-    console.log(token);
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
+//   if (Device.isDevice) {
+//     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+//     let finalStatus = existingStatus;
+//     if (existingStatus !== 'granted') {
+//       const { status } = await Notifications.requestPermissionsAsync();
+//       finalStatus = status;
+//     }
+//     if (finalStatus !== 'granted') {
+//       alert('Failed to get push token for push notification!');
+//       return;
+//     }
+//     // Learn more about projectId:
+//     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+//     token = (await Notifications.getExpoPushTokenAsync({ projectId: 'b1134ed4-c689-49dc-aadf-2e22206366f8' })).data;
+//     console.log(token);
+//   } else {
+//     alert('Must use physical device for Push Notifications');
+//   }
 
-  return token;
-}
+//   return token;
+// }
 
 
 
-const notificationToken =await registerForPushNotificationsAsync()
-console.log("notificationToken",notificationToken);
+// const notificationToken =await registerForPushNotificationsAsync()
+// console.log("notificationToken",notificationToken);
 
-await AsyncStorage.setItem('notificationToken',notificationToken);
-updateNotification(notificationToken);
-console.log(userData[0].id);
+// await AsyncStorage.setItem('notificationToken',notificationToken);
+// updateNotification(notificationToken);
+// console.log(userData[0].id);
 
-const userDocRef = doc(collection(db, 'user'), userData[0].id);
-await updateDoc(userDocRef, { token:notificationToken });
+// const userDocRef = doc(collection(db, 'user'), userData[0].id);
+// await updateDoc(userDocRef, { token:notificationToken });
 
-    navigation.navigate("NavBar");
+navigation.navigate("NavBar");
   } catch (error) {
     alert("Sign in failed: " + error.message);
   } finally {

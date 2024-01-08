@@ -9,6 +9,9 @@ import { db } from '../FireBaseConfig';
 import { collection, addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
 
 
 // var C = require("crypto-js");
@@ -38,14 +41,62 @@ const Register = ({ navigation }) => {
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       const uid = response.user?.uid; // Access the uid from the user property
+
+
+
+
+      // notification
+      async function registerForPushNotificationsAsync() {
+        let token;
+
+        if (Platform.OS === 'android') {
+          await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+          });
+        }
+
+        if (Device.isDevice) {
+          const { status: existingStatus } = await Notifications.getPermissionsAsync();
+          let finalStatus = existingStatus;
+          if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+          }
+          if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+          }
+          // Learn more about projectId:
+          // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+          token = (await Notifications.getExpoPushTokenAsync({ projectId: 'b1134ed4-c689-49dc-aadf-2e22206366f8' })).data;
+          console.log(token);
+        } else {
+          alert('Must use physical device for Push Notifications');
+        }
+
+        return token;
+      }
+
+
+
+      const notificationToken = await registerForPushNotificationsAsync()
+      console.log("notificationToken", notificationToken);
+
+
+
+
       const data = {
         id: uid,
         firstName,
         lastName,
         email,
         // password,
-        role:"employee",
-        apply:[]
+        role: "employee",
+        token: notificationToken,
+        apply: []
       };
 
       try {
@@ -55,6 +106,39 @@ const Register = ({ navigation }) => {
 
         // The following line will now correctly log the ID of the newly added document
         // console.log("Document written with ID: ", docRef.id);
+
+
+        // await AsyncStorage.setItem('notificationToken',notificationToken);
+        // // updateNotification(notificationToken);
+        // console.log(userData[0].id);
+
+        // const userDocRef = doc(collection(db, 'user'), userData[0].id);
+        // await updateDoc(userDocRef, { token:notificationToken });
+
+
+        // const [userProfile, setUser] = useState([]);
+        // const userCollectionRef = query(collection(db, 'user'), where("email", "==", email));
+
+        // useEffect(() => {
+        //   const getUserProfile = async () => {
+        //     try {
+        //       const querySnapshot = await getDocs(userCollectionRef);
+        //       const userData = querySnapshot.docs.map((doc) => ({
+        //         ...doc.data(),
+        //         user: doc.user,
+        //         id: doc.id,
+        //       }));
+        //       setUser(userData);
+        //     } catch (error) {
+        //       console.error('Error fetching user profile: ', error);
+        //     }
+        //   };
+
+        //   getUserProfile();
+        // }, []);
+
+
+
 
         navigation.navigate("LogIn");
       } catch (e) {
@@ -119,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: materialTheme.COLORS.BUTTON_COLOR,
     width: '100%',
     padding: 15,
-    paddingHorizontal: 127,
+    paddingHorizontal: "30%",
     borderRadius: 5,
     alignItems: 'center',
 

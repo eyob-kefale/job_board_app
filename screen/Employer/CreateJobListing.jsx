@@ -115,24 +115,33 @@ const CreateJobListing = ({ route, navigation }) => {
       // Iterate through employee users and send notifications
       employeeUsersSnapshot.forEach(async (userDoc) => {
         console.log("userDoc.data(); ",userDoc.data());
-        const { deviceToken } = userDoc.data();
-  
+        if(userDoc.data().token){
+          const { token } = userDoc.data();
+
+        
+          console.log("retoken ",token)
+       // console.log("token ",token);
         try {
+          console.log("token ",token);
           await Notifications.scheduleNotificationAsync({
             content: {
-              to: deviceToken,
+              to: token,
               title: "New Job Posted! 📬",
               body: 'Check out the latest job opportunity.',
               data: {
-                // Add any additional data you want to send
+                data: 'goes here',
+                icon: '🌟', // Add your desired icon or use emojis
+                date: new Date().toLocaleDateString(), // Add the current date
               },
               sound: "default",
             },
             trigger: { seconds: 2 },
           });
+         
         } catch (error) {
           console.error("Error scheduling notification:", error);
         }
+      }
       });
     } catch (error) {
       console.error("Error sending notifications to employees:", error);
@@ -194,7 +203,10 @@ const CreateJobListing = ({ route, navigation }) => {
 
       console.log('Jobs added successfully!');
       // Send notification before navigation
-       sendNotification();
+     
+        sendNotification();
+
+    
 
 
       navigation.navigate("MyJobs");
@@ -400,7 +412,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: '#000',
     fontSize: 18,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginLeft: 10
     // marginBottom: 8,
     // marginTop: 13,
