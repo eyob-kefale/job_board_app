@@ -22,6 +22,10 @@ import { useEffect } from 'react';
 
 import * as Notifications from 'expo-notifications';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../FireBaseConfig';
+import { Text, View } from 'react-native';
 // userProfile
 
 const user = {
@@ -70,46 +74,38 @@ const NavBar = () => {
     usId();
   }, [])
 
+  const [post, setPosts] = useState([])
+  useEffect(() => {
+    const fetchNotification = async () => {
+      const fetchNot = collection(db, 'notification');
+      //  console.log(getDocument.data());
+
+      try {
+        const data = await getDocs(fetchNot);
 
 
+        // Check if data.docs is defined before mapping over it
+        if (data.docs && data.docs.length > 0) {
+          const jobIds = data.docs.map((doc) => doc.id);
 
-  // Add a listener for incoming notifications
-  // useEffect(() => {
-  //   const subscription = Notifications.addNotificationReceivedListener((notification) => {
-  //     // Handle the incoming notification
-  //     console.log('Notification received:', notification);
-  //     // Update UI or navigate to relevant screen based on notification data
-  //   });
 
-  //   return () => {
-  //     subscription.remove(); // Remove the listener when the component unmounts
-  //   };
-  // }, []);
+          // Set the posts state with the data and include IDs
+          setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        } else {
+          console.error('No documents found');
+        }
+      } catch (error) {
+        console.error('Error fetching job lists: ', error);
+      }
+    }
+    fetchNotification();
+    // console.log(post);
+  }, [post])
 
-  // useEffect(() => {
-  //   const subscription = Notifications.addNotificationReceivedListener((notification) => {
-  //     console.log('Notification received:', notification);
-      
-  //     // Check notification data and navigate to the relevant screen
-  //     if (notification.data && notification.data.targetScreen) {
-  //       navigation.navigate(notification.data.targetScreen);
-  //     }
-  //   });
+const len=post.length;
+// console.log("len ",len)
+
   
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
-  
-  // // context
-  // updateUser(email);
-  // updateDocId(userData.map(user =>
-  //   console.log("user.id",user.id),
-  //   user.id));
-  // console.log("uid ",userData[0].role);
-  // updateRole(userData[0].role);
-
-  // console.log("roleeee ",role);
   return (
     //  <NavigationContainer>
 
@@ -180,11 +176,19 @@ const NavBar = () => {
       <Tab.Screen
         name="Notification"
         component={Notification}
-
         options={{
           headerShown: false,
           tabBarLabel: 'Notification',
-          tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={24} />,
+          tabBarIcon: ({ color }) => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon name="bell" color={color} size={24} />
+              {len > 0 && (
+                <View style={{ backgroundColor: '#9C26B0', borderRadius: 10, marginBottom: 4, paddingHorizontal:1}}>
+                  <Text style={{ color: 'white', fontSize: 10 }}>{len}</Text>
+                </View>
+              )}
+            </View>
+          ),
         }}
       />
       <Tab.Screen

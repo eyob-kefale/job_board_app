@@ -305,13 +305,14 @@ import { View, StyleSheet, ScrollView, TextInput, TouchableOpacity, Text } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import materialTheme from '../constants/Theme';
 import { useNavigation } from '@react-navigation/native';
-import { collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db, storage } from "../FireBaseConfig";
 import { useUser } from '../common/context/UserContext';
 import { uploadBytes, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import * as DocumentPicker from 'expo-document-picker';
 import { serverTimestamp } from 'firebase/firestore';
 import { AntDesign } from '@expo/vector-icons';
+import * as Notifications from 'expo-notifications';
 
 const ApplyPage = ({ route }) => {
   const [firstName, setFirstName] = useState('');
@@ -338,6 +339,49 @@ const ApplyPage = ({ route }) => {
 
   //   requestPermissions();
   // }, []);
+
+// Push notification
+const sendNotification = async () => {
+  try {
+    // Retrieve all users with the role "employee"
+    const employeeUsersRef =query( collection(db, 'user'),where('role', '==', 'employer'));
+    const employeeUsersSnapshot = await getDocs(employeeUsersRef);
+
+    // Iterate through employee users and send notifications
+    employeeUsersSnapshot.forEach(async (userDoc) => {
+      console.log("userDoc.data(); ",userDoc.data());
+      if(userDoc.data().token){
+        const { token } = userDoc.data();
+
+      
+        console.log("retoken ",token)
+     // console.log("token ",token);
+      try {
+        console.log("token ",token);
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            to: token,
+            title: "appllied! 📬",
+            body: `${userEmail} apply this job`,
+            data: {
+              data: 'goes here',
+              icon: '🌟', // Add your desired icon or use emojis
+              date: new Date().toLocaleDateString(), // Add the current date
+            },
+            sound: "default",
+          },
+          trigger: { seconds: 2 },
+        });
+       
+      } catch (error) {
+        console.error("Error scheduling notification:", error);
+      }
+    }
+    });
+  } catch (error) {
+    console.error("Error sending notifications to employees:", error);
+  }
+};
 
 
   const pickDocument = async () => {
@@ -386,14 +430,14 @@ const ApplyPage = ({ route }) => {
           setSuccess(true);
           setLoading(false);
           console.log("successs",loading);
-          alert("document upload successed")
+          // alert("document upload successed")
         }
         switch (snapshot.state) {
           case 'paused':
             console.log('Upload is paused');
             break;
           case 'running':
-            setSuccess(false);
+            // setSuccess(false);
             setLoading(true)
             console.log('Upload is running');
              break;
@@ -489,6 +533,7 @@ const ApplyPage = ({ route }) => {
     console.log("rtryf",loading);
 
       console.log('Application submitted successfully!');
+      sendNotification();
       navigation.navigate("MyApplication");
 
     } catch (error) {
@@ -537,10 +582,10 @@ const ApplyPage = ({ route }) => {
           />
           <TouchableOpacity style={styles.filePickerButton} onPress={pickDocument}>
             <Text style={styles.filePickerButtonText}>Pick Document</Text>
-           {(loading&& !success)&&(
+           {/* {(loading&& !success)&&(
              <AntDesign name='loading1' color='blue' size={24} />
-           )}
-           {(success && !loading)&&(
+           )} */}
+           {(success )&&(
              <AntDesign name='checkcircleo' color='green' size={24} />
            )}
           </TouchableOpacity>
