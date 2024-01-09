@@ -47,6 +47,7 @@ const NavBar = () => {
   const navigation = useNavigation();
 
   const auth = getAuth().currentUser;
+  console.log("authauth ",auth);
   //  console.log("authauth ",auth.email);
   useEffect(() => {
     const usId = async () => {

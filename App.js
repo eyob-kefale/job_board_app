@@ -32,6 +32,7 @@ import ViewEmployeeApplication from './screen/Employer/ViewEmployeeApplication';
 import AboutUs from './screen/aboutUs';
 
 import * as Notifications from 'expo-notifications';
+import ChangePassword from './common/ChangePassword';
 // const querySnapshot = await getDocs(collection(db, "user"));
 // querySnapshot.forEach((doc) => {
 //   console.log(`${doc.id} => ${doc.data()}`);
@@ -147,6 +148,7 @@ Notifications.setNotificationHandler({
        <Stack.Screen name="MyEmployeeProfile" component={MyEmployeeProfile}/>
        <Stack.Screen name="ViewEmployeeApplication" component={ViewEmployeeApplication}/>
        <Stack.Screen name="AboutUs" component={AboutUs}/>
+       <Stack.Screen name="ChangePassword" component={ChangePassword}/>
      
        
         {/* Add more stack screens if needed */}

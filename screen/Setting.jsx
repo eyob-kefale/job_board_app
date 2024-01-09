@@ -33,7 +33,9 @@ const Setting = ({ navigation }) => {
     // Navigate to the profile page
     navigation.navigate('UserProfile');
   };
-
+  const handleChangePassword = () => {
+    navigation.navigate('ChangePassword');
+  }
   return (
     <View style={styles.container}>
       <View style={styles.settingItem}>
@@ -53,11 +55,16 @@ const Setting = ({ navigation }) => {
         <View style={styles.profileIcon}>
           <Icon name="user" size={20} color="#007AFF" />
         </View>
-        <Text style={styles.settingText}>Profile Page</Text>
+        <Text style={styles.profilePage}>Profile Page</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.logoutButton} onPress={handleAboutUs}>
-        <MaterialIcons name="info-outline" size={20} color="#C21292" />
+        <MaterialIcons name="info-outline" size={20} color="#219C90" />
         <Text style={styles.aboutUs}>About Us</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.logoutButton} onPress={handleChangePassword}>
+        <MaterialIcons name="security" size={20} color="#C21292" />
+        <Text style={styles.changePassword}>Change Password</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -85,10 +92,10 @@ const styles = StyleSheet.create({
     // Add the following properties for shadow on Android
     elevation: 3,
     // Add the following properties for shadow on iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 2,
     // Additional styling
     borderWidth: 1,
     borderRadius: 8,
@@ -108,13 +115,14 @@ const styles = StyleSheet.create({
 
     elevation: 3,
     // Add the following properties for shadow on iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 2,
   },
   settingText: {
     fontSize: 18,
+   
   },
   profileIcon: {
     marginRight: 10,
@@ -131,13 +139,21 @@ const styles = StyleSheet.create({
     height: "8%",
     elevation: 3,
     // Add the following properties for shadow on iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 2,
   },
-
+profilePage:{
+  fontSize: 18,
+    color:"#007AFF"
+},
   aboutUs: {
+    marginLeft: 10,
+    fontSize: 18,
+    color: '#219C90',
+  },
+  changePassword: {
     marginLeft: 10,
     fontSize: 18,
     color: '#C21292',
