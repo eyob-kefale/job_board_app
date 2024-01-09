@@ -147,6 +147,7 @@ Notifications.setNotificationHandler({
        <Stack.Screen name="MyEmployeeProfile" component={MyEmployeeProfile}/>
        <Stack.Screen name="ViewEmployeeApplication" component={ViewEmployeeApplication}/>
        <Stack.Screen name="AboutUs" component={AboutUs}/>
+     
        
         {/* Add more stack screens if needed */}
       </Stack.Navigator>

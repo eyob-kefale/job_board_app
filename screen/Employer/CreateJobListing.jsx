@@ -201,6 +201,30 @@ const CreateJobListing = ({ route, navigation }) => {
       await setDoc(doc(categoriesRef), newJobLists);
 
 
+      // notification
+      const notificationRef = collection(db, 'notification');
+      const docNotificationRef = doc(notificationRef);
+      const newNotificationLists = {
+        jobId: docNotificationRef.id,
+        title: jobDetails.title,
+        description: jobDetails.description,
+        // requirements: jobDetails.requirements,
+        // skills: jobDetails.skills,
+        // professions: jobDetails.professions,
+        img: url,
+        // education: jobDetails.education,
+        email: userEmail,
+        // applicants: [],
+        createdDate: serverTimestamp(),
+        startDate: startDate,
+        endDate: selectedStartDate
+      };
+
+
+      await setDoc(doc(notificationRef), newNotificationLists);
+
+//notifications
+
       console.log('Jobs added successfully!');
       // Send notification before navigation
      
