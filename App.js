@@ -19,7 +19,7 @@ import HomeScreen from './screen/HomeScreen';
 import LogIn from './screen/LogIn';
 import { useState } from 'react';
 import User from 'firebase/auth'
-import { UserProvider } from './common/context/UserContext'
+import { UserProvider, useUser } from './common/context/UserContext'
 
 import { collection, getDocs } from "firebase/firestore"; 
 import EditJobs from './screen/Employer/EditJobs';
@@ -116,13 +116,6 @@ const user = {
 const App = () => {
   // const [user,setUser]=useState<User|null>(null);
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
   return (
 
 

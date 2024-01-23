@@ -6,16 +6,65 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '../common/context/UserContext';
+import * as Notifications from 'expo-notifications';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../FireBaseConfig';
 const Setting = ({ navigation }) => {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
-  const {role, updateUser, updateDocId, updateRole } = useUser();
+  const {role, updateUser, updateDocId, updateRole ,notificationEnable,userEmail} = useUser();
   const toggleNotifications = () => {
-    setNotificationsEnabled(!notificationsEnabled);
+    setNotificationsEnabled(!notificationsEnabled)
+    notificationEnable(!notificationsEnabled);
   };
 
   const toggleDarkMode = () => {
+    sendNotification();
     setDarkModeEnabled(!darkModeEnabled);
+  };
+
+
+  const sendNotification = async () => {
+    try {
+      // Retrieve all users with the role "employee"
+      const employeeUsersRef =query(collection(db, 'user'),where('email','==',userEmail));
+      const employeeUsersSnapshot = await getDocs(employeeUsersRef);
+  
+      // Iterate through employee users and send notifications
+      employeeUsersSnapshot.forEach(async (userDoc) => {
+        console.log("userDoc.data(); ",userDoc.data());
+        if(userDoc.data().token){
+          const { token } = userDoc.data();
+
+        
+          console.log("retoken ",token)
+       // console.log("token ",token);
+        try {
+          console.log("token ",token);
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              to: token,
+              title: "New Job Posted! 📬",
+              body: 'Check out the latest job opportunity.',
+              data: {
+                data: 'goes here',
+                icon: '🌟', // Add your desired icon or use emojis
+                date: new Date().toLocaleDateString(), // Add the current date
+              },
+              sound: "default",
+            },
+            trigger: { seconds: 2 },
+          });
+        
+        } catch (error) {
+          console.error("Error scheduling notification:", error);
+        }
+      }
+      
+      });
+    } catch (error) {
+      console.error("Error sending notifications to employees:", error);
+    }
   };
 
   const handleLogout = async () => {

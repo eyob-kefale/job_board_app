@@ -15,7 +15,7 @@ import {
 import Search from "../common/Search";
 import { useNavigation } from '@react-navigation/native';
 import materialTheme from '../constants/Theme';
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { db } from '../FireBaseConfig';
 import { useEffect } from 'react';
 import { useUser } from "../common/context/UserContext";
@@ -127,14 +127,22 @@ export default () => {
 
   //start fetching from jobLists
   const [posts, setPosts] = useState([]);
+  const [Horizontalposts, setHorizontalposts] = useState([]);
   const [jobId, setJobId] = useState([]);
-  const jobListsCollectionRef = query(collection(db, 'jobLists'), limit(10));
+  const jobListsCollectionRef = query(collection(db, 'jobLists'),
+  orderBy('createdDate','desc'),
+    limit(10)
+    );
 
+    const HorizontalpostsRef = query(collection(db, 'jobLists'),
+   
+    );
 
   const fetchJobLists = async () => {
     try {
       const data = await getDocs(jobListsCollectionRef);
-
+      const HorizontalData = await getDocs(HorizontalpostsRef);
+      
       // Check if data.docs is defined before mapping over it
       if (data.docs && data.docs.length > 0) {
         const jobIds = data.docs.map((doc) => doc.id);
@@ -142,6 +150,16 @@ export default () => {
 
         // Set the posts state with the data and include IDs
         setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } else {
+        console.error('No documents found');
+      }
+
+      if (HorizontalData.docs && HorizontalData.docs.length > 0) {
+        const jobIds = HorizontalData.docs.map((doc) => doc.id);
+        setJobId((prevId) => [...prevId, ...jobIds]);
+
+        // Set the posts state with the HorizontalData and include IDs
+        setHorizontalposts(HorizontalData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       } else {
         console.error('No documents found');
       }
@@ -161,7 +179,7 @@ export default () => {
 
     // // Cleanup the interval when the component unmounts
     // return () => clearInterval(intervalId);
-  }, [posts,apply]);
+  }, [posts,apply,Horizontalposts]);
 
 
   const onEditPress = (docId) => {
@@ -183,9 +201,12 @@ export default () => {
     setSearchTerm(text);
   };
 
+  
   const filteredInfo = posts.filter((info) =>
     info.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
   const renderJobItem = ({ item, index }) => (
 
 
@@ -257,7 +278,7 @@ export default () => {
 
                   <FlatList
                     horizontal
-                    data={posts}
+                    data={Horizontalposts}
                     renderItem={({ item }) => <ListItem item={item} />}
                     showsHorizontalScrollIndicator={false}
                   />

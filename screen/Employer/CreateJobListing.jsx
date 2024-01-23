@@ -109,7 +109,7 @@ const CreateJobListing = ({ route, navigation }) => {
   const sendNotification = async () => {
     try {
       // Retrieve all users with the role "employee"
-      const employeeUsersRef =query( collection(db, 'user'),where('role', '==', 'employee'));
+      const employeeUsersRef =query( collection(db, 'user'),where('email','==',userEmail));
       const employeeUsersSnapshot = await getDocs(employeeUsersRef);
   
       // Iterate through employee users and send notifications

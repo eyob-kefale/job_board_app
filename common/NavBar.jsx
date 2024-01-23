@@ -43,8 +43,22 @@ const user = {
 
 const NavBar = () => {
   const { role } = useUser();
-  const { updateUser, updateDocId, updateRole, updateApply, updateNotification } = useUser();
+  const { enableNotification,updateUser, updateDocId, updateRole, updateApply, updateNotification } = useUser();
   const navigation = useNavigation();
+
+console.log("enableNotification ",enableNotification)
+  if(enableNotification){
+    Notifications.setNotificationHandler({
+    
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+  
+  }
+
 
   const auth = getAuth().currentUser;
   console.log("authauth ",auth);
